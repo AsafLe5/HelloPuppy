@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/profile"
+        android:title="Profile"
+        android:icon="@drawable/ic_profile"/>
+    <item
+        android:id="@+id/group"
+        android:icon="@drawable/ic_group"
+        android:title="Group"/>
+    <item
+        android:id="@+id/chat"
+        android:title="Chat"
+        android:icon="@drawable/ic_chat"/>
+    <item
+        android:id="@+id/schedule"
+        android:title="Schedule"
+        android:icon="@drawable/ic_schedule"/>
+    <item
+        android:id="@+id/find_dog"
+        android:title="Find Dog"
+        android:icon="@drawable/ic_find_dog"/>
+
+</menu>
