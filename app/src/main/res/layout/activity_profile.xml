@@ -26,4 +26,42 @@
         android:layout_alignParentBottom="true"
         />
 
+    <ImageView
+        android:id="@+id/ProfileImage"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addProfileImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:translationX="370dp"
+        android:translationY="200dp"
+        app:srcCompat="@drawable/ic_launcher_foreground" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="325dp"
+        android:layout_height="wrap_content"
+        android:text="name"
+        android:textSize="50dp"
+        android:translationX="100dp"
+        android:translationY="270dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_name"
+        android:hint="Enter name"/>
+
+    <Button
+        android:id="@+id/buttonEditName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit" />
+
+
 </RelativeLayout>
