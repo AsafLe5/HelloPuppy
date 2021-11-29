@@ -17,26 +17,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 //import com.github.drjacky.imagepicker.ImagePicker;
 import com.github.drjacky.imagepicker.ImagePicker;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class Profile extends AppCompatActivity {
-    Button buttonEditName;
+public class Profile extends AppCompatActivity implements EditNameDialog.EditNameDialogListener {
+    private TextView nameTextView;
+    private Button buttonEditName;
     ImageView profileImage;
     FloatingActionButton addProfileImage;
 
-/*    ActivityResultLauncher<Intent> launcher =
-            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (ActivityResult result) -> {
-                if (result.getResultCode() == RESULT_OK) {
-                    Uri uri = result.getData().getData();
-                    // Use the uri to load the image
-                } else if (result.getResultCode() == ImagePicker.RESULT_ERROR) {
-                    // Use ImagePicker.Companion.getError(result.getData()) to show an error
-                }
-            });*/
 
     BottomNavigationView bottomNavigationView;
     @Override
@@ -45,7 +38,7 @@ public class Profile extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.profile);
-        //buttonEditName = findViewById(R.id.alertBt);
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -86,19 +79,19 @@ public class Profile extends AppCompatActivity {
                         .start();
             }
         });
-        buttonEditName = findViewById(R.id.buttonEditName);
-        buttonEditName.setOnClickListener(new View.OnClickListener(){
-              @Override
-              public void onClick(View view) {
-                  Dialog dialog = new Dialog(getApplicationContext());
-                  dialog.setTitle("Enter name:");
-                  View profileView = getLayoutInflater().inflate(R.layout.activity_profile,null);
-                  dialog.setContentView(profileView);
 
-                  // Dialog editTextView = new dialog.create();
-
-              }
+        nameTextView = findViewById(R.id.nameTextView);
+        buttonEditName =findViewById(R.id.buttonEditName);
+        buttonEditName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openEditNameDialog();
+            }
         });
+    }
+    public void openEditNameDialog(){
+        EditNameDialog editNameDialog = new EditNameDialog();
+        editNameDialog.show(getSupportFragmentManager(),"Edit Text Dialog");
     }
 
     @Override
@@ -109,5 +102,8 @@ public class Profile extends AppCompatActivity {
         profileImage.setImageURI(uri);
     }
 
-
+    @Override
+    public void applyText(String name) {
+        nameTextView.setText(name);
+    }
 }
