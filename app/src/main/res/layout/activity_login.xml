@@ -9,8 +9,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:fontFamily="sans-serif-condensed-medium"
+
         android:text="@string/Welcome"
-        />
+        android:textSize="32dp" />
 
     <ImageView
         android:id="@+id/profileImage"
@@ -20,26 +24,33 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="188dp"/>
 
+
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:id="@+id/text_user"/>
 
+    <Button
+        android:id="@+id/button_login_google"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="continue with google"
+        android:background="@drawable/ic_google_login"
+        android:layout_marginTop="227dp"
+        />
 
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/facebook_login_button"
-        android:layout_width="match_parent"
+        android:layout_width="229dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="227dp"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_centerVertical="true"
-
-        />
-
+        android:layout_centerInParent="true"
+        android:layout_marginStart="77dp"
+        android:layout_marginBottom="292dp" />
 
 
 </RelativeLayout>
