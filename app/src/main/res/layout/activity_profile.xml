@@ -65,13 +65,14 @@
         android:id="@+id/edit_name"
         android:layout_width="332dp"
         android:layout_height="96dp"
-        android:layout_above="@+id/null"
+
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="201dp"
         android:layout_marginTop="335dp"
         android:layout_marginBottom="71dp"
         android:hint="Enter name" />
+    <!--android:layout_above="@+id/null"-->
 
 
 </RelativeLayout>
