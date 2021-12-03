@@ -31,16 +31,12 @@
         android:layout_centerInParent="true"
         android:id="@+id/text_user"/>
 
-    <Button
-        android:id="@+id/button_login_google"
+    <com.google.android.gms.common.SignInButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="continue with google"
-        android:background="@drawable/ic_google_login"
-        android:layout_marginTop="227dp"
+        android:id="@+id/button_login_google"
         />
-
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/facebook_login_button"
