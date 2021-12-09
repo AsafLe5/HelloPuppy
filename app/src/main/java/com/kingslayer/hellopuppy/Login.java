@@ -65,9 +65,9 @@ public class Login extends AppCompatActivity {
         facebookLogin = findViewById(R.id.facebook_login_button);
         facebookLogin.setReadPermissions("email", "public_profile");
         callbackManager = CallbackManager.Factory.create();
-        googleSignInButton = findViewById(R.id.button_login_google);
         mAuth = FirebaseAuth.getInstance();
 
+        googleSignInButton = findViewById(R.id.button_login_google);
         googleSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,15 +132,14 @@ public class Login extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            Intent intent = new Intent(getApplicationContext(),Profile.class);
+                            startActivity(intent);
                             updateUI(user);
-                            startActivity(new Intent(getApplicationContext(),Profile.class));
-
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(Login.this, "Sorry, auth failed", Toast.LENGTH_SHORT).show();
                             updateUI(null);
-                            Toast.makeText(Login.this, "Sorry for party rocking!", Toast.LENGTH_SHORT).show();
-                            
                         }
                     }
                 });
@@ -210,13 +209,13 @@ public class Login extends AppCompatActivity {
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
             }
         }
+
     }
 
     @Override
