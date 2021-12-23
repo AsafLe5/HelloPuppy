@@ -6,16 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".Profile">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Profile"
-        android:textSize="50dp"
-        android:textStyle="bold"
-        android:layout_centerInParent="true"
-
-        android:textColor="@color/black"/>
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,29 +18,43 @@
         />
 
     <ImageView
-        android:id="@+id/ProfileImage"
+        android:id="@+id/profileImage"
         android:layout_width="match_parent"
-        android:layout_height="240dp"
+        android:layout_height="wrap_content"
+        android:minHeight="260dp"
+        android:minWidth="260dp"/>
 
-        tools:srcCompat="@tools:sample/avatars" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addProfileImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="77dp"
         android:clickable="true"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        app:srcCompat="@drawable/ic_launcher_foreground" />
+        app:srcCompat="@drawable/ic_upload_image" />
 
     <TextView
         android:id="@+id/nameTextView"
-        android:layout_width="195dp"
-        android:layout_height="wrap_content"
+        android:layout_width="380dp"
+        android:layout_height="55dp"
         android:text="name"
-        android:textSize="50dp"
+        android:textSize="42dp"
         android:translationX="20dp"
-        android:translationY="270dp" />
+        android:translationY="262dp"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/dogs_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="337dp"
+        android:textSize="24dp"
+        android:hint="Enter your dog's name"/>
 
     <Button
         android:id="@+id/buttonEditName"
@@ -61,16 +65,6 @@
         android:layout_marginTop="488dp"
         android:text="Edit" />
 
-    <EditText
-        android:id="@+id/edit_name"
-        android:layout_width="332dp"
-        android:layout_height="96dp"
-
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="201dp"
-        android:layout_marginTop="455dp"
-        android:hint="Enter name" />
     <!--android:layout_above="@+id/null"-->
 
 

@@ -43,15 +43,17 @@ import static android.content.ContentValues.TAG;
 public class Login extends AppCompatActivity {
     private final static int RC_SIGN_IN = 123;
     private ImageView imageProfile;
+    private String ProfileNameString;
     private LoginButton facebookLogin;
     private CallbackManager callbackManager;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
-    private TextView textViewUser;
+    //private TextView textViewUser;
     private AccessTokenTracker accessTokenTracker;
     private GoogleSignInClient mGoogleSignInClient;
     private SignInButton googleSignInButton;
     private FirebaseAuth mAuth;
+    private String photoUrl;
 
 
     @Override
@@ -60,7 +62,7 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
-        textViewUser = findViewById(R.id.text_user);
+        //textViewUser = findViewById(R.id.text_user);
         imageProfile = findViewById(R.id.profileImage);
         facebookLogin = findViewById(R.id.facebook_login_button);
         facebookLogin.setReadPermissions("email", "public_profile");
@@ -84,7 +86,14 @@ public class Login extends AppCompatActivity {
                 //Picasso.get().load(imageUrl).into(imageProfile);
                 Log.d(TAG, "onSuccess" + loginResult);
                 handleFacebookToken(loginResult.getAccessToken());
-                startActivity(new Intent(getApplicationContext(),Profile.class));
+                Intent intent = new Intent(getApplicationContext(),Profile.class);
+//                Bundle bundle = new Bundle();
+//                bundle.pu("ProfileImage",photoUrl);
+                intent.putExtra("ProfileName", ProfileNameString);
+                intent.putExtra("ProfileImage",photoUrl);
+                System.out.println("gam");
+                startActivity(intent);
+                System.out.println("vegam");
             }
             @Override
             public void onCancel() {
@@ -181,20 +190,19 @@ public class Login extends AppCompatActivity {
                 });
     }
 
-
-
     private void updateUI(FirebaseUser user) {
 
         if(user != null){
-            textViewUser.setText(user.getDisplayName());
+            //textViewUser.setText(user.getDisplayName());
             if(user.getPhotoUrl()!=null){
-                String photoUrl = user.getPhotoUrl().toString();
+                photoUrl = user.getPhotoUrl().toString();
+                ProfileNameString = user.getDisplayName();
                 photoUrl= photoUrl+"?type=large";
                 Picasso.get().load(photoUrl).into(imageProfile);
             }
         }
         else {
-            textViewUser.setText("");
+            //textViewUser.setText("");
             imageProfile.setImageResource(R.drawable.ic_profile);
         }
     }
@@ -227,6 +235,8 @@ public class Login extends AppCompatActivity {
 
         if(user != null){
             Intent intent = new Intent(getApplicationContext(),Profile.class);
+            intent.putExtra("ProfileImage",photoUrl);
+            intent.putExtra("ProfileName", ProfileNameString);
             startActivity(intent);
         }
     }

@@ -18,6 +18,12 @@ import org.jetbrains.annotations.NotNull;
 public class EditNameDialog extends AppCompatDialogFragment {
     private EditNameDialogListener listener;
     private EditText editTextName;
+    private String titleText;
+
+    public EditNameDialog(String hintText) {
+        this.titleText = hintText;
+    }
+
     @NonNull
     @NotNull
     @Override
@@ -26,7 +32,7 @@ public class EditNameDialog extends AppCompatDialogFragment {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.layout_dialog_edit_name,null);
-        builder.setView(view).setTitle("Login")
+        builder.setView(view).setTitle(titleText)
                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -40,7 +46,7 @@ public class EditNameDialog extends AppCompatDialogFragment {
                         listener.applyText(name);
                     }
                 });
-        editTextName = view.findViewById(R.id.edit_name_text); ;
+        editTextName = view.findViewById(R.id.edit_name_text);
         return builder.create();
     }
 
