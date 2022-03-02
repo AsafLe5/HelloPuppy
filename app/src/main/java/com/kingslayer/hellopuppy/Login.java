@@ -32,7 +32,16 @@ import java.util.Objects;
 
 import static android.content.ContentValues.TAG;
 import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
+import android.widget.TextView;
+import android.widget.Toast;
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.google.firebase.auth.FacebookAuthProvider;
 
 
 public class Login extends AppCompatActivity {
@@ -40,7 +49,17 @@ public class Login extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mFirebaseAuth;
     private int RC_SIGN_IN = 1;
-    private ImageView imageProfileFromGoogle;
+
+    private ImageView imageProfile;
+    private String ProfileNameString;
+    private LoginButton facebookLogin;
+    private CallbackManager callbackManager;
+    private FirebaseAuth.AuthStateListener authStateListener;
+    private TextView textViewUser;
+    private AccessTokenTracker accessTokenTracker;
+    private FirebaseUser user;
+    private FirebaseAuth mAuth;
+    private String photoUrl;
 
 
     @Override
@@ -48,7 +67,7 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        imageProfileFromGoogle = findViewById(R.id.profileImage);
+        imageProfile = findViewById(R.id.profileImage);
         signInButtonGoogle = findViewById(R.id.button_login_google);
         mFirebaseAuth = FirebaseAuth.getInstance();
 
@@ -63,6 +82,51 @@ public class Login extends AppCompatActivity {
                 signIn();
             }
         });
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        textViewUser = findViewById(R.id.text_user);
+        facebookLogin = findViewById(R.id.facebook_login_button);
+        facebookLogin.setReadPermissions("email", "public_profile");
+        callbackManager = CallbackManager.Factory.create();
+        mAuth = FirebaseAuth.getInstance();
+
+        facebookLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                handleFacebookToken(loginResult.getAccessToken());
+            }
+            @Override
+            public void onCancel() {
+                Log.d(TAG, "onCancel");
+            }
+
+            @Override
+            public void onError(@NotNull FacebookException e) {
+                Log.d(TAG, "onError");
+            }
+        });
+
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull @NotNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if(user != null){
+                    updateUIFB(user);
+                }
+                else{
+                    updateUIFB(null);
+                }
+            }
+        };
+
+        accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+                if(currentAccessToken == null){
+                    mFirebaseAuth.signOut();
+                }
+            }
+        };
     }
 
     private void signIn(){
@@ -95,8 +159,6 @@ public class Login extends AppCompatActivity {
             // Google Sign In failed, update UI appropriately
             Log.w(TAG, "in the catch part", e);
             System.out.println("in the catch part");
-
-//            firebaseGoogleAuth(null);
         }
     }
     private void firebaseGoogleAuth(GoogleSignInAccount acc){
@@ -129,16 +191,71 @@ public class Login extends AppCompatActivity {
         });
     }
     private void updateUI(FirebaseUser user) {
-
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
         if(account != null){
             Uri profilePic = account.getPhotoUrl();
             String profileName = account.getDisplayName();
-            Picasso.get().load(profilePic).into(imageProfileFromGoogle);
+            Picasso.get().load(profilePic).into(imageProfile);
         }
         else {
             //textViewUser.setText("");
-            imageProfileFromGoogle.setImageResource(R.drawable.ic_profile);
+            imageProfile.setImageResource(R.drawable.ic_profile);
+        }
+    }
+
+    private void handleFacebookToken(AccessToken token) {
+        Log.d(TAG, "handleFacebookToken" + token);
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mFirebaseAuth.signInWithCredential(credential).addOnCompleteListener
+                (this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            FirebaseUser user = mFirebaseAuth.getCurrentUser();
+                            updateUIFB(user);
+                            Intent intent = new Intent(getApplicationContext(),Profile.class);
+                            intent.putExtra("ProfileName", ProfileNameString);
+                            intent.putExtra("ProfileImage",photoUrl);
+                            startActivity(intent);
+                        }
+                        else{
+                            Toast.makeText(Login.this, "Authentication failed!",
+                                    Toast.LENGTH_SHORT).show();
+                            updateUIFB(null);
+                        }
+                    }
+                });
+    }
+
+    private void updateUIFB(FirebaseUser user) {
+
+        if(user != null){
+            textViewUser.setText(user.getDisplayName());
+            if(user.getPhotoUrl()!=null){
+                photoUrl = user.getPhotoUrl().toString();
+                ProfileNameString = user.getDisplayName();
+                photoUrl= photoUrl+"?type=large";
+                Picasso.get().load(photoUrl).into(imageProfile);
+            }
+        }
+        else {
+            textViewUser.setText("");
+            imageProfile.setImageResource(R.drawable.ic_profile);
+        }
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mFirebaseAuth.addAuthStateListener(authStateListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(authStateListener!= null){
+            mFirebaseAuth.removeAuthStateListener(authStateListener);
         }
     }
 }
