@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,27 +24,31 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
+import java.util.Objects;
 
 public class Profile extends AppCompatActivity implements EditNameDialog.EditNameDialogListener {
     private TextView nameTextView;
     private Button buttonEditName;
+    private Button buttonEditAge;
+    private Button buttonEditDogsAge;
     private String profileImageStr;
     private Uri profileImageUri;
     private ImageView profileImage;
     private TextView dogsName;
     FloatingActionButton addProfileImage;
+    private Intent intent;
 
 
     BottomNavigationView bottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //profileImageUrl = getIntent().getExtras().get("ProfileImage").toString();
-        Intent intent = getIntent();
+        intent = getIntent();
         Bundle extras = intent.getExtras();
         //profileImageUrl = intent.getExtras().toString();
-
-        profileImageStr = extras.getString("ProfileImage");
+//        profileImageStr = extras.getString("ProfileImage");
         String profileNameString  = extras.getString("ProfileName");
+        profileImageStr = extras.getString("ProfileImage");
         profileImageUri = Uri.parse(profileImageStr);
         //profileImageUri = Uri.parse("/drawable/ic_google_login.png");
         super.onCreate(savedInstanceState);
@@ -79,7 +84,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                 return false;
             }
         });
-        //profileImage = findViewById(R.id.ProfileImage);
+//        profileImage = findViewById(R.id.profileImage);
         addProfileImage = findViewById(R.id.addProfileImage);
         addProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +95,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                         .compress(1024)	    //Let the user to resize crop bounds
                         .maxResultSize(1080,1080)
                         .start();
+//                intent.putExtra("NewProfileImage", Objects.requireNonNull(user.getPhotoUrl()).toString());
             }
         });
 
@@ -115,25 +121,67 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         buttonEditName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openEditNameDialog();
+                openEditNameDialog("Enter dog's name", "dogs_name");
+            }
+        });
+
+        buttonEditAge =findViewById(R.id.buttonEditAge);
+        buttonEditAge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openEditNameDialog("Enter your age", "your_age");
+            }
+        });
+        buttonEditDogsAge = findViewById(R.id.buttonEditDogsAge);
+        buttonEditDogsAge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openEditNameDialog("Enter dog's age", "dogs_age");
             }
         });
     }
-    public void openEditNameDialog(){
-        EditNameDialog editNameDialog = new EditNameDialog("Enter dog's name");
+    public void openEditNameDialog(String hint, String strViewToChange){
+        EditNameDialog editNameDialog = new EditNameDialog(hint, strViewToChange);
         editNameDialog.show(getSupportFragmentManager(),null);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+//        if(CHANGE_PROFILE_CODE == 1){
+//            String newProfileImage= data.getStringExtra("result");
+//            Uri newProfileImage= (Uri) data.getExtras().get("profilePicture");
 
-        Uri uri = data.getData();
-        //profileImage.setImageURI(uri);
+//            Uri uri  = Uri.parse(newProfileImage);
+//            Picasso.get().load(newProfileImage).into(profileImage);
+//            Bundle extras = intent.getExtras();
+//            String newProfileImage = extras.getString("NewProfileImage");
+//            Uri uri  = Uri.parse(newProfileImage);
+//            Picasso.get().load(uri).into(profileImage);
+//        }
+
+
     }
 
-    @Override
-    public void applyText(String name) {
-        dogsName.setText(name);
+//    public void applyText(String name, String str) {
+//        TextView t = findViewById(R.id.str);
+//        t.setText(name);
+//    }
+
+    public void goToApplyText(String newText, String textViewToApply){
+        switch (textViewToApply){
+            case ("dogs_name"):
+                TextView t = findViewById(R.id.dogs_name);
+                t.setText(newText);
+                break;
+            case("your_age"):
+                TextView t2 = findViewById(R.id.your_age);
+                t2.setText(newText);
+                break;
+            case("dogs_age"):
+                TextView t3 = findViewById(R.id.dogs_age);
+                t3.setText(newText);
+                break;
+        }
     }
 }

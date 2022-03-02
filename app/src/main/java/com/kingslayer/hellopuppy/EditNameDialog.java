@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,9 +20,11 @@ public class EditNameDialog extends AppCompatDialogFragment {
     private EditNameDialogListener listener;
     private EditText editTextName;
     private String titleText;
+    private String textViewToChange;
 
-    public EditNameDialog(String hintText) {
+    public EditNameDialog(String hintText, String textViewToChange) {
         this.titleText = hintText;
+        this.textViewToChange = textViewToChange;
     }
 
     @NonNull
@@ -43,7 +46,7 @@ public class EditNameDialog extends AppCompatDialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String name = editTextName.getText().toString();
-                        listener.applyText(name);
+                        listener.goToApplyText(name, textViewToChange);
                     }
                 });
         editTextName = view.findViewById(R.id.edit_name_text);
@@ -63,6 +66,7 @@ public class EditNameDialog extends AppCompatDialogFragment {
     }
 
     public interface EditNameDialogListener{
-        void applyText(String name);
+//        void applyText(String name, String textViewToChange);
+        void goToApplyText(String newText, String textViewToApply);
     }
 }

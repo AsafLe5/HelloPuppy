@@ -29,41 +29,67 @@
         android:id="@+id/addProfileImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="77dp"
+        android:layout_marginBottom="471dp"
         android:clickable="true"
         app:srcCompat="@drawable/ic_upload_image" />
 
     <TextView
         android:id="@+id/nameTextView"
-        android:layout_width="380dp"
-        android:layout_height="55dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
         android:text="name"
-        android:textSize="42dp"
-        android:translationX="20dp"
-        android:translationY="262dp"
+        android:textSize="35dp"
+        android:layout_alignBottom="@id/addProfileImage"
+        android:layout_marginBottom="-50dp"
         android:textColor="@color/black"/>
 
     <TextView
         android:id="@+id/dogs_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="337dp"
+        android:layout_marginTop="570dp"
         android:textSize="24dp"
         android:hint="Enter your dog's name"/>
 
     <Button
         android:id="@+id/buttonEditName"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="488dp"
-        android:text="Edit" />
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="562dp"
+        android:background="@drawable/ic_edit" />
+
+    <TextView
+        android:id="@+id/your_age"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="330dp"
+        android:textSize="24dp"
+        android:hint="Enter your age"/>
+
+    <Button
+        android:id="@+id/buttonEditAge"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="320dp"
+        android:background="@drawable/ic_edit" />
+    <TextView
+        android:id="@+id/dogs_age"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="620dp"
+        android:textSize="24dp"
+        android:hint="Enter your dog's age"/>
+
+    <Button
+        android:id="@+id/buttonEditDogsAge"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="620dp"
+        android:background="@drawable/ic_edit" />
 
     <!--android:layout_above="@+id/null"-->
 
