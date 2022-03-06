@@ -19,8 +19,10 @@ import android.widget.TextView;
 
 //import com.github.drjacky.imagepicker.ImagePicker;
 import com.github.drjacky.imagepicker.ImagePicker;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
@@ -49,9 +51,8 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     protected void onCreate(Bundle savedInstanceState) {
         intent = getIntent();
         Bundle extras = intent.getExtras();
-        String profileNameString  = extras.getString("ProfileName");
-        profileImageStr = extras.getString("ProfileImage");
-        profileImageUri = Uri.parse(profileImageStr);
+        String profileNameString  = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
+        profileImageUri = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getPhotoUrl();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         bottomNavigationView = findViewById(R.id.bottom_navigator);
@@ -98,11 +99,12 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
 //                intent.putExtra("NewProfileImage", Objects.requireNonNull(user.getPhotoUrl()).toString());
             }
         });
-
         nameTextView = findViewById(R.id.nameTextView);
         nameTextView.setText(profileNameString);
         profileImage = findViewById(R.id.profileImage);
         Picasso.get().load(profileImageUri).into(profileImage);
+
+
 
         try {
             profileImage.setImageDrawable(Drawable.createFromStream(
