@@ -29,8 +29,13 @@ import java.util.Objects;
 public class Profile extends AppCompatActivity implements EditNameDialog.EditNameDialogListener {
     private TextView nameTextView;
     private Button buttonEditName;
+    private Button buttonEditGender;
     private Button buttonEditAge;
     private Button buttonEditDogsAge;
+    private Button buttonEditDogsGender;
+    private Button buttonEditDogsBreed;
+    private Button buttonEditLocation;
+    private Button buttonEditAvailability;
     private String profileImageStr;
     private Uri profileImageUri;
     private ImageView profileImage;
@@ -42,15 +47,11 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     BottomNavigationView bottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //profileImageUrl = getIntent().getExtras().get("ProfileImage").toString();
         intent = getIntent();
         Bundle extras = intent.getExtras();
-        //profileImageUrl = intent.getExtras().toString();
-//        profileImageStr = extras.getString("ProfileImage");
         String profileNameString  = extras.getString("ProfileName");
         profileImageStr = extras.getString("ProfileImage");
         profileImageUri = Uri.parse(profileImageStr);
-        //profileImageUri = Uri.parse("/drawable/ic_google_login.png");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         bottomNavigationView = findViewById(R.id.bottom_navigator);
@@ -84,7 +85,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                 return false;
             }
         });
-//        profileImage = findViewById(R.id.profileImage);
         addProfileImage = findViewById(R.id.addProfileImage);
         addProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,24 +104,26 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         profileImage = findViewById(R.id.profileImage);
         Picasso.get().load(profileImageUri).into(profileImage);
 
-//        profileImage.setImageURI(null);
-//        profileImage.setImageURI(profileImageUri);
         try {
             profileImage.setImageDrawable(Drawable.createFromStream(
                     getContentResolver().openInputStream(profileImageUri),null));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-//        profileImage.setImageBitmap(bi);
-//        Bitmap bitmap = BitmapFactory.decodeStream(profileImageUri);
-        //profileImage = (ImageView) findViewById(R.id.profileImage);
-        //profileImage.setImageBitmap(BitmapFactory.decodeFile(profileImageUri));
 
         buttonEditName =findViewById(R.id.buttonEditName);
         buttonEditName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openEditNameDialog("Enter dog's name", "dogs_name");
+            }
+        });
+
+        buttonEditGender = findViewById(R.id.buttonEditGender);
+        buttonEditGender.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openEditNameDialog("Enter your gender", "your_gender");
             }
         });
 
@@ -132,11 +134,48 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                 openEditNameDialog("Enter your age", "your_age");
             }
         });
+
         buttonEditDogsAge = findViewById(R.id.buttonEditDogsAge);
         buttonEditDogsAge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openEditNameDialog("Enter dog's age", "dogs_age");
+            }
+        });
+
+        buttonEditLocation =findViewById(R.id.buttonEditLocation);
+        buttonEditLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openEditNameDialog("Enter your location", "location");
+            }
+        });
+
+        buttonEditAvailability =findViewById(R.id.buttonEditAvailability);
+        buttonEditAvailability.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openEditNameDialog("Enter number of days you are available in a week",
+                        "availability");
+            }
+        });
+
+
+        buttonEditDogsGender =findViewById(R.id.buttonEditGenderD);
+        buttonEditDogsGender.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openEditNameDialog("Enter your dog's gender",
+                        "dogs_gender");
+            }
+        });
+
+        buttonEditDogsBreed =findViewById(R.id.buttonEditBreed);
+        buttonEditDogsBreed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openEditNameDialog("Enter your dog's breed",
+                        "dogs_breed");
             }
         });
     }
@@ -174,13 +213,35 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                 TextView t = findViewById(R.id.dogs_name);
                 t.setText(newText);
                 break;
+
             case("your_age"):
                 TextView t2 = findViewById(R.id.your_age);
                 t2.setText(newText);
                 break;
+
             case("dogs_age"):
                 TextView t3 = findViewById(R.id.dogs_age);
                 t3.setText(newText);
+                break;
+
+            case("your_gender"):
+                TextView t4 = findViewById(R.id.your_gender);
+                t4.setText(newText);
+                break;
+
+            case("location"):
+                TextView t5 = findViewById(R.id.location);
+                t5.setText(newText);
+                break;
+
+            case("availability"):
+                TextView t6 = findViewById(R.id.availability);
+                t6.setText(newText);
+                break;
+
+            case("dogs_gender"):
+                TextView t7 = findViewById(R.id.dogs_gender);
+                t7.setText(newText);
                 break;
         }
     }

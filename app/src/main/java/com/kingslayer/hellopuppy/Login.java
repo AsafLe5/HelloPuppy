@@ -61,7 +61,6 @@ public class Login extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private String photoUrl;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -165,36 +164,35 @@ public class Login extends AppCompatActivity {
         AuthCredential authCredential = GoogleAuthProvider.getCredential(acc.getIdToken(), null);
         mFirebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(
                 this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    Log.w(TAG, "successful");
-                    FirebaseUser user = mFirebaseAuth.getCurrentUser();
-                    updateUI(user);
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            Log.w(TAG, "successful");
+                            FirebaseUser user = mFirebaseAuth.getCurrentUser();
+                            updateUI(user);
 
-                    Intent intent = new Intent(getApplicationContext(),Profile.class);
-                    if (user != null) {
-                        intent.putExtra("ProfileName", user.getDisplayName());
-                        intent.putExtra("ProfileImage", Objects.requireNonNull(user.getPhotoUrl()).toString());
+                            Intent intent = new Intent(getApplicationContext(),Profile.class);
+                            if (user != null) {
+                                intent.putExtra("ProfileName", user.getDisplayName());
+                                intent.putExtra("ProfileImage", Objects.requireNonNull(user.getPhotoUrl()).toString());
+                            }
+                            else{
+                                intent.putExtra("ProfileName", "");
+                                intent.putExtra("ProfileImage", "");
+                            }
+                            startActivity(intent);
+                        }
+                        else {
+                            Log.w(TAG, "bad");
+                            updateUI(null);
+                        }
                     }
-                    else{
-                        intent.putExtra("ProfileName", "");
-                        intent.putExtra("ProfileImage", "");
-                    }
-                    startActivity(intent);
-                }
-                else {
-                    Log.w(TAG, "bad");
-                    updateUI(null);
-                }
-            }
-        });
+                });
     }
     private void updateUI(FirebaseUser user) {
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
         if(account != null){
             Uri profilePic = account.getPhotoUrl();
-            String profileName = account.getDisplayName();
             Picasso.get().load(profilePic).into(imageProfile);
         }
         else {
@@ -204,7 +202,6 @@ public class Login extends AppCompatActivity {
     }
 
     private void handleFacebookToken(AccessToken token) {
-        Log.d(TAG, "handleFacebookToken" + token);
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mFirebaseAuth.signInWithCredential(credential).addOnCompleteListener
                 (this, new OnCompleteListener<AuthResult>() {
@@ -238,6 +235,7 @@ public class Login extends AppCompatActivity {
                 Picasso.get().load(photoUrl).into(imageProfile);
             }
         }
+
         else {
             textViewUser.setText("");
             imageProfile.setImageResource(R.drawable.ic_profile);
