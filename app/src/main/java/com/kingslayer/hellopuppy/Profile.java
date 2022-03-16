@@ -28,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
+import java.sql.SQLOutput;
 import java.util.Objects;
 
 public class Profile extends AppCompatActivity implements EditNameDialog.EditNameDialogListener {
@@ -60,6 +61,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.profile);
         dogsName = findViewById(R.id.dogs_name);
+        System.out.println("het");
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
