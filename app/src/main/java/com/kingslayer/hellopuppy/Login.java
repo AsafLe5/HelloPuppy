@@ -45,10 +45,10 @@ import com.google.firebase.auth.FacebookAuthProvider;
 
 
 public class Login extends AppCompatActivity {
+    private/* const */ int RC_SIGN_IN = 1; // add consts
     private SignInButton signInButtonGoogle;
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mFirebaseAuth;
-    private int RC_SIGN_IN = 1;
 
     private ImageView imageProfile;
     private String ProfileNameString;
