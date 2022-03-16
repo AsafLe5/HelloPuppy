@@ -24,6 +24,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
@@ -81,6 +82,11 @@ public class Login extends AppCompatActivity {
                 signIn();
             }
         });
+        // If the User already connected - go to profile.
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null){
+            startActivity(new Intent(getApplicationContext(),Profile.class));
+        }
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         textViewUser = findViewById(R.id.text_user);
@@ -194,6 +200,12 @@ public class Login extends AppCompatActivity {
         if(account != null){
             Uri profilePic = account.getPhotoUrl();
             Picasso.get().load(profilePic).into(imageProfile);
+            // Create a table for the user in Fbase
+            FirebaseDatabase.getInstance().getReference().child("Users")
+                    .child(FirebaseAuth.getInstance().getUid().toString()).child("Full name")
+                    .setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString());
+            FirebaseDatabase.getInstance().getReference().child("Dogs")
+                    .child(FirebaseAuth.getInstance().getUid().toString());
         }
         else {
             //textViewUser.setText("");
@@ -233,6 +245,12 @@ public class Login extends AppCompatActivity {
                 ProfileNameString = user.getDisplayName();
                 photoUrl= photoUrl+"?type=large";
                 Picasso.get().load(photoUrl).into(imageProfile);
+                // Create a table for the user in Fbase
+                FirebaseDatabase.getInstance().getReference().child("Users")
+                        .child(FirebaseAuth.getInstance().getUid().toString()).child("Full name")
+                        .setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString());
+                FirebaseDatabase.getInstance().getReference().child("Dogs")
+                        .child(FirebaseAuth.getInstance().getUid().toString());
             }
         }
 

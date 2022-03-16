@@ -22,7 +22,9 @@ import com.github.drjacky.imagepicker.ImagePicker;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
@@ -214,11 +216,13 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             case ("dogs_name"):
                 TextView t = findViewById(R.id.dogs_name);
                 t.setText(newText);
+                addToDogFB("Name", newText);
                 break;
 
             case("your_age"):
                 TextView t2 = findViewById(R.id.your_age);
                 t2.setText(newText);
+                addToUserFB("Age", newText);
                 break;
 
             case("dogs_age"):
@@ -229,22 +233,35 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             case("your_gender"):
                 TextView t4 = findViewById(R.id.your_gender);
                 t4.setText(newText);
+                //addToUserFB("Gender", newText);
                 break;
 
-            case("location"):
+            case("location"): /** TODO: handle with GPS later*/
                 TextView t5 = findViewById(R.id.location);
                 t5.setText(newText);
                 break;
 
-            case("availability"):
+            case("availability"): //listBox
                 TextView t6 = findViewById(R.id.availability);
                 t6.setText(newText);
                 break;
 
-            case("dogs_gender"):
+            case("dogs_gender"): //listBox - male,female
                 TextView t7 = findViewById(R.id.dogs_gender);
                 t7.setText(newText);
                 break;
         }
+    }
+
+    public void addToUserFB(String attribute, String newText){
+        FirebaseDatabase.getInstance().getReference().child("Users")
+                .child(FirebaseAuth.getInstance().getUid().toString())
+                .child(attribute).setValue(newText);
+    }
+
+    public void addToDogFB(String attribute, String newText){
+        FirebaseDatabase.getInstance().getReference().child("Dogs")
+                .child(FirebaseAuth.getInstance().getUid().toString())
+                .child(attribute).setValue(newText);
     }
 }
