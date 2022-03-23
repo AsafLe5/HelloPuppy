@@ -37,7 +37,7 @@ dependencies {
     implementation 'com.github.Drjacky:ImagePicker:1.8.4'
     implementation 'com.google.firebase:firebase-auth:19.2.0'
     implementation 'com.google.android.gms:play-services-auth:18.1.0'
-    implementation 'com.google.firebase:firebase-database:19.2.1'
+    implementation 'com.google.firebase:firebase-database:20.0.4'
     testImplementation 'junit:junit:4.+'
     implementation 'com.facebook.android:facebook-android-sdk:latest.release'
     implementation 'com.facebook.android:facebook-login:latest.release'

@@ -60,7 +60,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         //intent = getIntent();
         //Bundle extras = intent.getExtras();
         String profileNameString  = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
-        profileImageUri = FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl();
+        profileImageUri = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.profile);
         dogsName = findViewById(R.id.dogs_name);
