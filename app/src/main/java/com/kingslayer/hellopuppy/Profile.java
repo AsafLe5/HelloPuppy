@@ -4,25 +4,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-//import com.github.drjacky.imagepicker.ImagePicker;
 import com.github.drjacky.imagepicker.ImagePicker;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,11 +27,9 @@ import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
-import java.io.FileNotFoundException;
-import java.sql.SQLOutput;
 import java.util.Objects;
 
-public class Profile extends AppCompatActivity implements EditNameDialog.EditNameDialogListener {
+public class Profile extends AppCompatActivity implements EditNameDialog.EditNameDialogListener, AdapterView.OnItemSelectedListener {
     private TextView nameTextView;
     private Button buttonEditName;
     private Button buttonEditGender;
@@ -50,24 +45,25 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     private TextView dogsName;
     FloatingActionButton addProfileImage;
     private Intent intent;
+    private Spinner availabilitySpinner;
+
 
 
     BottomNavigationView bottomNavigationView;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        intent = getIntent();
-        Bundle extras = intent.getExtras();
-        String profileNameString  = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
-        profileImageUri = FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl();
-                //Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getPhotoUrl();
-        //////FirebaseAuth.getInstance().getCurrentUser().
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        //intent = getIntent();
+        //Bundle extras = intent.getExtras();
+        String profileNameString  = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
+        profileImageUri = FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl();
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.profile);
         dogsName = findViewById(R.id.dogs_name);
-        System.out.println("het");
-
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -134,14 +130,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             Picasso.get().load(profileImageUri).into(profileImage);
         }
 
-
-/*        try {
-            profileImage.setImageDrawable(Drawable.createFromStream(
-                    getContentResolver().openInputStream(profileImageUri),null));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }*/
-
         buttonEditName =findViewById(R.id.buttonEditName);
         buttonEditName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,14 +170,14 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             }
         });
 
-        buttonEditAvailability =findViewById(R.id.buttonEditAvailability);
-        buttonEditAvailability.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openEditNameDialog("Enter number of days you are available in a week",
-                        "availability");
-            }
-        });
+        availabilitySpinner =findViewById(R.id.availability);
+        ArrayAdapter<CharSequence> availabilityAdapter =
+                ArrayAdapter.createFromResource(this,R.array.availabilities,
+                        android.R.layout.simple_spinner_item);
+        availabilityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        availabilitySpinner.setAdapter(availabilityAdapter);
+        availabilitySpinner.setOnItemSelectedListener(this);
+
 
 
         buttonEditDogsGender =findViewById(R.id.buttonEditGenderD);
@@ -233,11 +221,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
 
     }
 
-//    public void applyText(String name, String str) {
-//        TextView t = findViewById(R.id.str);
-//        t.setText(name);
-//    }
-
     public void goToApplyText(String newText, String textViewToApply){
         switch (textViewToApply){
             case ("dogs_name"):
@@ -268,11 +251,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                 t5.setText(newText);
                 break;
 
-            case("availability"): //listBox
-                TextView t6 = findViewById(R.id.availability);
-                t6.setText(newText);
-                break;
-
             case("dogs_gender"): //listBox - male,female
                 TextView t7 = findViewById(R.id.dogs_gender);
                 t7.setText(newText);
@@ -299,5 +277,17 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             }
         }
         return false;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        String choice = adapterView.getItemAtPosition(i).toString();
+        addToUserFB("Availability", choice);
+        //Toast.makeText(getApplicationContext(),choice,Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }

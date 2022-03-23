@@ -82,6 +82,7 @@ public class Login extends AppCompatActivity {
                 signIn();
             }
         });
+
         // If the User already connected - go to profile.
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user != null){

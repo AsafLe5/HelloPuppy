@@ -3,4 +3,12 @@
     <string name="facebook_app_id">2700875820221797</string>
     <string name="fb_login_protocol_scheme">fb2700875820221797</string>
     <string name="Welcome"> Welcome to HelloPuppy! </string>
+    <string-array name="availabilities">
+        <item>One day a week</item>
+        <item>Two days a week</item>
+        <item>Three days a week</item>
+        <item>Four days a week</item>
+        <item>Five days a week</item>
+        <item>Six days a week</item>
+    </string-array>
 </resources>

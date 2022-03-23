@@ -153,7 +153,7 @@
                 android:text="Availability:"
                 android:textSize="24dp" />
 
-            <TextView
+            <Spinner
                 android:id="@+id/availability"
                 android:layout_width="340dp"
                 android:layout_height="wrap_content"
@@ -161,14 +161,6 @@
                 android:layout_marginStart="130dp"
                 android:textSize="24dp"
                 android:hint="Enter Availability In A"/>
-
-            <Button
-                android:id="@+id/buttonEditAvailability"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="340dp"
-                android:layout_marginTop="470dp"
-                android:background="@drawable/ic_edit" />
 
 
             <TextView
