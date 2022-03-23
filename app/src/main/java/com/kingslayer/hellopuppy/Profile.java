@@ -23,7 +23,10 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
@@ -55,7 +58,9 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         intent = getIntent();
         Bundle extras = intent.getExtras();
         String profileNameString  = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
-        profileImageUri = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getPhotoUrl();
+        profileImageUri = FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl();
+                //Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getPhotoUrl();
+        //////FirebaseAuth.getInstance().getCurrentUser().
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         bottomNavigationView = findViewById(R.id.bottom_navigator);
@@ -106,16 +111,36 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         nameTextView = findViewById(R.id.nameTextView);
         nameTextView.setText(profileNameString);
         profileImage = findViewById(R.id.profileImage);
-        Picasso.get().load(profileImageUri).into(profileImage);
+
+        if(isFacebookUser()){
+            String facebookUserId = "";
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            // find the Facebook profile and get the user's id
+            for(UserInfo profile : user.getProviderData()) {
+                // check if the provider id matches "facebook.com"
+                if(FacebookAuthProvider.PROVIDER_ID.equals(profile.getProviderId())) {
+                    facebookUserId = profile.getUid();
+                }
+            }
+
+            // construct the URL to the profile picture, with a custom height
+            // alternatively, use '?type=small|medium|large' instead of ?height=
+            String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?height=500";
+
+            // (optional) use Picasso to download and show to image
+            Picasso.get().load(photoUrl).into(profileImage);
+        }
+        else {
+            Picasso.get().load(profileImageUri).into(profileImage);
+        }
 
 
-
-        try {
+/*        try {
             profileImage.setImageDrawable(Drawable.createFromStream(
                     getContentResolver().openInputStream(profileImageUri),null));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }
+        }*/
 
         buttonEditName =findViewById(R.id.buttonEditName);
         buttonEditName.setOnClickListener(new View.OnClickListener() {
@@ -233,8 +258,8 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                 break;
 
             case("your_gender"):
-                TextView t4 = findViewById(R.id.your_gender);
-                t4.setText(newText);
+                //TextView t4 = findViewById(R.id.your_gender);
+                //t4.setText(newText);
                 //addToUserFB("Gender", newText);
                 break;
 
@@ -265,5 +290,14 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         FirebaseDatabase.getInstance().getReference().child("Dogs")
                 .child(FirebaseAuth.getInstance().getUid().toString())
                 .child(attribute).setValue(newText);
+    }
+
+    boolean isFacebookUser(){
+        for (UserInfo user: FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
+            if (user.getProviderId().equals("facebook.com")) {
+                return true;
+            }
+        }
+        return false;
     }
 }

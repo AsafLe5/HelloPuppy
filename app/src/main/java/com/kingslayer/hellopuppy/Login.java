@@ -85,6 +85,11 @@ public class Login extends AppCompatActivity {
         // If the User already connected - go to profile.
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user != null){
+            FirebaseDatabase.getInstance().getReference().child("Users")
+                    .child(FirebaseAuth.getInstance().getUid().toString()).child("Full name")
+                    .setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString());
+/*            FirebaseDatabase.getInstance().getReference().child("Dogs")
+                    .child(FirebaseAuth.getInstance().getUid().toString());*/
             startActivity(new Intent(getApplicationContext(),Profile.class));
         }
 
@@ -198,18 +203,18 @@ public class Login extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
         if(account != null){
-            Uri profilePic = account.getPhotoUrl();
-            Picasso.get().load(profilePic).into(imageProfile);
+            //Uri profilePic = account.getPhotoUrl();
+            //Picasso.get().load(profilePic).into(imageProfile);
             // Create a table for the user in Fbase
             FirebaseDatabase.getInstance().getReference().child("Users")
                     .child(FirebaseAuth.getInstance().getUid().toString()).child("Full name")
                     .setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString());
-            FirebaseDatabase.getInstance().getReference().child("Dogs")
-                    .child(FirebaseAuth.getInstance().getUid().toString());
+/*            FirebaseDatabase.getInstance().getReference().child("Dogs")
+                    .child(FirebaseAuth.getInstance().getUid().toString());*/
         }
         else {
             //textViewUser.setText("");
-            imageProfile.setImageResource(R.drawable.ic_profile);
+            //imageProfile.setImageResource(R.drawable.ic_profile);
         }
     }
 
@@ -241,16 +246,16 @@ public class Login extends AppCompatActivity {
         if(user != null){
             textViewUser.setText(user.getDisplayName());
             if(user.getPhotoUrl()!=null){
-                photoUrl = user.getPhotoUrl().toString();
-                ProfileNameString = user.getDisplayName();
-                photoUrl= photoUrl+"?type=large";
-                Picasso.get().load(photoUrl).into(imageProfile);
+                //photoUrl = user.getPhotoUrl().toString();
+                //ProfileNameString = user.getDisplayName();
+                //photoUrl= photoUrl+"?type=large";
+                //Picasso.get().load(photoUrl).into(imageProfile);
                 // Create a table for the user in Fbase
                 FirebaseDatabase.getInstance().getReference().child("Users")
                         .child(FirebaseAuth.getInstance().getUid().toString()).child("Full name")
                         .setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString());
-                FirebaseDatabase.getInstance().getReference().child("Dogs")
-                        .child(FirebaseAuth.getInstance().getUid().toString());
+/*                FirebaseDatabase.getInstance().getReference().child("Dogs")
+                        .child(FirebaseAuth.getInstance().getUid().toString());*/
             }
         }
 
