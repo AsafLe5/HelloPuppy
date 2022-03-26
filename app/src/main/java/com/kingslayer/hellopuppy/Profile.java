@@ -45,9 +45,9 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     private TextView dogsName;
     FloatingActionButton addProfileImage;
     private Intent intent;
+    private Spinner userGenderSpinner;
     private Spinner availabilitySpinner;
-
-
+    private Spinner dogGenderSpinner;
 
     BottomNavigationView bottomNavigationView;
 
@@ -108,6 +108,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         nameTextView.setText(profileNameString);
         profileImage = findViewById(R.id.profileImage);
 
+
         if(isFacebookUser()){
             String facebookUserId = "";
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -138,14 +139,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             }
         });
 
-        buttonEditGender = findViewById(R.id.buttonEditGender);
-        buttonEditGender.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openEditNameDialog("Enter your gender", "your_gender");
-            }
-        });
-
         buttonEditAge =findViewById(R.id.buttonEditAge);
         buttonEditAge.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,17 +163,28 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             }
         });
 
+        userGenderSpinner = findViewById(R.id.your_gender);
+        ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.
+                createFromResource(this,R.array.genders, android.R.layout.simple_spinner_item);
+        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        userGenderSpinner.setAdapter(genderAdapter);
+        userGenderSpinner.setOnItemSelectedListener(this);
+
         availabilitySpinner =findViewById(R.id.availability);
-        ArrayAdapter<CharSequence> availabilityAdapter =
-                ArrayAdapter.createFromResource(this,R.array.availabilities,
-                        android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> availabilityAdapter = ArrayAdapter.
+                createFromResource(this,R.array.availabilities, android.R.layout.simple_spinner_item);
         availabilityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         availabilitySpinner.setAdapter(availabilityAdapter);
         availabilitySpinner.setOnItemSelectedListener(this);
 
+        dogGenderSpinner =findViewById(R.id.dogs_gender);
+        ArrayAdapter<CharSequence> dogsGenderAdapter = ArrayAdapter.
+                createFromResource(this,R.array.genders, android.R.layout.simple_spinner_item);
+        dogsGenderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dogGenderSpinner.setAdapter(dogsGenderAdapter);
+        dogGenderSpinner.setOnItemSelectedListener(this);
 
-
-        buttonEditDogsGender =findViewById(R.id.buttonEditGenderD);
+        buttonEditDogsGender = findViewById(R.id.buttonEditGenderD);
         buttonEditDogsGender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -282,8 +286,20 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String choice = adapterView.getItemAtPosition(i).toString();
-        addToUserFB("Availability", choice);
-        //Toast.makeText(getApplicationContext(),choice,Toast.LENGTH_LONG).show();
+        switch (adapterView.getId()){
+            case R.id.availability:
+                addToUserFB("Availability", choice);
+                break;
+            case R.id.dogs_gender:
+                addToDogFB("Gender", choice);
+                break;
+            case R.id.your_gender:
+                addToUserFB("Gender", choice);
+                break;
+            default:
+                break;
+        }
+        //Toast.makeText(getApplicationContext(),adapterView.getId(),Toast.LENGTH_LONG).show();
     }
 
     @Override

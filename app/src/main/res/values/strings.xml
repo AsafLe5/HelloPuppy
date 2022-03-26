@@ -11,4 +11,8 @@
         <item>Five days a week</item>
         <item>Six days a week</item>
     </string-array>
+    <string-array name="genders">
+        <item>male</item>
+        <item>female</item>
+    </string-array>
 </resources>
