@@ -21,6 +21,9 @@ public class Chat extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.chat);
 
+
+
+        //region $ Navigation View
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -48,6 +51,7 @@ public class Chat extends AppCompatActivity {
                 return false;
             }
         });
+        //endregion
     }
 
 }

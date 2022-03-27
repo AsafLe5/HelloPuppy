@@ -45,9 +45,9 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     private TextView dogsName;
     FloatingActionButton addProfileImage;
     private Intent intent;
+    private Spinner userGenderSpinner;
     private Spinner availabilitySpinner;
-
-
+    private Spinner dogGenderSpinner;
 
     BottomNavigationView bottomNavigationView;
 
@@ -64,6 +64,8 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.profile);
         dogsName = findViewById(R.id.dogs_name);
+
+        //region $ Navigation View
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -91,6 +93,8 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                 return false;
             }
         });
+        //endregion
+
         addProfileImage = findViewById(R.id.addProfileImage);
         addProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +111,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         nameTextView = findViewById(R.id.nameTextView);
         nameTextView.setText(profileNameString);
         profileImage = findViewById(R.id.profileImage);
+
 
         if(isFacebookUser()){
             String facebookUserId = "";
@@ -138,14 +143,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             }
         });
 
-        buttonEditGender = findViewById(R.id.buttonEditGender);
-        buttonEditGender.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openEditNameDialog("Enter your gender", "your_gender");
-            }
-        });
-
         buttonEditAge =findViewById(R.id.buttonEditAge);
         buttonEditAge.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,24 +167,26 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             }
         });
 
+        userGenderSpinner = findViewById(R.id.your_gender);
+        ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.
+                createFromResource(this,R.array.genders, android.R.layout.simple_spinner_item);
+        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        userGenderSpinner.setAdapter(genderAdapter);
+        userGenderSpinner.setOnItemSelectedListener(this);
+
         availabilitySpinner =findViewById(R.id.availability);
-        ArrayAdapter<CharSequence> availabilityAdapter =
-                ArrayAdapter.createFromResource(this,R.array.availabilities,
-                        android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> availabilityAdapter = ArrayAdapter.
+                createFromResource(this,R.array.availabilities, android.R.layout.simple_spinner_item);
         availabilityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         availabilitySpinner.setAdapter(availabilityAdapter);
         availabilitySpinner.setOnItemSelectedListener(this);
 
-
-
-        buttonEditDogsGender =findViewById(R.id.buttonEditGenderD);
-        buttonEditDogsGender.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openEditNameDialog("Enter your dog's gender",
-                        "dogs_gender");
-            }
-        });
+        dogGenderSpinner =findViewById(R.id.dogs_gender);
+        ArrayAdapter<CharSequence> dogsGenderAdapter = ArrayAdapter.
+                createFromResource(this,R.array.genders, android.R.layout.simple_spinner_item);
+        dogsGenderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dogGenderSpinner.setAdapter(dogsGenderAdapter);
+        dogGenderSpinner.setOnItemSelectedListener(this);
 
         buttonEditDogsBreed =findViewById(R.id.buttonEditBreed);
         buttonEditDogsBreed.setOnClickListener(new View.OnClickListener() {
@@ -250,11 +249,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                 TextView t5 = findViewById(R.id.location);
                 t5.setText(newText);
                 break;
-
-            case("dogs_gender"): //listBox - male,female
-                TextView t7 = findViewById(R.id.dogs_gender);
-                t7.setText(newText);
-                break;
         }
     }
 
@@ -282,8 +276,20 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String choice = adapterView.getItemAtPosition(i).toString();
-        addToUserFB("Availability", choice);
-        //Toast.makeText(getApplicationContext(),choice,Toast.LENGTH_LONG).show();
+        switch (adapterView.getId()){
+            case R.id.availability:
+                addToUserFB("Availability", choice);
+                break;
+            case R.id.dogs_gender:
+                addToDogFB("Gender", choice);
+                break;
+            case R.id.your_gender:
+                addToUserFB("Gender", choice);
+                break;
+            default:
+                break;
+        }
+        //Toast.makeText(getApplicationContext(),adapterView.getId(),Toast.LENGTH_LONG).show();
     }
 
     @Override

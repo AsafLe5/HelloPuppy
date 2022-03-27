@@ -71,15 +71,8 @@
                 android:layout_marginTop="330dp"
                 android:layout_marginStart="110dp"
                 android:hint="Enter your gender"
-                android:textSize="24dp" />
-
-            <Button
-                android:id="@+id/buttonEditGender"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="340dp"
-                android:layout_marginTop="320dp"
-                android:background="@drawable/ic_edit" />
+                android:textSize="24dp"
+                />
 
             <TextView
                 android:layout_width="100dp"
@@ -170,7 +163,7 @@
                 android:text="Gender:"
                 android:textSize="24dp" />
 
-            <TextView
+            <Spinner
                 android:id="@+id/dogs_gender"
                 android:layout_width="340dp"
                 android:layout_height="wrap_content"
@@ -178,14 +171,6 @@
                 android:layout_marginStart="110dp"
                 android:textSize="24dp"
                 android:hint="Enter your dog's gender"/>
-
-            <Button
-                android:id="@+id/buttonEditGenderD"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="340dp"
-                android:layout_marginTop="670dp"
-                android:background="@drawable/ic_edit" />
 
             <TextView
                 android:layout_width="100dp"
