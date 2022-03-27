@@ -15,4 +15,22 @@
         <item>male</item>
         <item>female</item>
     </string-array>
+    <string-array name="one_to_seven">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+        <item>Five</item>
+        <item>Six</item>
+        <item>Seven</item>
+    </string-array>
+    <string-array name="size_of_dog">
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Big</item>
+    </string-array>
+    <string-array name="yes_or_no">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
 </resources>

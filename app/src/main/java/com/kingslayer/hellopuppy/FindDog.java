@@ -21,6 +21,7 @@ public class FindDog extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.find_dog);
 
+        //region $ Navigation View
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -48,5 +49,6 @@ public class FindDog extends AppCompatActivity {
                 return false;
             }
         });
+        //endregion
     }
 }

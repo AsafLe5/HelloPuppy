@@ -15,7 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class Group extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
-    Button buttonLogin;
+    Button createGroup;
     Button buttonLogout;
 
     @Override
@@ -25,9 +25,10 @@ public class Group extends AppCompatActivity {
 
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.group);
-        buttonLogin = findViewById(R.id.button_login);
+        createGroup = findViewById(R.id.button_create_group);
         buttonLogout = findViewById(R.id.button_logout);
 
+        //region $ Navigation View
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -56,11 +57,12 @@ public class Group extends AppCompatActivity {
                 return false;
             }
         });
+        //endregion
 
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
+        createGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),Login.class));
+                startActivity(new Intent(getApplicationContext(),CreateGroup.class));
             }
         });
         

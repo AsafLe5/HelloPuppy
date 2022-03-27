@@ -64,6 +64,8 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.profile);
         dogsName = findViewById(R.id.dogs_name);
+
+        //region $ Navigation View
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -91,6 +93,8 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                 return false;
             }
         });
+        //endregion
+
         addProfileImage = findViewById(R.id.addProfileImage);
         addProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,15 +188,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         dogGenderSpinner.setAdapter(dogsGenderAdapter);
         dogGenderSpinner.setOnItemSelectedListener(this);
 
-        buttonEditDogsGender = findViewById(R.id.buttonEditGenderD);
-        buttonEditDogsGender.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openEditNameDialog("Enter your dog's gender",
-                        "dogs_gender");
-            }
-        });
-
         buttonEditDogsBreed =findViewById(R.id.buttonEditBreed);
         buttonEditDogsBreed.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -253,11 +248,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             case("location"): /** TODO: handle with GPS later*/
                 TextView t5 = findViewById(R.id.location);
                 t5.setText(newText);
-                break;
-
-            case("dogs_gender"): //listBox - male,female
-                TextView t7 = findViewById(R.id.dogs_gender);
-                t7.setText(newText);
                 break;
         }
     }

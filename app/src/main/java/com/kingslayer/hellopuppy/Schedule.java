@@ -19,6 +19,7 @@ public class Schedule extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.schedule);
 
+        //region $ Navigation View
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -46,6 +47,7 @@ public class Schedule extends AppCompatActivity {
                 return false;
             }
         });
+        //endregion
     }
 
 }
