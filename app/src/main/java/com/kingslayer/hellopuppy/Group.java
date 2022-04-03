@@ -17,6 +17,7 @@ public class Group extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     Button createGroup;
     Button buttonLogout;
+    Button group1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +28,7 @@ public class Group extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.group);
         createGroup = findViewById(R.id.button_create_group);
         buttonLogout = findViewById(R.id.button_logout);
+        group1 = findViewById(R.id.group1);
 
         //region $ Navigation View
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -73,6 +75,13 @@ public class Group extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), Login.class));
                // overridePendingTransition(0,0);
 
+            }
+        });
+
+        group1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), GroupProfile.class));
             }
         });
     }

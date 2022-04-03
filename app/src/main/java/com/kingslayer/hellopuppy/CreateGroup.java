@@ -148,11 +148,6 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
                             .child(chs.getKey()).setValue(chs.getValue());
                 }
 
-//                final ProgressDialog pd = new ProgressDialog(CreateGroup.this);
-//                pd.setMessage("Creating group...");
-//                pd.show();
-//                pd.dismiss();
-
                 Toast.makeText(CreateGroup.this,
                         "Group created successfully"
                         , Toast.LENGTH_SHORT).show();
@@ -296,6 +291,7 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
         StorageReference fileRef = FirebaseStorage.getInstance().getReference("Group profile photos")
                 .child(FirebaseAuth.getInstance().getUid().toString() +
                         "." + getFileExtention(imageUri));
+
         fileRef.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override

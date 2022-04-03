@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_height="70dp"
+            android:layout_width="70dp"
+            android:id="@+id/UserPicture"
+            android:src="@drawable/ic_profile"
+            android:layout_alignParentTop="true"/>
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name:"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_toEndOf="@id/UserPicture"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/dogsName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dog's Name:"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_below="@id/userName"
+            android:layout_toEndOf="@id/UserPicture"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/actualUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/userName"
+            android:layout_marginStart="4dp"
+            android:singleLine="true"
+            android:text="the user name"
+            android:textSize="18sp"/>
+
+
+        <TextView
+            android:id="@+id/actualDogName"
+            android:layout_width="119dp"
+            android:layout_height="31dp"
+            android:layout_below="@id/actualUserName"
+            android:layout_marginStart="4dp"
+            android:layout_toEndOf="@+id/dogsName"
+            android:singleLine="true"
+            android:text="the dog's name"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
+

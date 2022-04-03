@@ -289,7 +289,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             default:
                 break;
         }
-        //Toast.makeText(getApplicationContext(),adapterView.getId(),Toast.LENGTH_LONG).show();
+        //Toast.makeText(Toast.LENGTH_LONG,Toast.LENGTH_LONG).show();
     }
 
     @Override
