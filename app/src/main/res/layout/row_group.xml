@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_height="80dp"
+            android:layout_width="80dp"
+            android:id="@+id/GroupPicture"
+            android:src="@drawable/ic_profile"
+            android:layout_alignParentTop="true"/>
+
+
+        <TextView
+            android:id="@+id/groupsName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Group's name"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_toEndOf="@id/GroupPicture"
+            android:singleLine="true"
+            android:textSize="25dp"/>
+
+
+        <ImageView
+            android:layout_width="3dp"
+            android:layout_height="3dp"
+            android:background="@drawable/ic_dot">
+        </ImageView>
+
+        <TextView
+            android:id="@+id/NumOfMembers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Number of members"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_toEndOf="@id/GroupPicture"
+            android:layout_below="@id/groupsName"
+            android:singleLine="true"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/walksPerWeek"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Walks per week"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_toEndOf="@id/NumOfMembers"
+            android:layout_below="@id/groupsName"
+            android:singleLine="true"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/explanation_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Explanation"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_toEndOf="@id/GroupPicture"
+            android:layout_below="@id/NumOfMembers"
+            android:singleLine="true"
+            android:textSize="20sp"/>
+
+        <Button
+            android:layout_width="114dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="56dp"
+            android:layout_toEndOf="@+id/groupsName"
+            android:text="Join">
+
+        </Button>
+
+
+
+    </RelativeLayout>
+
+
+</androidx.cardview.widget.CardView>
+
+
+
+
+

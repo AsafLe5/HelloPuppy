@@ -45,6 +45,7 @@
         <activity android:name=".Chat" />
         <activity android:name=".Schedule" />
         <activity android:name=".Profile" />
+        <activity android:name=".GroupProfile" />
         <activity android:name=".Group">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -151,6 +151,8 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
                 Toast.makeText(CreateGroup.this,
                         "Group created successfully"
                         , Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(), Group.class));
+                overridePendingTransition(0,0);
 
             }
         });

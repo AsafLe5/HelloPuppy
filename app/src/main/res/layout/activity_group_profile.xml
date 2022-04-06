@@ -6,12 +6,51 @@
     android:layout_height="match_parent"
     tools:context=".GroupProfile">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/users"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="100dp"
+            android:text="Group Profile"
+            android:textColor="@color/black"
+            android:textSize="50dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/explanation_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="100dp"
+            android:text="explanation"
+            android:textColor="@color/black"
+            android:textSize="30dp"
+            android:layout_marginTop="100dp"
+            android:textStyle="bold"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            tools:listitem="@layout/row_groupchat_list"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            android:id="@+id/reall"
+            android:layout_below="@+id/explanation_text">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/users"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:listitem="@layout/row_user"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        </RelativeLayout>
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/reall"
+            android:layout_alignParentBottom="true"
+            app:itemBackground="@color/purple_500"
+            app:itemIconTint="@drawable/serlector"
+            app:itemTextColor="@drawable/serlector"
+            app:menu="@menu/menu" />
 
 </RelativeLayout>
 

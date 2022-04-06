@@ -6,12 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -31,7 +28,7 @@ public class AdapterUserList extends RecyclerView.Adapter<AdapterUserList.Holder
     @NotNull
     @Override
     public HolderUserList onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.row_groupchat_list,
+        View view = LayoutInflater.from(context).inflate(R.layout.row_user,
                 parent, false);
         return new HolderUserList(view);
     }
