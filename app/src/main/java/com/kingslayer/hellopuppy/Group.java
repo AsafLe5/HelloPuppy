@@ -28,25 +28,73 @@ public class Group extends AppCompatActivity {
     Button createGroup;
     Button buttonLogout;
     Button group1;
+    private String myGroupId;
 
     private RecyclerView groups;
     private FirebaseAuth firebaseAuth;
     private ArrayList<ModelGroup> groupsList;
     private AdapterGroupsList adapterGroupsList;
+    private DatabaseReference fb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
-
+        fb = FirebaseDatabase.getInstance().getReference();
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.group);
         createGroup = findViewById(R.id.button_create_group);
 //        buttonLogout = findViewById(R.id.button_logout);
+
         group1 = findViewById(R.id.group1);
         groups = findViewById(R.id.groups);
         firebaseAuth = FirebaseAuth.getInstance();
         loadGroups();
+
+
+
+
+        DatabaseReference groupIdRef = FirebaseDatabase.getInstance().getReference().child("Users")
+                .child(FirebaseAuth.getInstance().getUid().toString());
+
+
+        groupIdRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.hasChild("GroupId")) {
+                    myGroupId = snapshot.child("GroupId").getValue().toString();
+                    DatabaseReference membersIds = fb.child("Groups").child(myGroupId).child("MembersIds");
+                    membersIds.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot snapshot) {
+                            for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                                String s = snapshot.getValue().toString();
+                                System.out.println(snapshot.getValue()); // the String "John"
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                        }
+
+                    });
+
+                    System.out.println("he");
+                    System.out.println("he");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+
+
+
+
 
         //region $ Navigation View
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -89,11 +137,14 @@ public class Group extends AppCompatActivity {
         group1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), GroupProfile.class));
+
+                Intent intent = new Intent(getApplicationContext(), GroupProfile.class);
+                intent.putExtra("GroupId", myGroupId);
+                startActivity(intent);
+
             }
         });
     }
-
     private void loadGroups(){
         groupsList = new ArrayList<>();
 
@@ -110,8 +161,6 @@ public class Group extends AppCompatActivity {
                             ds.child("Description").getValue().toString(),
                             null));
                 }
-               // groupsList.add(new ModelGroup("erin", "2",
-                 //       "walksPerWeek", "vnicn;", null));
                 adapterGroupsList = new AdapterGroupsList(Group.this, groupsList);
                 groups.setAdapter(adapterGroupsList);
             }
@@ -124,4 +173,3 @@ public class Group extends AppCompatActivity {
     }
 
 }
-             

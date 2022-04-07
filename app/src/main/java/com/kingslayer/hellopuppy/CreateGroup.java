@@ -43,7 +43,10 @@ import com.google.firebase.storage.UploadTask;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CreateGroup extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -66,7 +69,7 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
     private static final int IMAGE_PICK_GALLERY_CODE = 400;
     private String[] cameraPermissions;
     private String[] storagePermissions;
-
+    private String groupId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,14 +132,16 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
             @Override
             public void onClick(View view) {
 
+                groupId = ""+System.currentTimeMillis();
+
                 // name of group
                 FirebaseDatabase.getInstance().getReference().child("Groups")
-                        .child(FirebaseAuth.getInstance().getUid().toString())
+                        .child(groupId)
                         .child("Name").setValue(nameOfGroup.getText().toString());
 
                 // description of the group
                 FirebaseDatabase.getInstance().getReference().child("Groups")
-                        .child(FirebaseAuth.getInstance().getUid().toString())
+                        .child(groupId)
                         .child("Description").setValue(descriptionOfGroup.getText().toString());
 
                 // upload photo
@@ -144,7 +149,7 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
                 // all spinners of group
                 for (Map.Entry<String,String> chs : choices.entrySet()){
                     FirebaseDatabase.getInstance().getReference().child("Groups")
-                            .child(FirebaseAuth.getInstance().getUid().toString())
+                            .child(groupId)
                             .child(chs.getKey()).setValue(chs.getValue());
                 }
 
@@ -154,6 +159,26 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
                 startActivity(new Intent(getApplicationContext(), Group.class));
                 overridePendingTransition(0,0);
 
+
+                //String[] names = {FirebaseAuth.getInstance().getUid().toString()};
+                List<String> nameList;
+                nameList = new ArrayList<>();
+                nameList.add(FirebaseAuth.getInstance().getUid().toString());
+
+                FirebaseDatabase.getInstance().getReference().child("Groups")
+                        .child(groupId)
+                        .child("MembersIds").setValue(nameList).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<Void> task) {
+                        Toast.makeText(getApplicationContext(), "shalom", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+
+                // storing my group id
+                FirebaseDatabase.getInstance().getReference().child("Users")
+                        .child(FirebaseAuth.getInstance().getUid().toString())
+                        .child("GroupId").setValue(groupId);
             }
         });
         //endregion
@@ -291,7 +316,7 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
         pd.show();
 
         StorageReference fileRef = FirebaseStorage.getInstance().getReference("Group profile photos")
-                .child(FirebaseAuth.getInstance().getUid().toString() +
+                .child(groupId.toString() +
                         "." + getFileExtention(imageUri));
 
         fileRef.putFile(imageUri)

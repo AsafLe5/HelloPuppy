@@ -46,7 +46,9 @@ public class WatchProfile extends AppCompatActivity {
         dogAgeText = findViewById(R.id.dog_age_text);
         isVaccinatedText = findViewById(R.id.is_vaccinated_text);
         isCastratedText = findViewById(R.id.is_castrated_text);
-        user = getIntent().getParcelableExtra("User").toString();
+        if (getIntent().hasExtra("User")){
+            user = getIntent().getParcelableExtra("User").toString();
+        }
 
         setUserProfile();
 
