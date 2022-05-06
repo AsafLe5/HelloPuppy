@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F1EDED"
+    tools:context=".GroupChatActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/purple"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_height="80dp"
+                android:layout_width="80dp"
+                android:id="@+id/GroupPicture"
+                android:src="@drawable/ic_profile"
+                android:layout_alignParentTop="true"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/groupTitle"
+                android:layout_toEndOf="@+id/GroupPicture"
+                android:text="Group Title"
+                android:textSize="18sp"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                >
+            </TextView>
+
+        </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/chat"
+        android:layout_below="@+id/toolbar"
+        android:layout_above="@+id/chatLayout"
+        tools:listitem="@layout/row_groupchat_left"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <LinearLayout
+        android:id="@+id/chatLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@color/white"
+        android:layout_alignParentBottom="true"
+        >
+
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/attachBtn"
+            android:src="@drawable/ic_attach_file"
+            android:background="@null">
+        </ImageButton>
+
+        <EditText
+            android:id="@+id/messageEt"
+            android:hint="Start typing..."
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textCapSentences|textMultiLine"
+            android:layout_weight="1"
+            android:background="@null">
+        </EditText>
+
+        <ImageButton
+            android:id="@+id/sendBtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_send">
+        </ImageButton>
+
+    </LinearLayout>
+
+</RelativeLayout>

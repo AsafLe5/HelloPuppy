@@ -1,6 +1,7 @@
 package com.kingslayer.hellopuppy;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,15 +11,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kingslayer.hellopuppy.Models.ModelGroup;
+
 import org.jetbrains.annotations.NotNull;
 
-import java.net.URL;
 import java.util.ArrayList;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.HolderGroupsList>{
 
     private Context context;
     private ArrayList<ModelGroup> groupsChatList;
+    private String groupId;
 
     public AdapterGroupsList(Context context, ArrayList<ModelGroup> groupsChatList){
         this.context = context;
@@ -42,6 +47,8 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
         String explanation = group.getExplanation();
         holder.explanation.setText(explanation);
 
+        groupId = group.getGroupId();
+
         String groupName = group.getGroupName();
         holder.groupName.setText(groupName);
 
@@ -63,6 +70,13 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), GroupProfile.class);
+                intent.putExtra("GroupId", groupId);
+                context.startActivity(intent);
+                //open group chat
+//                Intent intent = new Intent(context, GroupChatActivity.class);
+//                intent.putExtra("groupId", groupId);
+//                context.startActivity(intent);
 //                Toast.makeText(ModelUser.this,
 //                        "user clicked!", Toast.LENGTH_SHORT).show();
 

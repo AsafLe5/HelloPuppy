@@ -1,4 +1,4 @@
-package com.kingslayer.hellopuppy;
+package com.kingslayer.hellopuppy.Models;
 
 import android.widget.ImageView;
 
@@ -9,18 +9,20 @@ public class ModelGroup {
     private String numOfMembers;
     private String explanation;
     private String groupName;
+    private String groupId;
 //    private URL imageUrl;
 
     public ModelGroup(){
     }
 
     public ModelGroup(String groupName, String numOfMembers, String walksPerWeek,
-                      String explanation, URL imageUrl){
+                      String explanation, URL imageUrl, String groupId){
         this.groupName = groupName;
         this.explanation = explanation;
         this.numOfMembers = numOfMembers;
         this.walksPerWeek = walksPerWeek;
 //        this.imageUrl = imageUrl;
+        this.groupId = groupId;
     }
 
     //region $ getters
@@ -40,7 +42,10 @@ public class ModelGroup {
         return walksPerWeek;
     }
 
-//    public URL getImageUrl() {
+    public String getGroupId() {
+        return groupId;
+    }
+    //    public URL getImageUrl() {
 //        return imageUrl;
 //    }
     //endregion
@@ -64,6 +69,10 @@ public class ModelGroup {
 
     public void setWalksPerWeek(String walksPerWeek) {
         this.walksPerWeek = walksPerWeek;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
     }
     //endregion
 }

@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kingslayer.hellopuppy.Models.ModelUser;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

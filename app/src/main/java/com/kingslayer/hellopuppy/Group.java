@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.kingslayer.hellopuppy.Models.ModelGroup;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -39,19 +40,68 @@ public class Group extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        String myId = FirebaseAuth.getInstance().getUid();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+
+                for(DataSnapshot ds: snapshot.getChildren()){
+
+                    assert myId != null;
+                    if(ds.getKey().equals(myId)){
+                        String groupId = ds.child("GroupId").getValue().toString();
+//                        if(ds.child(myId).hasChild("GroupId")){
+//                            String asdasdasdasdasdasdasd = ds.child(myId).child("GroupId").toString();
+                            Intent intent = new Intent(getApplicationContext(), GroupProfile.class);
+                            intent.putExtra("GroupId", groupId);
+                            startActivity(intent);
+                            overridePendingTransition(0,0);
+                            return;
+    //                        Button myJbtn = findViewById(R.id.button_create_group);
+    //                        myJbtn.setAlpha(1);
+    //                        createGroup.getBackground().setAlpha(255);
+    //                        ViewGroup layout = (ViewGroup) createGroup.getParent();
+    //                        if(null!=layout) //for safety only  as you are doing onClick
+    //                            layout.removeView(createGroup);
+    //                        createGroup.setBackground();
+    //                        Toast.makeText(CreateGroup.this,
+    //                                "You are already in a group!", Toast.LENGTH_SHORT).show();
+    //                        Intent intent = new Intent(getApplicationContext(), Group.class);
+    //                        startActivity(intent);
+
+                    }
+                }
+                initializeGroups();
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+
+        // trigger onDataChange
+        reference.child("Tempi").setValue("deleteInAMinute");
+        reference.child("Tempi").removeValue();
+    }
+
+    private void initializeGroups() {
         setContentView(R.layout.activity_group);
         fb = FirebaseDatabase.getInstance().getReference();
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.group);
         createGroup = findViewById(R.id.button_create_group);
+
+
+
 //        buttonLogout = findViewById(R.id.button_logout);
 
-        group1 = findViewById(R.id.group1);
+//        group1 = findViewById(R.id.group1);
         groups = findViewById(R.id.groups);
         firebaseAuth = FirebaseAuth.getInstance();
         loadGroups();
-
-
 
 
         DatabaseReference groupIdRef = FirebaseDatabase.getInstance().getReference().child("Users")
@@ -134,17 +184,19 @@ public class Group extends AppCompatActivity {
             }
         });
 
-        group1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+//        group1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Intent intent = new Intent(getApplicationContext(), GroupProfile.class);
+//                intent.putExtra("GroupId", myGroupId);
+//                startActivity(intent);
+//
+//            }
+//        });
 
-                Intent intent = new Intent(getApplicationContext(), GroupProfile.class);
-                intent.putExtra("GroupId", myGroupId);
-                startActivity(intent);
-
-            }
-        });
     }
+
     private void loadGroups(){
         groupsList = new ArrayList<>();
 
@@ -159,7 +211,7 @@ public class Group extends AppCompatActivity {
                             ds.child("numOfFriends").getValue().toString(),
                             ds.child("sizeOfDogs").getValue().toString(),
                             ds.child("Description").getValue().toString(),
-                            null));
+                            null, ds.getKey()));
                 }
                 adapterGroupsList = new AdapterGroupsList(Group.this, groupsList);
                 groups.setAdapter(adapterGroupsList);

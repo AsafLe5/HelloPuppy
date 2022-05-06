@@ -1,4 +1,4 @@
-package com.kingslayer.hellopuppy;
+package com.kingslayer.hellopuppy.Models;
 
 public class ModelUser {
     String userName, dogsName;

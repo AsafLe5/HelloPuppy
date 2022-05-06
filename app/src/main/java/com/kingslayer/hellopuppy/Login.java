@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.facebook.LoggingBehavior;
+import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -65,6 +67,7 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_login);
 
         imageProfile = findViewById(R.id.profileImage);
@@ -94,6 +97,7 @@ public class Login extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(),Profile.class));
         }
 
+        FacebookSdk.setClientToken("de914a5a5db3dd92cfd3378bfa1b5fc7");
         FacebookSdk.sdkInitialize(getApplicationContext());
         textViewUser = findViewById(R.id.text_user);
         facebookLogin = findViewById(R.id.facebook_login_button);

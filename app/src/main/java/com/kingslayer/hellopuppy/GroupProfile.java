@@ -15,13 +15,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.kingslayer.hellopuppy.Models.ModelUser;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +46,7 @@ public class GroupProfile extends AppCompatActivity {
         }
         usersList = null;
         bottomNavigationView = findViewById(R.id.bottom_navigator);
-        bottomNavigationView.setSelectedItemId(R.id.profile);
+        bottomNavigationView.setSelectedItemId(R.id.group);
         users = findViewById(R.id.users);
         firebaseAuth = FirebaseAuth.getInstance();
         loadUsers();
@@ -58,10 +57,10 @@ public class GroupProfile extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.group:
-                        startActivity(new Intent(getApplicationContext(), Group.class));
-                        overridePendingTransition(0, 0);
                         return true;
                     case R.id.profile:
+                        startActivity(new Intent(getApplicationContext(), Profile.class));
+                        overridePendingTransition(0, 0);
                         return true;
                     case R.id.schedule:
                         startActivity(new Intent(getApplicationContext(), Schedule.class));
@@ -86,55 +85,27 @@ public class GroupProfile extends AppCompatActivity {
     private void loadUsers() {
         usersList = new ArrayList<>();
 
+        DatabaseReference DbRef = FirebaseDatabase.getInstance().getReference();
 
-        DatabaseReference membersIdsDR = FirebaseDatabase.getInstance().getReference().child("Groups")
-                .child(groupId).child("MembersIds");
-        DatabaseReference usersDR = FirebaseDatabase.getInstance().getReference("Users");
-        DatabaseReference dogsDR = FirebaseDatabase.getInstance().getReference("Dogs");
-
-
-        membersIdsDR.addListenerForSingleValueEvent(new ValueEventListener() {
+        DbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                usersList.size();
-                long c = snapshot.getChildrenCount();
-                int a = 4;
-                membersArray = (List<String>) snapshot.getValue();
 
-            }
+                membersArray = (List<String>) snapshot.child("Groups").child(groupId)
+                        .child("MembersIds").getValue();
+                for(String member: membersArray){
+//                    snapshot.child("Users").child(member);
+                    ModelUser asd = new ModelUser();
+                    asd.setUserName(snapshot.child("Users").child(member)
+                            .child("Full name").getValue().toString());
 
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                    asd.setDogsName(snapshot.child("Dogs").child(member)
+                            .child("Name").getValue().toString());
 
-            }
-        });
+                    usersModelMap.put(member, asd);
 
-        usersDR.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                for (String userIdString : membersArray) {
-                    for (DataSnapshot attribute : snapshot.child(userIdString).getChildren()) {
-                        switch (attribute.getKey().toString()) {
-                            case "Full name":
-                                if (modDog != true)
-                                    usersModelMap.put(userIdString, new ModelUser());
-                                usersModelMap.get(userIdString).setUserName(attribute.getValue().toString());
-                               // UsersModelMap[attribute.getKey()] = new ModelUser();
-                                //newUserModel.setUserName(attribute.getValue().toString());
-                                break;
-
-/*
-                            case "Full":
-
-                                break;
-*/
-                            default:
-                        }
-                    }
                 }
-                modUser = true;
-                if (modDog == true)
-                    updateMod();
+                updateMod();
             }
 
             @Override
@@ -142,42 +113,92 @@ public class GroupProfile extends AppCompatActivity {
 
             }
         });
-        dogsDR.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                for (String userIdString : membersArray) {
-                    for (DataSnapshot dogAttribute : snapshot.child(userIdString).getChildren()) {
-                        switch (dogAttribute.getKey().toString()) {
-                            case "Name":
-                                if (modUser != true)
-                                    usersModelMap.put(userIdString, new ModelUser());
-                                ModelUser asd = usersModelMap.get(userIdString);
-                                asd.setDogsName(dogAttribute.getValue().toString());
-                                break;
-/*
-                            case "Full":
-
-                                break;
-*/
-                            default:
-                        }
-                        //String a = attribute.getValue().toString();
-                        System.out.println("dfg");
-                    }
-                    //snapshot.child(user).getValue();
-                }
-                modDog = true;
-                if (modUser == true)
-                    updateMod();
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-        });
+        DbRef.child("Users").child("Tempi").setValue("deleteInAMinute");
+        //DbRef.child("Users").child("Tempi").removeValue();
 
 
+//
+//        membersIdsDR.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+//                usersList.size();
+//                long c = snapshot.getChildrenCount();
+//                int a = 4;
+//                membersArray = (List<String>) snapshot.getValue();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+//
+//            }
+//        });
+//        membersIdsDR.child("Tempi").setValue("deleteInAMinute");
+//        membersIdsDR.child("Tempi").removeValue();
+//        usersDR.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+//                for (String userIdString : membersArray) {
+//                    for (DataSnapshot attribute : snapshot.child(userIdString).getChildren()) {
+//                        switch (attribute.getKey().toString()) {
+//                            case "Full name":
+//                                if (modDog != true)
+//                                    usersModelMap.put(userIdString, new ModelUser());
+//                                usersModelMap.get(userIdString).setUserName(attribute.getValue().toString());
+//                               // UsersModelMap[attribute.getKey()] = new ModelUser();
+//                                //newUserModel.setUserName(attribute.getValue().toString());
+//                                break;
+//
+//                            default:
+//                        }
+//                    }
+//                }
+//                modUser = true;
+//                if (modDog)
+//                    updateMod();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+//
+//            }
+//        });
+//        dogsDR.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+//                for (String userIdString : membersArray) {
+//                    for (DataSnapshot dogAttribute : snapshot.child(userIdString).getChildren()) {
+//                        switch (dogAttribute.getKey().toString()) {
+//                            case "Name":
+//                                if (modUser != true)
+//                                    usersModelMap.put(userIdString, new ModelUser());
+//                                ModelUser asd = usersModelMap.get(userIdString);
+//                                asd.setDogsName(dogAttribute.getValue().toString());
+//                                break;
+///*
+//                            case "Full":
+//
+//                                break;
+//*/
+//                            default:
+//                        }
+//                        //String a = attribute.getValue().toString();
+//                        System.out.println("dfg");
+//                    }
+//                    //snapshot.child(user).getValue();
+//                }
+//                modDog = true;
+//                if (modUser)
+//                    updateMod();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+//
+//            }
+//        });
+//
+//        membersIdsDR.child("Tempi").setValue("deleteInAMinute");
+//        membersIdsDR.child("Tempi").removeValue();
     }
     void updateMod(){
         for (Map.Entry<String, ModelUser> model : usersModelMap.entrySet()){

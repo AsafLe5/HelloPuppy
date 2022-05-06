@@ -36,7 +36,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -74,6 +78,7 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_create_group);
 
         bottomNavigationView = findViewById(R.id.bottom_navigator);
@@ -82,6 +87,7 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
         descriptionOfGroup = findViewById(R.id.group_description);
         createGroup = findViewById(R.id.create_group);
         uploadGroupImage = findViewById(R.id.button_upload_image);
+
 
         //region $ Spinner and Adapters initialization
         numOfFriends = (Spinner) findViewById(R.id.limit_friends_spinner);
@@ -179,6 +185,16 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
                 FirebaseDatabase.getInstance().getReference().child("Users")
                         .child(FirebaseAuth.getInstance().getUid().toString())
                         .child("GroupId").setValue(groupId);
+
+                FirebaseDatabase.getInstance().getReference().child("Groups")
+                        .child(groupId).child("groupManagerId")
+                        .setValue(FirebaseAuth.getInstance().getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<Void> task) {
+                        Toast.makeText(getApplicationContext(), "shalom", Toast.LENGTH_LONG).show();
+                    }
+                });;
+
             }
         });
         //endregion
@@ -213,6 +229,7 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
             }
         });
         //endregion
+
 
 
     }
