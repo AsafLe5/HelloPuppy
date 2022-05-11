@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.ColorSpace;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,10 +37,13 @@ public class Group extends AppCompatActivity {
     private ArrayList<ModelGroup> groupsList;
     private AdapterGroupsList adapterGroupsList;
     private DatabaseReference fb;
+    private Button requsestJoinBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requsestJoinBtn = findViewById(R.id.RequestJoin);
 
         String myId = FirebaseAuth.getInstance().getUid();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
@@ -50,7 +54,7 @@ public class Group extends AppCompatActivity {
                 for(DataSnapshot ds: snapshot.getChildren()){
 
                     assert myId != null;
-                    if(ds.getKey().equals(myId)){
+                    if(ds.getKey().equals(myId) && ds.hasChild("GroupId")){
                         String groupId = ds.child("GroupId").getValue().toString();
 //                        if(ds.child(myId).hasChild("GroupId")){
 //                            String asdasdasdasdasdasdasd = ds.child(myId).child("GroupId").toString();
@@ -120,7 +124,6 @@ public class Group extends AppCompatActivity {
                             for (DataSnapshot postSnapshot: snapshot.getChildren()) {
                                 String s = snapshot.getValue().toString();
                                 System.out.println(snapshot.getValue()); // the String "John"
-
                             }
                         }
 
@@ -130,9 +133,6 @@ public class Group extends AppCompatActivity {
                         }
 
                     });
-
-                    System.out.println("he");
-                    System.out.println("he");
                 }
             }
 
@@ -141,9 +141,6 @@ public class Group extends AppCompatActivity {
 
             }
         });
-
-
-
 
 
         //region $ Navigation View
@@ -207,11 +204,20 @@ public class Group extends AppCompatActivity {
                 groupsList.size();
                 for(DataSnapshot ds: snapshot.getChildren()){
                     //groupsList.add(ds.getValue(ModelGroup.class));
-                    groupsList.add(new ModelGroup(ds.child("Name").getValue().toString(),
+                    String ldkfgjlsrjg = ds.getKey().toString();
+                    String a1 = ds.child("Name").getValue().toString();
+                    String a2 = ds.child("numOfFriends").getValue().toString();
+                    String a3 = ds.child("Description").getValue().toString();
+
+                    String a4 = ds.getKey().toString();
+
+                    ModelGroup newMG = new ModelGroup(ds.child("Name").getValue().toString(),
                             ds.child("numOfFriends").getValue().toString(),
                             ds.child("sizeOfDogs").getValue().toString(),
                             ds.child("Description").getValue().toString(),
-                            null, ds.getKey()));
+                            null, ds.getKey().toString());
+                    groupsList.add(newMG);
+
                 }
                 adapterGroupsList = new AdapterGroupsList(Group.this, groupsList);
                 groups.setAdapter(adapterGroupsList);

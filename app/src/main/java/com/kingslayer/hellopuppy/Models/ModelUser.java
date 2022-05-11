@@ -1,16 +1,15 @@
 package com.kingslayer.hellopuppy.Models;
 
 public class ModelUser {
-    String userName, dogsName;
+    String userName, dogsName, availability, userId;
+
 
     public ModelUser(){
     }
 
-    public ModelUser(String userName, String dogsName){
-        this.userName = userName;
-        this.dogsName = dogsName;
+    public String getUserId() {
+        return userId;
     }
-
 
     public String getUserName(){
         return userName;
@@ -20,11 +19,23 @@ public class ModelUser {
         return dogsName;
     }
 
+    public String getAvailability() {
+        return availability;
+    }
+
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
     public void setDogsName(String dogsName) {
         this.dogsName = dogsName;
+    }
+
+    public void setAvailability(String availability) {
+        this.availability = availability;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

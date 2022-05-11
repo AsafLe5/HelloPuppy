@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,10 +28,12 @@ import java.util.Map;
 
 public class GroupProfile extends AppCompatActivity {
     private RecyclerView users;
+    private RecyclerView requestUsers;
     private FirebaseAuth firebaseAuth;
     private ArrayList<ModelUser> usersList;
     private AdapterUserList adapterUserList;
     private BottomNavigationView bottomNavigationView;
+    private Button buttonJoinRequests;
     private String groupId;
     private List<String> membersArray;
     private Map<String,ModelUser> usersModelMap = new HashMap<String,ModelUser>();;
@@ -44,12 +48,25 @@ public class GroupProfile extends AppCompatActivity {
             Bundle B = getIntent().getExtras();
             groupId = B.getString("GroupId");
         }
+        buttonJoinRequests = findViewById(R.id.button_join_requests);
         usersList = null;
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.group);
         users = findViewById(R.id.users);
         firebaseAuth = FirebaseAuth.getInstance();
         loadUsers();
+
+        buttonJoinRequests.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), JoinRequests.class);
+                intent.putExtra("GroupId", groupId);
+                startActivity(intent);
+                overridePendingTransition(0,0);
+//                startActivity(new Intent(getApplicationContext(), Profile.class));
+//                overridePendingTransition(0, 0);
+            }
+        });
 
         //region $ Navigation View
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -207,5 +224,6 @@ public class GroupProfile extends AppCompatActivity {
         adapterUserList = new AdapterUserList(GroupProfile.this, usersList);
         users.setAdapter(adapterUserList);
     }
+
 }
 

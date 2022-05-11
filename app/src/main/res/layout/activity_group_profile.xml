@@ -16,6 +16,16 @@
             android:textSize="50dp"
             android:textStyle="bold"/>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_join_requests"
+            android:paddingVertical="13dp"
+            android:paddingHorizontal="13dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="55dp"
+            android:text="join requests"/>
+
         <TextView
             android:id="@+id/explanation_text"
             android:layout_width="wrap_content"

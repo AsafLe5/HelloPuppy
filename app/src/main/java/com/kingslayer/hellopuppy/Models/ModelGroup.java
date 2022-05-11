@@ -1,18 +1,26 @@
 package com.kingslayer.hellopuppy.Models;
 
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.kingslayer.hellopuppy.R;
 
 import java.net.URL;
 
-public class ModelGroup {
+
+public class ModelGroup extends AppCompatActivity {
     private String walksPerWeek;
     private String numOfMembers;
     private String explanation;
     private String groupName;
     private String groupId;
+    private Button requestJoinBtn;
 //    private URL imageUrl;
 
-    public ModelGroup(){
+    public ModelGroup()  {
     }
 
     public ModelGroup(String groupName, String numOfMembers, String walksPerWeek,
@@ -23,7 +31,22 @@ public class ModelGroup {
         this.walksPerWeek = walksPerWeek;
 //        this.imageUrl = imageUrl;
         this.groupId = groupId;
+        //this.requestJoinBtn = findViewById(R.id.RequestJoin);
+
+//        requestJoinBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                Toast.makeText(Group., "clicked", Toast.LENGTH_SHORT).show();
+//                String a = groupId;
+//            }
+//    });
+   }
+
+    public Button getRequestJoinBtn() {
+        return requestJoinBtn;
     }
+
+
 
     //region $ getters
     public String getNumOfMembers() {

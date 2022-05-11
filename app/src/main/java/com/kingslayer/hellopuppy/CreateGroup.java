@@ -150,7 +150,7 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
                         .child(groupId)
                         .child("Description").setValue(descriptionOfGroup.getText().toString());
 
-                // upload photo
+                /**** upload photo**/
 
                 // all spinners of group
                 for (Map.Entry<String,String> chs : choices.entrySet()){
@@ -162,8 +162,7 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
                 Toast.makeText(CreateGroup.this,
                         "Group created successfully"
                         , Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), Group.class));
-                overridePendingTransition(0,0);
+
 
 
                 //String[] names = {FirebaseAuth.getInstance().getUid().toString()};
@@ -177,6 +176,7 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
                     @Override
                     public void onComplete(@NonNull @NotNull Task<Void> task) {
                         Toast.makeText(getApplicationContext(), "shalom", Toast.LENGTH_LONG).show();
+
                     }
                 });
 
@@ -192,6 +192,8 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
                     @Override
                     public void onComplete(@NonNull @NotNull Task<Void> task) {
                         Toast.makeText(getApplicationContext(), "shalom", Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(getApplicationContext(), Group.class));
+                        overridePendingTransition(0,0);
                     }
                 });;
 

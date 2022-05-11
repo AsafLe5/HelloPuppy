@@ -5,17 +5,22 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.kingslayer.hellopuppy.Models.ModelGroup;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -24,10 +29,15 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
     private Context context;
     private ArrayList<ModelGroup> groupsChatList;
     private String groupId;
+    private List<String> membersIds;
 
     public AdapterGroupsList(Context context, ArrayList<ModelGroup> groupsChatList){
         this.context = context;
         this.groupsChatList = groupsChatList;
+        membersIds = new ArrayList<>();
+//        membersIds.add("mask");
+
+        int s = 8;
     }
 
     @NonNull
@@ -49,6 +59,10 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
 
         groupId = group.getGroupId();
 
+//        FirebaseDatabase.getInstance().getReference().child("Groups")
+//                .child(groupId).child("Join requests")
+//                .setValue(membersIds);
+
         String groupName = group.getGroupName();
         holder.groupName.setText(groupName);
 
@@ -57,6 +71,9 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
 
         String numOfMembers = group.getNumOfMembers();
         holder.numOfMembers.setText(numOfMembers);
+
+        Button requestJoin = group.getRequestJoinBtn();
+
 
 
         try {
@@ -70,6 +87,8 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 Intent intent = new Intent(getApplicationContext(), GroupProfile.class);
                 intent.putExtra("GroupId", groupId);
                 context.startActivity(intent);
@@ -82,7 +101,22 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
 
             }
         });
+
+        holder.itemView.findViewById(R.id.RequestJoin).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                membersIds.add(FirebaseAuth.getInstance().getUid());
+                FirebaseDatabase.getInstance().getReference().child("Groups")
+                        .child(groupId).child("Join requests")
+                        .setValue(membersIds);
+
+            }
+        });
+
+
+
     }
+
 
     @Override
     public int getItemCount() {
