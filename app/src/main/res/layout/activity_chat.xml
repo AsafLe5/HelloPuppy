@@ -9,8 +9,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Chat"
-        android:textSize="50dp"
+        android:text="You don't have a group yet"
+        android:textSize="30dp"
         android:textStyle="bold"
         android:layout_centerInParent="true"
         android:textColor="@color/black"

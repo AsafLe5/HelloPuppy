@@ -62,7 +62,6 @@ public class EditNameDialog extends AppCompatDialogFragment {
             throw new ClassCastException(context.toString()+
                     "must implement EditNameDialogListener");
         }
-
     }
 
     public interface EditNameDialogListener{

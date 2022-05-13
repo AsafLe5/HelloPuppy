@@ -195,8 +195,7 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
                         startActivity(new Intent(getApplicationContext(), Group.class));
                         overridePendingTransition(0,0);
                     }
-                });;
-
+                });
             }
         });
         //endregion

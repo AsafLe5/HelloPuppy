@@ -42,12 +42,6 @@ public class ModelGroup extends AppCompatActivity {
 //    });
    }
 
-    public Button getRequestJoinBtn() {
-        return requestJoinBtn;
-    }
-
-
-
     //region $ getters
     public String getNumOfMembers() {
         return numOfMembers;
@@ -68,6 +62,11 @@ public class ModelGroup extends AppCompatActivity {
     public String getGroupId() {
         return groupId;
     }
+
+    public Button getRequestJoinBtn() {
+        return requestJoinBtn;
+    }
+
     //    public URL getImageUrl() {
 //        return imageUrl;
 //    }

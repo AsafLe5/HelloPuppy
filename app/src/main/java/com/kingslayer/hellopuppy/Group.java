@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.ColorSpace;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.kingslayer.hellopuppy.Adapters.AdapterGroupsList;
 import com.kingslayer.hellopuppy.Models.ModelGroup;
 
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +31,6 @@ public class Group extends AppCompatActivity {
     Button buttonLogout;
     Button group1;
     private String myGroupId;
-
     private RecyclerView groups;
     private FirebaseAuth firebaseAuth;
     private ArrayList<ModelGroup> groupsList;
@@ -54,27 +53,14 @@ public class Group extends AppCompatActivity {
                 for(DataSnapshot ds: snapshot.getChildren()){
 
                     assert myId != null;
+                    String sdf = ds.getKey();
                     if(ds.getKey().equals(myId) && ds.hasChild("GroupId")){
                         String groupId = ds.child("GroupId").getValue().toString();
-//                        if(ds.child(myId).hasChild("GroupId")){
-//                            String asdasdasdasdasdasdasd = ds.child(myId).child("GroupId").toString();
                             Intent intent = new Intent(getApplicationContext(), GroupProfile.class);
                             intent.putExtra("GroupId", groupId);
                             startActivity(intent);
                             overridePendingTransition(0,0);
                             return;
-    //                        Button myJbtn = findViewById(R.id.button_create_group);
-    //                        myJbtn.setAlpha(1);
-    //                        createGroup.getBackground().setAlpha(255);
-    //                        ViewGroup layout = (ViewGroup) createGroup.getParent();
-    //                        if(null!=layout) //for safety only  as you are doing onClick
-    //                            layout.removeView(createGroup);
-    //                        createGroup.setBackground();
-    //                        Toast.makeText(CreateGroup.this,
-    //                                "You are already in a group!", Toast.LENGTH_SHORT).show();
-    //                        Intent intent = new Intent(getApplicationContext(), Group.class);
-    //                        startActivity(intent);
-
                     }
                 }
                 initializeGroups();
@@ -191,7 +177,6 @@ public class Group extends AppCompatActivity {
 //
 //            }
 //        });
-
     }
 
     private void loadGroups(){

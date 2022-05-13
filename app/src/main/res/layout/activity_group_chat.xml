@@ -45,6 +45,7 @@
         android:layout_height="match_parent"
         android:id="@+id/chat"
         android:layout_below="@+id/toolbar"
+        app:stackFromEnd="true"
         android:layout_above="@+id/chatLayout"
         tools:listitem="@layout/row_groupchat_left"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
@@ -86,5 +87,15 @@
         </ImageButton>
 
     </LinearLayout>
+
+<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--        android:id="@+id/bottom_navigator"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        app:itemBackground="@color/purple_500"-->
+<!--        app:itemIconTint="@drawable/serlector"-->
+<!--        app:itemTextColor="@drawable/serlector"-->
+<!--        app:menu="@menu/menu" />-->
 
 </RelativeLayout>

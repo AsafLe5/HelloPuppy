@@ -1,4 +1,4 @@
-package com.kingslayer.hellopuppy;
+package com.kingslayer.hellopuppy.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,14 +8,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.kingslayer.hellopuppy.GroupProfile;
 import com.kingslayer.hellopuppy.Models.ModelGroup;
+import com.kingslayer.hellopuppy.R;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -36,8 +37,6 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
         this.groupsChatList = groupsChatList;
         membersIds = new ArrayList<>();
 //        membersIds.add("mask");
-
-        int s = 8;
     }
 
     @NonNull
@@ -73,7 +72,6 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
         holder.numOfMembers.setText(numOfMembers);
 
         Button requestJoin = group.getRequestJoinBtn();
-
 
 
         try {

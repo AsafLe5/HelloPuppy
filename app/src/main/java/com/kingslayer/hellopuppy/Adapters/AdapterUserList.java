@@ -1,4 +1,4 @@
-package com.kingslayer.hellopuppy;
+package com.kingslayer.hellopuppy.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kingslayer.hellopuppy.Models.ModelUser;
+import com.kingslayer.hellopuppy.R;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.kingslayer.hellopuppy.Adapters.AdapterUserList;
 import com.kingslayer.hellopuppy.Models.ModelUser;
 
 import org.jetbrains.annotations.NotNull;
@@ -224,6 +225,5 @@ public class GroupProfile extends AppCompatActivity {
         adapterUserList = new AdapterUserList(GroupProfile.this, usersList);
         users.setAdapter(adapterUserList);
     }
-
 }
 
