@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,7 +25,7 @@ public class Chat extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+        setContentView(R.layout.loading_page);
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.chat);
 
@@ -41,12 +42,14 @@ public class Chat extends AppCompatActivity {
                         String groupId = ds.child("GroupId").getValue().toString();
                         Intent intent = new Intent(getApplicationContext(), GroupChatActivity.class);
                         intent.putExtra("GroupId", groupId);
+                        findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                         startActivity(intent);
                         overridePendingTransition(0,0);
                         return;
                     }
                 }
-
+                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                setContentView(R.layout.activity_chat);
             }
 
             @Override

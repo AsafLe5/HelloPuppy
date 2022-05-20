@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ChooseShifts">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="500dp"
+        android:layout_height="wrap_content"
+        android:text="Choose wanted shifts"
+        android:textSize="40dp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/explanation"
+        android:layout_width="500dp"
+        android:layout_height="wrap_content"
+        android:text="Rate each day below by how much you want to have this shift next week:"
+        android:textSize="22dp"
+        android:layout_below="@id/title"/>
+
+
+    <TextView
+        android:id="@+id/sunday_text"
+        android:layout_below="@id/explanation"
+        android:layout_marginTop="20dp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Sunday:"
+        android:textSize="24dp" />
+
+    <Spinner
+        android:id="@+id/sunday_spinner"
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/sunday_text"
+        android:layout_below="@id/explanation"
+        android:layout_marginTop="20dp"
+        android:hint="Enter your gender"
+        android:textSize="24dp"
+        />
+
+    <TextView
+        android:id="@+id/monday_text"
+        android:layout_below="@id/sunday_text"
+        android:layout_marginTop="20dp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Monday:"
+        android:textSize="24dp" />
+
+    <Spinner
+        android:id="@+id/monday_spinner"
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/monday_text"
+        android:layout_below="@id/sunday_spinner"
+        android:layout_marginTop="30dp"
+        android:hint="Enter your gender"
+        android:textSize="24dp"
+        />
+
+    <TextView
+        android:id="@+id/tuesday_text"
+        android:layout_below="@id/monday_text"
+        android:layout_marginTop="20dp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Tuesday:"
+        android:textSize="24dp" />
+
+    <Spinner
+        android:id="@+id/tuesday_spinner"
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/tuesday_text"
+        android:layout_below="@id/monday_spinner"
+        android:layout_marginTop="30dp"
+        android:hint="Enter your gender"
+        android:textSize="24dp"
+        />
+
+    <TextView
+        android:id="@+id/wednesday_text"
+        android:layout_below="@id/tuesday_text"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wednesday:"
+        android:textSize="24dp" />
+
+    <Spinner
+        android:id="@+id/wednesday_spinner"
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/wednesday_text"
+        android:layout_below="@id/tuesday_spinner"
+        android:layout_marginTop="30dp"
+        android:hint="Enter your gender"
+        android:textSize="24dp"
+        />
+
+    <TextView
+        android:id="@+id/thursday_text"
+        android:layout_below="@id/wednesday_text"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thursday:"
+        android:textSize="24dp" />
+
+    <Spinner
+        android:id="@+id/thursday_spinner"
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/thursday_text"
+        android:layout_below="@id/wednesday_spinner"
+        android:layout_marginTop="30dp"
+        android:hint="Enter your gender"
+        android:textSize="24dp"
+        />
+
+    <TextView
+        android:id="@+id/friday_text"
+        android:layout_below="@id/thursday_text"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Friday:"
+        android:textSize="24dp" />
+
+    <Spinner
+        android:id="@+id/friday_spinner"
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/friday_text"
+        android:layout_below="@id/thursday_spinner"
+        android:layout_marginTop="30dp"
+        android:hint="Enter your gender"
+        android:textSize="24dp"
+        />
+
+    <TextView
+        android:id="@+id/saturday_text"
+        android:layout_below="@id/friday_text"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+            android:text="Saturday:"
+        android:textSize="24dp" />
+
+    <Spinner
+        android:id="@+id/saturday_spinner"
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/saturday_text"
+        android:layout_below="@id/friday_spinner"
+        android:layout_marginTop="30dp"
+        android:hint="Enter your gender"
+        android:textSize="24dp"
+        />
+
+    <Button
+        android:id="@+id/submit_shifts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:layout_below="@id/saturday_text"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        />
+
+
+</RelativeLayout>

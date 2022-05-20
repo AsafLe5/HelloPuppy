@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F1EDED"
+    android:id="@+id/group_layout"
     tools:context=".GroupChatActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -88,14 +89,24 @@
 
     </LinearLayout>
 
+<!--    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--        xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--        xmlns:tools="http://schemas.android.com/tools"-->
+<!--        android:layout_alignBottom="@+id/chatLayout"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:id="@+id/grlayout">-->
+
 <!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
 <!--        android:id="@+id/bottom_navigator"-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentBottom="true"-->
 <!--        app:itemBackground="@color/purple_500"-->
 <!--        app:itemIconTint="@drawable/serlector"-->
 <!--        app:itemTextColor="@drawable/serlector"-->
 <!--        app:menu="@menu/menu" />-->
+<!--    </LinearLayout>-->
+
 
 </RelativeLayout>
