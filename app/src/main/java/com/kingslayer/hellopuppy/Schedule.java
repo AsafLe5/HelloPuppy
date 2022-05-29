@@ -106,9 +106,9 @@ public class Schedule extends AppCompatActivity {
         });
         //endregion
 
-//        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(
-//                MakeShifts.class, 7, TimeUnit.DAYS).build();
-//        WorkManager.getInstance().enqueue(periodicWorkRequest);
+        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(
+                MakeShifts.class, 7, TimeUnit.DAYS).build();
+        WorkManager.getInstance().enqueue(periodicWorkRequest);
     }
 
 }

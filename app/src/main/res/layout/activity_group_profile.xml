@@ -13,18 +13,20 @@
             android:layout_marginStart="100dp"
             android:text="Group Profile"
             android:textColor="@color/black"
-            android:textSize="50dp"
+            android:textSize="35dp"
             android:textStyle="bold"/>
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/button_join_requests"
-            android:paddingVertical="13dp"
-            android:paddingHorizontal="13dp"
-            android:layout_centerHorizontal="true"
+            android:layout_width="101dp"
+            android:layout_height="73dp"
+            android:textSize="10dp"
+            android:layout_alignParentEnd="true"
             android:layout_marginTop="55dp"
-            android:text="join requests"/>
+            android:layout_marginEnd="9dp"
+            android:paddingHorizontal="13dp"
+            android:paddingVertical="13dp"
+            android:text="join requests" />
 
         <TextView
             android:id="@+id/explanation_text"
@@ -48,8 +50,12 @@
                     android:id="@+id/users"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    tools:listitem="@layout/row_user"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginBottom="0dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/row_user" />
         </RelativeLayout>
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigator"

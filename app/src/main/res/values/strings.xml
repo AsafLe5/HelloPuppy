@@ -2,6 +2,9 @@
     <string name="app_name">HelloPuppy</string>
     <string name="facebook_app_id">2700875820221797</string>
     <string name="fb_login_protocol_scheme">fb2700875820221797</string>
+
+    <string name="google_maps_key">AIzaSyAkGSmYtUXZUJqggjS3GZ9l9cI9eVfiffM</string>
+
     <string name="Welcome"> Welcome to HelloPuppy! </string>
     <string-array name="availabilities">
         <item>One day a week</item>
