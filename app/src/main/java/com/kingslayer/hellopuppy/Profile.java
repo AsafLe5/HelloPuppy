@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.drjacky.imagepicker.ImagePicker;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -24,8 +23,14 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -44,12 +49,18 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     private ImageView profileImage;
     private TextView dogsName;
     FloatingActionButton addProfileImage;
-    private Intent intent;
+//    private Intent intent;
     private Spinner userGenderSpinner;
     private Spinner availabilitySpinner;
     private Spinner dogGenderSpinner;
 
+    private TextView usersAge;
+    private TextView dogsAge;
     BottomNavigationView bottomNavigationView;
+
+    private String userGender;
+    private String availability;
+    private String dogGender;
 
 
 
@@ -57,13 +68,67 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        //intent = getIntent();
-        //Bundle extras = intent.getExtras();
         String profileNameString  = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
         profileImageUri = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
+
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.profile);
         dogsName = findViewById(R.id.dogs_name);
+        usersAge = findViewById(R.id.your_age);
+        dogsAge = findViewById(R.id.dogs_age);
+
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                DataSnapshot user = snapshot.child("Users").child(FirebaseAuth.getInstance().getUid().toString());
+                DataSnapshot dog = snapshot.child("Dogs").child(FirebaseAuth.getInstance().getUid().toString());
+                if (user.hasChild("Age")){
+                    usersAge.setText(user.child("Age").getValue().toString());
+                }
+
+                if (dog.hasChild("Name")){
+                    dogsName.setText(dog.child("Name").getValue().toString());
+                }
+
+                if (dog.hasChild("Age")){
+                    dogsAge.setText(dog.child("Age").getValue().toString());
+                }
+
+                if(user.hasChild("Gender")){
+                    userGender = user.child("Gender").getValue().toString();
+                    handleUserGender();
+                }
+                else{
+                    userGenderSpinner.setSelection(0);
+                    addToUserFB("Gender", "male");
+                }
+
+                if(user.hasChild("Availability")){
+                    availability = user.child("Availability").getValue().toString();
+                    handleAvailability();
+                }
+                else{
+                    availabilitySpinner.setSelection(0);
+                    addToUserFB("Availability", "One day a week");
+                }
+
+                if(dog.hasChild("Gender")){
+                    dogGender = dog.child("Gender").getValue().toString();
+                    handleDogGender();
+                }
+                else {
+                    dogGenderSpinner.setSelection(0);
+                    addToDogFB("Gender", "male");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+
 
         //region $ Navigation View
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -173,6 +238,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         userGenderSpinner.setAdapter(genderAdapter);
         userGenderSpinner.setOnItemSelectedListener(this);
+        handleUserGender();
 
         availabilitySpinner =findViewById(R.id.availability);
         ArrayAdapter<CharSequence> availabilityAdapter = ArrayAdapter.
@@ -180,6 +246,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         availabilityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         availabilitySpinner.setAdapter(availabilityAdapter);
         availabilitySpinner.setOnItemSelectedListener(this);
+        handleAvailability();
 
         dogGenderSpinner =findViewById(R.id.dogs_gender);
         ArrayAdapter<CharSequence> dogsGenderAdapter = ArrayAdapter.
@@ -187,6 +254,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         dogsGenderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dogGenderSpinner.setAdapter(dogsGenderAdapter);
         dogGenderSpinner.setOnItemSelectedListener(this);
+        handleDogGender();
 
         buttonEditDogsBreed =findViewById(R.id.buttonEditBreed);
         buttonEditDogsBreed.setOnClickListener(new View.OnClickListener() {
@@ -197,6 +265,84 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             }
         });
     }
+
+    public void handleAvailability(){
+        if(availability!= null){
+            switch (availability){
+                case "One day a week":
+                    availabilitySpinner.setSelection(0);
+                    break;
+                case "Two days a week":
+                    availabilitySpinner.setSelection(1);
+                    break;
+                case "Three days a week":
+                    availabilitySpinner.setSelection(2);
+                    break;
+                case "Four days a week":
+                    availabilitySpinner.setSelection(3);
+                    break;
+                case "Five days a week":
+                    availabilitySpinner.setSelection(4);
+                    break;
+                case "Six days a week":
+                    availabilitySpinner.setSelection(5);
+                    break;
+            }
+        }
+        else{
+            // trigger onDataChange to get userGender
+
+            DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+            dbRef.child("Tempi").setValue("deleteInAMinute");
+            dbRef.child("Tempi").removeValue();
+        }
+    }
+
+    public void handleDogGender(){
+        if(dogGender!= null){
+            if (dogGender.equals("male")){
+                if(dogGenderSpinner != null)
+                    dogGenderSpinner.setSelection(0);
+            }
+            else{
+                if(dogGenderSpinner != null)
+                    dogGenderSpinner.setSelection(1);
+            }
+        }
+
+        else{
+            // trigger onDataChange to get userGender
+
+            DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+            dbRef.child("Tempi").setValue("deleteInAMinute");
+            dbRef.child("Tempi").removeValue();
+        }
+    }
+
+    public void handleUserGender(){
+        if(userGender!= null){
+            if (userGender.equals("male")){
+                if(userGenderSpinner != null)
+                    userGenderSpinner.setSelection(0);
+            }
+            else{
+                if(userGenderSpinner != null)
+                    userGenderSpinner.setSelection(1);
+            }
+        }
+
+         else{
+            // trigger onDataChange to get userGender
+
+            DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+            dbRef.child("Tempi").setValue("deleteInAMinute");
+            dbRef.child("Tempi").removeValue();
+        }
+    }
+
+
+
+
     public void openEditNameDialog(String hint, String strViewToChange){
         EditNameDialog editNameDialog = new EditNameDialog(hint, strViewToChange);
         editNameDialog.show(getSupportFragmentManager(),null);
@@ -237,6 +383,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             case("dogs_age"):
                 TextView t3 = findViewById(R.id.dogs_age);
                 t3.setText(newText);
+                addToDogFB("Age", newText);
                 break;
 
             case("your_gender"):
@@ -278,14 +425,24 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         String choice = adapterView.getItemAtPosition(i).toString();
         switch (adapterView.getId()){
             case R.id.availability:
-                addToUserFB("Availability", choice);
+                if(availability != null){
+                    availability = choice;
+                    addToUserFB("Availability", choice);
+                }
                 break;
             case R.id.dogs_gender:
-                addToDogFB("Gender", choice);
+                if(dogGender!= null){
+                    dogGender = choice;
+                    addToDogFB("Gender", choice);
+                }
                 break;
             case R.id.your_gender:
-                addToUserFB("Gender", choice);
+                if(userGender != null){
+                    userGender = choice;
+                    addToUserFB("Gender", choice);
+                }
                 break;
+
             default:
                 break;
         }

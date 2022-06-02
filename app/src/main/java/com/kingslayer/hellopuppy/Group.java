@@ -188,13 +188,6 @@ public class Group extends AppCompatActivity {
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 groupsList.size();
                 for(DataSnapshot ds: snapshot.getChildren()){
-                    //groupsList.add(ds.getValue(ModelGroup.class));
-                    String ldkfgjlsrjg = ds.getKey().toString();
-                    String a1 = ds.child("Name").getValue().toString();
-                    String a2 = ds.child("numOfFriends").getValue().toString();
-                    String a3 = ds.child("Description").getValue().toString();
-
-                    String a4 = ds.getKey().toString();
 
                     ModelGroup newMG = new ModelGroup(ds.child("Name").getValue().toString(),
                             ds.child("numOfFriends").getValue().toString(),

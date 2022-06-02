@@ -33,6 +33,9 @@ public class Schedule extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
 
+//        Intent intent = getIntent();
+//        groupId = intent.getStringExtra("GroupId");
+
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.schedule);
         chooseShifts = findViewById(R.id.choose_shifts);
@@ -41,9 +44,9 @@ public class Schedule extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // trigger onDataChange
-                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
-                reference.child("Tempi").setValue("deleteInAMinute");
-                reference.child("Tempi").removeValue();
+//                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+//                reference.child("Tempi").setValue("deleteInAMinute");
+//                reference.child("Tempi").removeValue();
                 if(groupId != null){
                     Intent intent = new Intent(getApplicationContext(), ChooseShifts.class);
                     intent.putExtra("GroupId", groupId);
@@ -65,8 +68,9 @@ public class Schedule extends AppCompatActivity {
                         groupId = ds.child("GroupId").getValue().toString();
                     }
                 }
-//                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-//                setContentView(R.layout.activity_chat);
+//
+////                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+////                setContentView(R.layout.activity_chat);
             }
 
             @Override
@@ -110,5 +114,4 @@ public class Schedule extends AppCompatActivity {
                 MakeShifts.class, 7, TimeUnit.DAYS).build();
         WorkManager.getInstance().enqueue(periodicWorkRequest);
     }
-
 }

@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.kingslayer.hellopuppy.Models.ModelUser;
@@ -82,6 +84,9 @@ public class AdapterJoinRequests extends
 
                 DatabaseReference DbRef = FirebaseDatabase.getInstance().getReference("Groups").child(groupId);
                 DbRef.child("Join requests").setValue(requestsIds);
+
+                FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
+                        .child("ScheduleChoices").child(user.getUserId().toString()).child("Credits").setValue(5);
 
 
 //                DbRef.addValueEventListener(new ValueEventListener() {
