@@ -299,33 +299,20 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
                 minSize = tempDay.size();
         }
 
-        if (progr < 100-100/creditsLeft - 1 && minSize < 4){
-
-//            sundaySpinner.addV(0);
-//            sundaySpinner.setSelection(0, true);
+        if (progr <= 100-200/creditsLeft && minSize < 4){
             IncToFiveOpt(curr);
-
         }
 
-        if (progr < 100-200/creditsLeft - 1 && minSize < 2){
+        if (progr <= 100-100/creditsLeft && minSize < 2){
             IncToThreeOpt(curr);
-
         }
 
         if (progr > 100-200/creditsLeft && minSize > 4){
             DecToThreeOpt(curr, day);
-
-
-//            sundaySpinner.removeViewAt(0);
-//            sundaySpinner.removeViewAt(4);
         }
 
         if (progr > 100-100/creditsLeft && minSize >2){
             DecToOneOpt(curr, day);
-
-//            sundaySpinner.removeViewAt(1);
-//            sundaySpinner.removeViewAt(3);
-
         }
     }
 
@@ -343,48 +330,50 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
 
             }
         }
-        for (ArrayAdapter day: daysAdapter.values())
-            day.notifyDataSetChanged();
-
-//        sundayInventory.remove(0);
-//        sundayInventory.remove(3);
-//        sundayAdapter.notifyDataSetChanged();
+        for (ArrayAdapter day: daysAdapter.values()){
+           // if(Math.abs(choice) == 2 && !choices.get(day).equals("2") && !choices.get(day).equals("-2"))
+                day.notifyDataSetChanged();
+        }
     }
 
     private void DecToOneOpt(int choice, String currDay) {
 
         for (String day : daysInventory.keySet()){
-            if(Math.abs(choice) == 1 && !choices.get(day).equals("1")&& !choices.get(day).equals("-1")) {
+            if(Math.abs(choice) == 1 && !choices.get(day).equals("1")&& !choices.get(day).equals("-1")
+                    && !choices.get(day).equals("-2") && !choices.get(day).equals("2")){
                 daysInventory.get(day).remove(0);
                 daysInventory.get(day).remove(1);
             }
         }
 
         for (String day : daysAdapter.keySet()){
-            if(Math.abs(choice) == 1 && !choices.get(day).equals("1")&& !choices.get(day).equals("-1")) {
+            if(Math.abs(choice) == 1 && !choices.get(day).equals("1")&& !choices.get(day).equals("-1")
+                && !choices.get(day).equals("-2") && !choices.get(day).equals("2")) {
                 daysSpinner.get(day).setSelection(0);
             }
         }
-//        for (List<String> day : daysInventory.values()){
-//            if(Math.abs(choice) != 1) {
-//                day.remove(0);
-//                day.remove(1);
-//            }
-//        }
+
         for (ArrayAdapter day: daysAdapter.values())
             day.notifyDataSetChanged();
-//        sundayInventory.remove(0);
-//        sundayInventory.remove(1);
-//        sundayAdapter.notifyDataSetChanged();
+
     }
 
     private void IncToThreeOpt(int choice) {
 
 
         for (List<String> day : daysInventory.values()){
-            day.add(0, "bad");
-            day.add("good");
+            if (day.size() == 1){
+                day.add(0, "bad");
+                day.add("good");
+            }
         }
+
+//        for (String day : daysAdapter.keySet()){
+//            if(daysInventory.get(day).size() == 3) {
+//                daysSpinner.get(day).setSelection(1);
+//            }
+//        }
+
         for (ArrayAdapter day: daysAdapter.values())
             day.notifyDataSetChanged();
 
@@ -397,8 +386,10 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
     private void IncToFiveOpt(int choice) {
 
         for (List<String> day : daysInventory.values()){
-            day.add(0, "really bad");
-            day.add( "really good");
+            if(day.size() == 3) {
+                day.add(0, "really bad");
+                day.add("really good");
+            }
         }
         for (ArrayAdapter day: daysAdapter.values())
             day.notifyDataSetChanged();

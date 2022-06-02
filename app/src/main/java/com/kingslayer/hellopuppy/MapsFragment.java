@@ -85,7 +85,6 @@ public class MapsFragment extends FragmentActivity implements
         {
             checkUserLocationPermission();
         }
-
     }
 
 //    public void onClick(View view)
@@ -212,7 +211,6 @@ public class MapsFragment extends FragmentActivity implements
         }
 
         else return true;
-
     }
 
     @Override
