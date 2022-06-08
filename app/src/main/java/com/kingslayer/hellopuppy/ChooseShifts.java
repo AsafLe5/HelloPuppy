@@ -184,7 +184,6 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
         fridaySpinner.setOnItemSelectedListener(this);
         fridaySpinner.setSelection(2);
 
-
         saturdaySpinner = findViewById(R.id.saturday_spinner);
         saturdayAdapter = new ArrayAdapter(this,R.layout.support_simple_spinner_dropdown_item, saturdayInventory);
         saturdayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -233,7 +232,7 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
                 // -> for every person save each day and what he wants
                 DatabaseReference dref = FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
                         .child("ScheduleChoices").child(FirebaseAuth.getInstance().getUid()
-                        .toString());
+                                .toString());
 
                 dref.child("Sunday").setValue(sundayChoice);
                 dref.child("Monday").setValue(mondayChoice);
@@ -286,7 +285,6 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
-
     private void updateProgressBar(String times, String before, String day) {
         int prev = Math.abs(Integer.parseInt(before));
         int curr = Math.abs(Integer.parseInt(times));
@@ -299,6 +297,7 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
                 minSize = tempDay.size();
         }
 
+
         if (progr <= 100-200/creditsLeft && minSize < 4){
             IncToFiveOpt(curr);
         }
@@ -307,7 +306,7 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
             IncToThreeOpt(curr);
         }
 
-        if (progr > 100-200/creditsLeft && minSize > 4){
+        if (progr > 100-200/creditsLeft){
             DecToThreeOpt(curr, day);
         }
 
@@ -318,29 +317,54 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
 
     private void DecToThreeOpt(int choice, String currDay) {
 
+
         for (String day : daysInventory.keySet()){
-            if(Math.abs(choice) == 2 && !choices.get(day).equals("2") && !choices.get(day).equals("-2") ) {
+            if(!choices.get(day).equals("2") && !choices.get(day).equals("-2")
+                    && daysInventory.get(day).size() == 5) {
                 daysInventory.get(day).remove(0);
                 daysInventory.get(day).remove(3);
             }
+/*            if(Math.abs(choice) == 2 && !choices.get(day).equals("1") && !choices.get(day).equals("-1") ) {
+                daysInventory.get(day).remove(0);
+                daysInventory.get(day).remove(1);
+            }*/
         }
         for (String day : daysAdapter.keySet()){
-            if(Math.abs(choice) == 2 && !choices.get(day).equals("2") && !choices.get(day).equals("-2")) {
+            if(!choices.get(day).equals("2") && !choices.get(day).equals("-2")
+                    && daysInventory.get(day).size() == 3) {
+                if (choices.get(day).equals("0")){
+                    daysSpinner.get(day).setSelection(1);
+
+                }
+                if(choices.get(day).equals("1")){
+                    daysSpinner.get(day).setSelection(0);
+
+                }
+                if(choices.get(day).equals("-1")){
+//                    if(daysAdapter.get(day).getCount() == 3)
+                    daysSpinner.get(day).setSelection(2);
+//                    else
+//                        daysSpinner.get(day).setSelection(0);
+                    System.out.println(day);
+                }
+            }
+/*            if(Math.abs(choice) == 2 && !choices.get(day).equals("1") && !choices.get(day).equals("-1")) {
                 daysSpinner.get(day).setSelection(1);
 
-            }
+            }*/
         }
         for (ArrayAdapter day: daysAdapter.values()){
-           // if(Math.abs(choice) == 2 && !choices.get(day).equals("2") && !choices.get(day).equals("-2"))
-                day.notifyDataSetChanged();
+            // if(Math.abs(choice) == 2 && !choices.get(day).equals("2") && !choices.get(day).equals("-2"))
+            day.notifyDataSetChanged();
         }
     }
 
     private void DecToOneOpt(int choice, String currDay) {
 
         for (String day : daysInventory.keySet()){
-            if(Math.abs(choice) == 1 && !choices.get(day).equals("1")&& !choices.get(day).equals("-1")
-                    && !choices.get(day).equals("-2") && !choices.get(day).equals("2")){
+            if(!choices.get(day).equals("1")&& !choices.get(day).equals("-1")
+                    && !choices.get(day).equals("-2") && !choices.get(day).equals("2")
+                    && daysInventory.get(day).size() == 3){
                 daysInventory.get(day).remove(0);
                 daysInventory.get(day).remove(1);
             }
@@ -348,8 +372,10 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
 
         for (String day : daysAdapter.keySet()){
             if(Math.abs(choice) == 1 && !choices.get(day).equals("1")&& !choices.get(day).equals("-1")
-                && !choices.get(day).equals("-2") && !choices.get(day).equals("2")) {
+                    && !choices.get(day).equals("-2") && !choices.get(day).equals("2")
+                    && daysInventory.get(day).size() == 1) {
                 daysSpinner.get(day).setSelection(0);
+
             }
         }
 
@@ -359,14 +385,28 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void IncToThreeOpt(int choice) {
-
+        boolean daysChanged[] = {false,false,false,false,false,false,false};
+        int i = 0;
 
         for (List<String> day : daysInventory.values()){
             if (day.size() == 1){
                 day.add(0, "bad");
                 day.add("good");
+                daysChanged[i] = true;
             }
+            i++;
         }
+        i = 0;
+        for (String day : daysAdapter.keySet()){
+
+            if(daysChanged[i])
+                daysSpinner.get(day).setSelection(1);
+            i++;
+        }
+
+
+        for (ArrayAdapter day: daysAdapter.values())
+            day.notifyDataSetChanged();
 
 //        for (String day : daysAdapter.keySet()){
 //            if(daysInventory.get(day).size() == 3) {
@@ -374,8 +414,7 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
 //            }
 //        }
 
-        for (ArrayAdapter day: daysAdapter.values())
-            day.notifyDataSetChanged();
+
 
 //        sundayInventory.add(0, "bad");
 //        sundayInventory.add("good");
@@ -384,28 +423,67 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void IncToFiveOpt(int choice) {
+        Map<String, String> wasBefore = new HashMap<>(7);
+        wasBefore.put("sunday", "");
+        wasBefore.put("monday", "");
+        wasBefore.put("tuesday", "");
+        wasBefore.put("wednesday", "");
+        wasBefore.put("thursday", "");
+        wasBefore.put("friday", "");
+        wasBefore.put("saturday", "");
 
-        for (List<String> day : daysInventory.values()){
-            if(day.size() == 3) {
-                day.add(0, "really bad");
-                day.add("really good");
+        boolean daysChanged[] = {false,false,false,false,false,false,false};
+        int i = 0;
+        for (String day : daysInventory.keySet()){
+            if(daysInventory.get(day).size() == 3  && choices.get(day).equals("0")) {
+                daysInventory.get(day).add(0, "really bad");
+                daysInventory.get(day).add("really good");
+                daysChanged[i] = true;
             }
+
+            else{
+                if(daysInventory.get(day).size() == 3) {
+                    daysInventory.get(day).add(0, "really bad");
+                    daysInventory.get(day).add("really good");
+                    wasBefore.put(day , choices.get(day));
+                }
+            }
+            i++;
         }
+
         for (ArrayAdapter day: daysAdapter.values())
             day.notifyDataSetChanged();
 
-//        sundayInventory.add(0, "really bad");
-//        sundayInventory.add( "really good");
-//        sundayAdapter.notifyDataSetChanged();
+        i = 0;
+        for (String day : daysAdapter.keySet()){
+            if(daysChanged[i])
+                daysSpinner.get(day).setSelection(2);
+            i++;
+        }
 
+        for (String day : daysAdapter.keySet()){
+            if(!wasBefore.get(day).equals("")){
+                daysSpinner.get(day).setSelection(getIndexInThree(wasBefore.get(day)) + 1);
+            }
+        }
     }
 
+    public int getIndexInThree(String opt){
+        switch (opt){
+            case "1":
+                return 0;
+            case "-1":
+                return 2;
+            default:
+                return 0;
+        }
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        boolean nothing = false;
+//        boolean nothing = false;
         String temp="0";
-        int day;
+//        int day;
         String choice = parent.getItemAtPosition(position).toString();
         switch (parent.getId()) {
             case R.id.sunday_spinner:
@@ -465,7 +543,7 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
                 updateProgressBar(getNumOfCredits(choice), temp, "saturday");
                 break;
             default:
-                nothing =true;
+//                nothing =true;
                 break;
         }
 //        if (!nothing)

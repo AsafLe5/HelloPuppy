@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,8 +17,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.drjacky.imagepicker.ImagePicker;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FacebookAuthProvider;
@@ -452,5 +457,26 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    // checks whether there is google api service, without it maps won't work.
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        int errorCode = GoogleApiAvailability.getInstance()
+                .isGooglePlayServicesAvailable(this);
+
+        if (errorCode != ConnectionResult.SUCCESS){
+            Dialog errorDialog = GoogleApiAvailability.getInstance()
+                    .getErrorDialog(this, errorCode, errorCode, new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialogInterface) {
+                            Toast.makeText(Profile.this, "no services",Toast.LENGTH_LONG).show();
+                        }
+                    });
+            errorDialog.show();
+        }
+        else
+            Toast.makeText(Profile.this, "there's services",Toast.LENGTH_LONG).show();
     }
 }
