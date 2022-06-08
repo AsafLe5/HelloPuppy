@@ -183,7 +183,7 @@ public class Group extends AppCompatActivity {
         groupsList = new ArrayList<>();
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Groups");
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 groupsList.size();

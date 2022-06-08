@@ -33,7 +33,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -132,42 +136,32 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
 
                 groupId = ""+System.currentTimeMillis();
 
+                DatabaseReference groupRef = FirebaseDatabase.getInstance().getReference().child("Groups")
+                        .child(groupId);
+
                 // name of group
-                FirebaseDatabase.getInstance().getReference().child("Groups")
-                        .child(groupId)
-                        .child("Name").setValue(nameOfGroup.getText().toString());
+                groupRef.child("Name").setValue(nameOfGroup.getText().toString());
 
                 // description of the group
-                FirebaseDatabase.getInstance().getReference().child("Groups")
-                        .child(groupId)
-                        .child("Description").setValue(descriptionOfGroup.getText().toString());
+                groupRef.child("Description").setValue(descriptionOfGroup.getText().toString());
 
                 /**** upload photo**/
 
                 // all spinners of group
                 for (Map.Entry<String,String> chs : choices.entrySet()){
-                    FirebaseDatabase.getInstance().getReference().child("Groups")
-                            .child(groupId)
-                            .child(chs.getKey()).setValue(chs.getValue());
+                    groupRef.child(chs.getKey()).setValue(chs.getValue());
                 }
-
-                Toast.makeText(CreateGroup.this,
-                        "Group created successfully"
-                        , Toast.LENGTH_SHORT).show();
-
 
 
                 //String[] names = {FirebaseAuth.getInstance().getUid().toString()};
                 List<String> nameList;
                 nameList = new ArrayList<>();
                 nameList.add(FirebaseAuth.getInstance().getUid().toString());
-
-                FirebaseDatabase.getInstance().getReference().child("Groups")
-                        .child(groupId)
-                        .child("MembersIds").setValue(nameList).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                groupRef.child("MembersIds").setValue(nameList);
+                groupRef.child("MembersIds").setValue(nameList).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<Void> task) {
-                        Toast.makeText(getApplicationContext(), "shalom", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(), "shalom", Toast.LENGTH_LONG).show();
 
                     }
                 });
@@ -178,18 +172,41 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
                         .child(FirebaseAuth.getInstance().getUid().toString())
                         .child("GroupId").setValue(groupId);
 
-                FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
-                        .child("ScheduleChoices").child(FirebaseAuth.getInstance().getUid()
+                groupRef.child("ScheduleChoices").child(FirebaseAuth.getInstance().getUid()
                         .toString()).child("Credits").setValue(5);
 
-                FirebaseDatabase.getInstance().getReference().child("Groups")
-                        .child(groupId).child("groupManagerId")
-                        .setValue(FirebaseAuth.getInstance().getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                groupRef.child("FindDog").child("CurrentlyOnTrip").setValue("");
+//                groupRef.child("groupManagerId").setValue(FirebaseAuth.getInstance().getUid().toString());
+
+                groupRef.child("groupManagerId").setValue(FirebaseAuth.getInstance().getUid())
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<Void> task) {
-                        Toast.makeText(getApplicationContext(), "shalom", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(), "shalom", Toast.LENGTH_LONG).show();
                         startActivity(new Intent(getApplicationContext(), Group.class));
                         overridePendingTransition(0,0);
+                    }
+                });
+
+                groupRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+//                        if(snapshot.hasChild("Name") && snapshot.hasChild("Description")
+//                                &&snapshot.hasChild("MembersIds") && snapshot.hasChild("ScheduleChoices")
+//                                &&snapshot.hasChild("FindDog") && snapshot.hasChild("groupManagerId")) {
+
+                        if (snapshot.getChildrenCount() == 10){
+                            Toast.makeText(CreateGroup.this, "Group created successfully"
+                                    , Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(getApplicationContext(), Group.class));
+                            overridePendingTransition(0,0);
+//                        }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
                     }
                 });
             }
