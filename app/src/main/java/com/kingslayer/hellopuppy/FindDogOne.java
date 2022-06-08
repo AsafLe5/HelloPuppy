@@ -140,6 +140,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.jetbrains.annotations.NotNull;
@@ -190,6 +191,9 @@ public class FindDogOne extends FragmentActivity implements OnMapReadyCallback,
             public void onClick(View view) {
                 // start map
                 // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+                FirebaseDatabase.getInstance().getReference("Groups").child(myGroupId)
+                        .child("FindDog").child("CurrentlyOnTrip").setValue(FirebaseAuth.getInstance().getUid().toString());
+
                 SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                         .findFragmentById(R.id.map);
                 mapFragment.getMapAsync(FindDogOne.this);
