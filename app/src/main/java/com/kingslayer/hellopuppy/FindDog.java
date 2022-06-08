@@ -167,8 +167,7 @@ public class FindDog extends AppCompatActivity{
 //        }
 
         if(currentlyOnTrip.equals("")){
-            FirebaseDatabase.getInstance().getReference("Groups").child(myGroupId)
-                    .child("FindDog").child("CurrentlyOnTrip").setValue(FirebaseAuth.getInstance().getUid().toString());
+
 
             Intent intent = new Intent(getApplicationContext(), FindDogOne.class);
             intent.putExtra("myGroupId", myGroupId);

@@ -91,6 +91,10 @@ public class FindDogOthers extends FragmentActivity implements OnMapReadyCallbac
                 }
             }
 
+
+            DatabaseReference locationDBR = FirebaseDatabase.getInstance().getReference("Groups")
+                    .child(myGroupId).child("FindDog").child("location");
+
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
