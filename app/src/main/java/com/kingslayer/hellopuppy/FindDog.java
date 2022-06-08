@@ -167,8 +167,6 @@ public class FindDog extends AppCompatActivity{
 //        }
 
         if(currentlyOnTrip.equals("")){
-
-
             Intent intent = new Intent(getApplicationContext(), FindDogOne.class);
             intent.putExtra("myGroupId", myGroupId);
             startActivity(intent);

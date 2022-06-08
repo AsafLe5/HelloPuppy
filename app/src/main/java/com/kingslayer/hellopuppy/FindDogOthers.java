@@ -19,6 +19,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,6 +42,7 @@ public class FindDogOthers extends FragmentActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private LatLng location;
     private String myGroupId;
+    private Marker marker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,8 +73,11 @@ public class FindDogOthers extends FragmentActivity implements OnMapReadyCallbac
                     location = new LatLng(Double.parseDouble(snapshot.child("latitude").getValue().toString()),
                             Double.parseDouble(snapshot.child("longitude").getValue().toString()));
 
-                    mMap.addMarker(new MarkerOptions().position(location)
-                            .title("Current location"));
+                    if(marker != null){
+                        marker.remove();
+                    }
+
+                    marker = mMap.addMarker(new MarkerOptions().position(location).title("Current location"));
                     float zoomLevel = 16.0f; //This goes up to 21
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, zoomLevel));
 
