@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22dp"
+        android:layout_marginStart="100dp"
+        android:id="@+id/name">
+    </TextView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22dp"
+        android:text="is currently on a trip"
+        android:layout_centerHorizontal="true"
+        android:layout_toEndOf="@+id/name">
+    </TextView>
+
+    <fragment
+        xmlns:tools="http://schemas.android.com/tools&#8221;"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_marginTop="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        android:layout_below="@+id/name"
+        tools:context=".FindDogOthers">
+    </fragment>
+
+    <TextView
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="current address:"
+        android:id="@+id/addr_text">
+    </TextView>
+
+    <TextView
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/address"
+        android:layout_toEndOf="@+id/addr_text">
+    </TextView>
+
+</RelativeLayout>
+

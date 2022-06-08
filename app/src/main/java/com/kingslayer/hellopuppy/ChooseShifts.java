@@ -331,7 +331,7 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
         }
         for (String day : daysAdapter.keySet()){
             if(!choices.get(day).equals("2") && !choices.get(day).equals("-2")
-                    && daysInventory.get(day).size() == 3) {
+            && daysInventory.get(day).size() == 3) {
                 if (choices.get(day).equals("0")){
                     daysSpinner.get(day).setSelection(1);
 
@@ -364,7 +364,7 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
         for (String day : daysInventory.keySet()){
             if(!choices.get(day).equals("1")&& !choices.get(day).equals("-1")
                     && !choices.get(day).equals("-2") && !choices.get(day).equals("2")
-                    && daysInventory.get(day).size() == 3){
+            && daysInventory.get(day).size() == 3){
                 daysInventory.get(day).remove(0);
                 daysInventory.get(day).remove(1);
             }
@@ -373,7 +373,7 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
         for (String day : daysAdapter.keySet()){
             if(Math.abs(choice) == 1 && !choices.get(day).equals("1")&& !choices.get(day).equals("-1")
                     && !choices.get(day).equals("-2") && !choices.get(day).equals("2")
-                    && daysInventory.get(day).size() == 1) {
+            && daysInventory.get(day).size() == 1) {
                 daysSpinner.get(day).setSelection(0);
 
             }
