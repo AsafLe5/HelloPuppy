@@ -3,6 +3,7 @@ package com.kingslayer.hellopuppy;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+//import android.appcompat.widget.Toolbar;
 
 import com.github.drjacky.imagepicker.ImagePicker;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -64,6 +66,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +76,8 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
 
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.profile);
+        getSupportActionBar().setTitle("Profile");
+
         dogsName = findViewById(R.id.dogs_name);
         usersAge = findViewById(R.id.your_age);
         dogsAge = findViewById(R.id.dogs_age);

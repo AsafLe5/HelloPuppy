@@ -84,6 +84,7 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
         createGroup = findViewById(R.id.create_group);
         uploadGroupImage = findViewById(R.id.button_upload_image);
 
+        getSupportActionBar().setTitle("Create group");
 
         //region $ Spinner and Adapters initialization
         numOfFriends = (Spinner) findViewById(R.id.limit_friends_spinner);

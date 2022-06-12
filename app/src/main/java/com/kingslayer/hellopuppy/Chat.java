@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class Chat extends AppCompatActivity {
 
-    BottomNavigationView bottomNavigationView;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +28,8 @@ public class Chat extends AppCompatActivity {
         setContentView(R.layout.loading_page);
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.chat);
+        getSupportActionBar().setTitle("Chat");
+
 
         String myId = FirebaseAuth.getInstance().getUid();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");

@@ -131,6 +131,7 @@ public class FindDog extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DatabaseReference fb = FirebaseDatabase.getInstance().getReference();
+        getSupportActionBar().setTitle("Find dog");
 
 
         fb.addListenerForSingleValueEvent(new ValueEventListener() {

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -44,14 +46,17 @@ public class GroupChatActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private ArrayList<ModelGroupChat> groupChatList;
     private AdapterGroupChat adapterGroupChat;
-
-
+    private BottomNavigationView bottomNavigationView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_chat);
+        bottomNavigationView = findViewById(R.id.bottom_navigator);
+        bottomNavigationView.setSelectedItemId(R.id.chat);
+
+        getSupportActionBar().setTitle("Chat");
 
         // init views
         groupPic = findViewById(R.id.GroupPicture);
@@ -87,6 +92,36 @@ public class GroupChatActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //region $ Navigation View
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.group:
+                        startActivity(new Intent(getApplicationContext(), Group.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.profile:
+                        startActivity(new Intent(getApplicationContext(), Profile.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.schedule:
+                        startActivity(new Intent(getApplicationContext(), Schedule.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.chat:
+                        return true;
+                    case R.id.find_dog:
+                        startActivity(new Intent(getApplicationContext(),FindDog.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                }
+
+                return false;
+            }
+        });
+        //endregion
     }
 
     private void loadGroupsMessages() {

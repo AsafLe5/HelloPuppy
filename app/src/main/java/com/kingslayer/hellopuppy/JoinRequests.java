@@ -4,9 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 
 public class JoinRequests extends AppCompatActivity {
+    private BottomNavigationView bottomNavigationView;
+
     private String groupId;
     private List<String> requestsIds;
     private Map<String, ModelUser> usersModelMap = new HashMap<String, ModelUser>();
@@ -37,6 +42,12 @@ public class JoinRequests extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.join_requests);
         requests = findViewById(R.id.requests);
+        bottomNavigationView = findViewById(R.id.bottom_navigator);
+        bottomNavigationView.setSelectedItemId(R.id.group);
+
+        getSupportActionBar().setTitle("Join requests");
+
+
         if (getIntent().hasExtra("GroupId")) {
             Bundle B = getIntent().getExtras();
             groupId = B.getString("GroupId");
@@ -44,6 +55,37 @@ public class JoinRequests extends AppCompatActivity {
         loadJoinRequests();
         DatabaseReference DbRef = FirebaseDatabase.getInstance().getReference();
         DbRef.child("Users").child("Tempi").setValue("deleteInAMinute");
+
+        //region $ Navigation View
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.profile:
+                        startActivity(new Intent(getApplicationContext(), Profile.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.group:
+                        return true;
+                    case R.id.schedule:
+                        startActivity(new Intent(getApplicationContext(), Schedule.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.chat:
+                        startActivity(new Intent(getApplicationContext(),Chat.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.find_dog:
+                        startActivity(new Intent(getApplicationContext(),FindDog.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                }
+
+                return false;
+            }
+        });
+        //endregion
+
 
     }
 

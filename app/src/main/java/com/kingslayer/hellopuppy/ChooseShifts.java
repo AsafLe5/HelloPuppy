@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,6 +30,8 @@ import java.util.List;
 import java.util.Map;
 
 public class ChooseShifts extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+    private BottomNavigationView bottomNavigationView;
+
     private Spinner sundaySpinner;
     private Spinner mondaySpinner;
     private Spinner tuesdaySpinner;
@@ -76,6 +80,12 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_shifts);
+
+        getSupportActionBar().setTitle("Choose shifts");
+
+        bottomNavigationView = findViewById(R.id.bottom_navigator);
+        bottomNavigationView.setSelectedItemId(R.id.schedule);
+
         daysInventory = new HashMap<>(7);
         daysAdapter = new HashMap<>(7);
         choices = new HashMap<>(7);
@@ -262,6 +272,38 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
 
             }
         });
+
+        //region $ Navigation View
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.profile:
+                        startActivity(new Intent(getApplicationContext(), Profile.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.group:
+                        startActivity(new Intent(getApplicationContext(), Group.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.schedule:
+                        return true;
+                    case R.id.chat:
+                        startActivity(new Intent(getApplicationContext(),Chat.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.find_dog:
+                        startActivity(new Intent(getApplicationContext(),FindDog.class));
+                        overridePendingTransition(0,0);
+                        return true;
+
+                }
+
+                return false;
+            }
+        });
+        //endregion
+
     }
 
     public String getNumOfCredits(String choice){

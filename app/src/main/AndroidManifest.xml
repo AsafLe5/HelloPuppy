@@ -38,7 +38,15 @@
 
         <activity android:name=".ChooseShifts" />
         <activity android:name=".JoinRequests" />
-        <activity android:name=".GroupChatActivity" /> <!-- android:theme="@style/AppThemeNo"/> -->
+        <activity android:name=".GroupChatActivity"
+                    android:windowSoftInputMode="adjustPan"
+                    android:configChanges="keyboardHidden|orientation|screenSize">
+            <intent-filter>
+                <action android:name="android.intent.action.GroupChatActivity" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity android:name=".WatchProfile" />
         <activity android:name=".CreateGroup" />
         <activity android:name=".Models.ModelGroup" />

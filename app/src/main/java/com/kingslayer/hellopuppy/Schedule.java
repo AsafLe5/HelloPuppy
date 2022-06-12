@@ -33,6 +33,8 @@ public class Schedule extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
 
+        getSupportActionBar().setTitle("Schedule");
+
 //        Intent intent = getIntent();
 //        groupId = intent.getStringExtra("GroupId");
 

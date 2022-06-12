@@ -49,6 +49,9 @@ public class GroupProfile extends AppCompatActivity {
             Bundle B = getIntent().getExtras();
             groupId = B.getString("GroupId");
         }
+
+        getSupportActionBar().setTitle("Group profile");
+
         buttonJoinRequests = findViewById(R.id.button_join_requests);
         usersList = null;
         bottomNavigationView = findViewById(R.id.bottom_navigator);

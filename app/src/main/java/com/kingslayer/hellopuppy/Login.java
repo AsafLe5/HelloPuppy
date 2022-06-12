@@ -70,6 +70,8 @@ public class Login extends AppCompatActivity {
 
         setContentView(R.layout.activity_login);
 
+        getSupportActionBar().setTitle("Login");
+
         imageProfile = findViewById(R.id.profileImage);
         signInButtonGoogle = findViewById(R.id.button_login_google);
         mFirebaseAuth = FirebaseAuth.getInstance();

@@ -45,6 +45,8 @@ public class Group extends AppCompatActivity {
 
         requsestJoinBtn = findViewById(R.id.RequestJoin);
 
+//        getSupportActionBar().setTitle("Groups");
+
         String myId = FirebaseAuth.getInstance().getUid();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
         reference.addValueEventListener(new ValueEventListener() {

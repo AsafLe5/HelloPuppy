@@ -190,6 +190,9 @@ public class FindDogOne extends FragmentActivity implements OnMapReadyCallback,
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.find_dog);
 
+//        getSupportActionBar().setTitle("Profile");
+
+
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
