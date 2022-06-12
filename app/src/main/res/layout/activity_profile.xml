@@ -81,22 +81,35 @@
                 android:text="Age:"
                 android:textSize="24dp" />
 
-            <TextView
-                android:id="@+id/your_age"
-                android:layout_width="340dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="380dp"
-                android:layout_marginStart="110dp"
-                android:textSize="24dp"
-                android:hint="Enter your age"/>
+<!--            <TextView-->
+<!--                android:id="@+id/your_age"-->
+<!--                android:layout_width="340dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="380dp"-->
+<!--                android:layout_marginStart="110dp"-->
+<!--                android:textSize="24dp"-->
+<!--                android:hint="Enter your age"/>-->
 
             <Button
-                android:id="@+id/buttonEditAge"
-                android:layout_width="50dp"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="340dp"
-                android:layout_marginTop="370dp"
-                android:background="@drawable/ic_edit" />
+                android:id="@+id/date_picker_actions"
+                android:text="Select date"
+                android:textSize="24dp"
+                android:textColor="@color/black"
+                android:layout_marginStart="110dp"
+                style="?android:spinnerStyle"
+                android:layout_below="@+id/your_gender"
+                android:onClick="openDatePicker"
+                />
+
+<!--            <Button-->
+<!--                android:id="@+id/buttonEditAge"-->
+<!--                android:layout_width="50dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="340dp"-->
+<!--                android:layout_marginTop="370dp"-->
+<!--                android:background="@drawable/ic_edit" />-->
 
 
             <TextView
@@ -126,10 +139,11 @@
                 android:id="@+id/location"
                 android:layout_width="340dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="430dp"
                 android:layout_marginStart="110dp"
                 android:textSize="24dp"
-                android:hint="Enter your location"/>
+                android:hint="Enter your location"
+                android:layout_below="@+id/date_picker_actions"
+                />
 
             <Button
                 android:id="@+id/buttonEditLocation"
