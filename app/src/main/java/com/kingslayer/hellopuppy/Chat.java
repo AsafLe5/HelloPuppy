@@ -89,5 +89,4 @@ public class Chat extends AppCompatActivity {
         });
         //endregion
     }
-
 }
