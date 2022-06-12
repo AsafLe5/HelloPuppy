@@ -115,8 +115,10 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -138,6 +140,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -154,6 +157,7 @@ import java.util.TimerTask;
 public class FindDogOne extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+    BottomNavigationView bottomNavigationView;
     private GoogleMap mMap;
 
     private LocationListener locationListener;
@@ -170,6 +174,7 @@ public class FindDogOne extends FragmentActivity implements OnMapReadyCallback,
 
     private ExtendedFloatingActionButton fab;
     private FusedLocationProviderClient mLocationClient;
+    private boolean startButton = true;
 
     private Timer timer;
     private TimerTask timerTask;
@@ -181,6 +186,11 @@ public class FindDogOne extends FragmentActivity implements OnMapReadyCallback,
         Intent intent = getIntent();
         myGroupId = intent.getStringExtra("myGroupId");
         setContentView(R.layout.activity_find_dog_one);
+
+
+        bottomNavigationView = findViewById(R.id.bottom_navigator);
+        bottomNavigationView.setSelectedItemId(R.id.find_dog);
+
         startBtn = findViewById(R.id.start_button);
         endBtn = findViewById(R.id.end_button);
         fab = findViewById(R.id.fab);
@@ -191,38 +201,64 @@ public class FindDogOne extends FragmentActivity implements OnMapReadyCallback,
             public void onClick(View view) {
                 // start map
                 // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-                FirebaseDatabase.getInstance().getReference("Groups").child(myGroupId)
-                        .child("FindDog").child("CurrentlyOnTrip").setValue(FirebaseAuth.getInstance().getUid().toString());
 
-                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.map);
-                mapFragment.getMapAsync(FindDogOne.this);
+                if (startButton) {
+                    FirebaseDatabase.getInstance().getReference("Groups").child(myGroupId)
+                            .child("FindDog").child("CurrentlyOnTrip").setValue(FirebaseAuth.getInstance().getUid().toString());
 
-                ActivityCompat.requestPermissions(FindDogOne.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        PackageManager.PERMISSION_GRANTED);
-                ActivityCompat.requestPermissions(FindDogOne.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                        PackageManager.PERMISSION_GRANTED);
+                    SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                            .findFragmentById(R.id.map);
+                    mapFragment.getMapAsync(FindDogOne.this);
 
-                mLocationClient = new FusedLocationProviderClient(FindDogOne.this);
+                    ActivityCompat.requestPermissions(FindDogOne.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            PackageManager.PERMISSION_GRANTED);
+                    ActivityCompat.requestPermissions(FindDogOne.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                            PackageManager.PERMISSION_GRANTED);
+
+                    mLocationClient = new FusedLocationProviderClient(FindDogOne.this);
 
 
-                startTimer();
+                    startTimer();
 
 
-                fab.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        getCurrLocation();
-                    }
-                });
+                    fab.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            getCurrLocation();
+                        }
+                    });
 
-                fab.callOnClick();
+                    fab.callOnClick();
 
-                // disable start button
-                startBtn.setEnabled(false);
+                    // disable start button
+                    // startBtn.setEnabled(false);
 
-                //enable end button
-                endBtn.setEnabled(true);
+                    startBtn.setText("END TRIP");
+
+                    //enable end button
+                    endBtn.setEnabled(true);
+                    startButton = false;
+
+                }
+                else {
+                    // save that the trip is over
+                    FirebaseDatabase.getInstance().getReference("Groups").child(myGroupId)
+                            .child("FindDog").child("CurrentlyOnTrip").setValue("");
+
+                    fab.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            getCurrLocation();
+                        }
+                    });
+                    fab.callOnClick();
+
+                    Intent intent1 = new Intent(getApplicationContext(), FindDog.class);
+                    startActivity(intent1);
+
+                    startBtn.setText("START TRIP");
+                    startButton = true;
+                }
             }
         });
 
@@ -248,6 +284,37 @@ public class FindDogOne extends FragmentActivity implements OnMapReadyCallback,
                 startActivity(intent1);
             }
         });
+
+        //region $ Navigation View
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.group:
+                        startActivity(new Intent(getApplicationContext(), Group.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.profile:
+                        startActivity(new Intent(getApplicationContext(),Profile.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.schedule:
+                        startActivity(new Intent(getApplicationContext(), Schedule.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.chat:
+                        startActivity(new Intent(getApplicationContext(),Chat.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.find_dog:
+                        return true;
+                }
+                return false;
+            }
+        });
+        //endregion
+
+
     }
 
     @SuppressLint("MissingPermission")

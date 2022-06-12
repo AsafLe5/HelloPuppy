@@ -39,7 +39,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class Profile extends AppCompatActivity implements EditNameDialog.EditNameDialogListener, AdapterView.OnItemSelectedListener {
+    public class Profile extends AppCompatActivity implements EditNameDialog.EditNameDialogListener, AdapterView.OnItemSelectedListener {
     private TextView nameTextView;
     private Button buttonEditName;
     private Button buttonEditGender;
@@ -62,7 +62,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     private TextView usersAge;
     private TextView dogsAge;
     BottomNavigationView bottomNavigationView;
-
+    View _rootView;
     private String userGender;
     private String availability;
     private String dogGender;
