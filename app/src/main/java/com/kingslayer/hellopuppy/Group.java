@@ -33,7 +33,8 @@ public class Group extends AppCompatActivity {
     private String myGroupId;
     private RecyclerView groups;
     private FirebaseAuth firebaseAuth;
-    private ArrayList<ModelGroup> groupsList;
+    private ArrayList<ModelGroup> groupsList = new ArrayList<>();
+//    private ArrayList<ModelGroup> groupsList;
     private AdapterGroupsList adapterGroupsList;
     private DatabaseReference fb;
     private Button requsestJoinBtn;
@@ -104,22 +105,22 @@ public class Group extends AppCompatActivity {
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.hasChild("GroupId")) {
                     myGroupId = snapshot.child("GroupId").getValue().toString();
-                    DatabaseReference membersIds = fb.child("Groups").child(myGroupId).child("MembersIds");
-                    membersIds.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot snapshot) {
-                            for (DataSnapshot postSnapshot: snapshot.getChildren()) {
-                                String s = snapshot.getValue().toString();
-                                System.out.println(snapshot.getValue()); // the String "John"
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-                        }
-
-                    });
+//                    DatabaseReference membersIds = fb.child("Groups").child(myGroupId).child("MembersIds");
+//                    membersIds.addValueEventListener(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot snapshot) {
+//                            for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+//                                String s = snapshot.getValue().toString();
+//                                System.out.println(snapshot.getValue()); // the String "John"
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+//
+//                        }
+//
+//                    });
                 }
             }
 
@@ -181,13 +182,16 @@ public class Group extends AppCompatActivity {
     }
 
     private void loadGroups(){
-        groupsList = new ArrayList<>();
+//        groupsList = new ArrayList<>();
+
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Groups");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 groupsList.size();
+                groupsList = new ArrayList<>();
+
                 for(DataSnapshot ds: snapshot.getChildren()){
 
                     ModelGroup newMG = new ModelGroup(ds.child("Name").getValue().toString(),

@@ -7,6 +7,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,6 +36,9 @@ import java.util.List;
 import java.util.Locale;
 
 public class FindDogOthers extends FragmentActivity implements OnMapReadyCallback{
+
+    private BottomNavigationView bottomNavigationView;
+
     private TextView name;
     private TextView address;
 
@@ -55,7 +60,41 @@ public class FindDogOthers extends FragmentActivity implements OnMapReadyCallbac
         name = findViewById(R.id.name);
         name.setText(currOnTrip);
 
+        bottomNavigationView = findViewById(R.id.bottom_navigator);
+        bottomNavigationView.setSelectedItemId(R.id.find_dog);
+
         address = findViewById(R.id.address);
+
+        //region $ Navigation View
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.profile:
+                        startActivity(new Intent(getApplicationContext(), Profile.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.group:
+                        startActivity(new Intent(getApplicationContext(),Group.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.schedule:
+                        startActivity(new Intent(getApplicationContext(), Schedule.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.chat:
+                        startActivity(new Intent(getApplicationContext(),Chat.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.find_dog:
+                        return true;
+
+                }
+
+                return false;
+            }
+        });
+        //endregion
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);

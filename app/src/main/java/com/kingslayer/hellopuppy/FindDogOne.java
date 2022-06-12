@@ -115,7 +115,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
@@ -157,14 +156,14 @@ import java.util.TimerTask;
 public class FindDogOne extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    BottomNavigationView bottomNavigationView;
+    private BottomNavigationView bottomNavigationView;
+
     private GoogleMap mMap;
 
     private LocationListener locationListener;
     private LocationManager locationManager;
 
     private Button startBtn;
-    private Button endBtn;
 
     private final long MIN_TIME = 1000; // 1 second
     private final long MIN_DIST = 5; // 5 Meters
@@ -175,7 +174,6 @@ public class FindDogOne extends FragmentActivity implements OnMapReadyCallback,
     private ExtendedFloatingActionButton fab;
     private FusedLocationProviderClient mLocationClient;
     private boolean startButton = true;
-
     private Timer timer;
     private TimerTask timerTask;
     private final Handler handler = new Handler();
@@ -186,15 +184,11 @@ public class FindDogOne extends FragmentActivity implements OnMapReadyCallback,
         Intent intent = getIntent();
         myGroupId = intent.getStringExtra("myGroupId");
         setContentView(R.layout.activity_find_dog_one);
-
-
-        bottomNavigationView = findViewById(R.id.bottom_navigator);
-        bottomNavigationView.setSelectedItemId(R.id.find_dog);
-
         startBtn = findViewById(R.id.start_button);
-        endBtn = findViewById(R.id.end_button);
         fab = findViewById(R.id.fab);
         fab.setVisibility(View.INVISIBLE);
+        bottomNavigationView = findViewById(R.id.bottom_navigator);
+        bottomNavigationView.setSelectedItemId(R.id.find_dog);
 
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -235,8 +229,7 @@ public class FindDogOne extends FragmentActivity implements OnMapReadyCallback,
 
                     startBtn.setText("END TRIP");
 
-                    //enable end button
-                    endBtn.setEnabled(true);
+
                     startButton = false;
 
                 }
@@ -262,40 +255,19 @@ public class FindDogOne extends FragmentActivity implements OnMapReadyCallback,
             }
         });
 
-        endBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // disable end trip button
-                endBtn.setEnabled(false);
 
-                // save that the trip is over
-                FirebaseDatabase.getInstance().getReference("Groups").child(myGroupId)
-                        .child("FindDog").child("CurrentlyOnTrip").setValue("");
-
-                fab.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        getCurrLocation();
-                    }
-                });
-                fab.callOnClick();
-
-                Intent intent1 = new Intent(getApplicationContext(), FindDog.class);
-                startActivity(intent1);
-            }
-        });
 
         //region $ Navigation View
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
-                    case R.id.group:
-                        startActivity(new Intent(getApplicationContext(), Group.class));
+                    case R.id.profile:
+                        startActivity(new Intent(getApplicationContext(), Profile.class));
                         overridePendingTransition(0,0);
                         return true;
-                    case R.id.profile:
-                        startActivity(new Intent(getApplicationContext(),Profile.class));
+                    case R.id.group:
+                        startActivity(new Intent(getApplicationContext(),Group.class));
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.schedule:
@@ -308,13 +280,13 @@ public class FindDogOne extends FragmentActivity implements OnMapReadyCallback,
                         return true;
                     case R.id.find_dog:
                         return true;
+
                 }
+
                 return false;
             }
         });
         //endregion
-
-
     }
 
     @SuppressLint("MissingPermission")
@@ -332,6 +304,7 @@ public class FindDogOne extends FragmentActivity implements OnMapReadyCallback,
                 goToLocation(location.getLatitude(), location.getLongitude());
             }
         });
+
     }
 
     private void goToLocation(double latitude, double longitude) {
