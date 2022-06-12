@@ -98,6 +98,7 @@ public class Schedule extends AppCompatActivity {
                     case R.id.schedule:
                         return true;
                     case R.id.chat:
+
                         startActivity(new Intent(getApplicationContext(),Chat.class));
                         overridePendingTransition(0,0);
                         return true;
@@ -111,6 +112,7 @@ public class Schedule extends AppCompatActivity {
             }
         });
         //endregion
+
 
         PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(
                 MakeShifts.class, 7, TimeUnit.DAYS).build();

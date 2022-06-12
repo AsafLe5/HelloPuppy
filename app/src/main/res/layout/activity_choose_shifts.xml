@@ -51,7 +51,7 @@
 
     <Spinner
         android:id="@+id/sunday_spinner"
-        android:layout_width="340dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/sunday_text"
         android:layout_below="@id/progress_bar"
@@ -64,14 +64,14 @@
         android:id="@+id/monday_text"
         android:layout_below="@id/sunday_text"
         android:layout_marginTop="20dp"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Monday:"
         android:textSize="24dp" />
 
     <Spinner
         android:id="@+id/monday_spinner"
-        android:layout_width="340dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/monday_text"
         android:layout_below="@id/sunday_spinner"

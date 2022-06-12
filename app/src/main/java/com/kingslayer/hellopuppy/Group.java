@@ -39,6 +39,7 @@ public class Group extends AppCompatActivity {
     private DatabaseReference fb;
     private Button requsestJoinBtn;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
