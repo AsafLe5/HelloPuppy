@@ -35,9 +35,6 @@ public class Schedule extends AppCompatActivity {
 
         getSupportActionBar().setTitle("Schedule");
 
-//        Intent intent = getIntent();
-//        groupId = intent.getStringExtra("GroupId");
-
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.schedule);
         chooseShifts = findViewById(R.id.choose_shifts);
@@ -45,10 +42,6 @@ public class Schedule extends AppCompatActivity {
         chooseShifts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // trigger onDataChange
-//                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
-//                reference.child("Tempi").setValue("deleteInAMinute");
-//                reference.child("Tempi").removeValue();
                 if(groupId != null){
                     Intent intent = new Intent(getApplicationContext(), ChooseShifts.class);
                     intent.putExtra("GroupId", groupId);
@@ -59,7 +52,7 @@ public class Schedule extends AppCompatActivity {
 
         String myId = FirebaseAuth.getInstance().getUid();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
 
@@ -70,9 +63,11 @@ public class Schedule extends AppCompatActivity {
                         groupId = ds.child("GroupId").getValue().toString();
                     }
                 }
-//
-////                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-////                setContentView(R.layout.activity_chat);
+
+//                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+//                if(groupId == null){
+//                    setContentView(R.layout.activity_chat);
+//                }
             }
 
             @Override
@@ -98,7 +93,6 @@ public class Schedule extends AppCompatActivity {
                     case R.id.schedule:
                         return true;
                     case R.id.chat:
-
                         startActivity(new Intent(getApplicationContext(),Chat.class));
                         overridePendingTransition(0,0);
                         return true;
@@ -117,5 +111,6 @@ public class Schedule extends AppCompatActivity {
         PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(
                 MakeShifts.class, 7, TimeUnit.DAYS).build();
         WorkManager.getInstance().enqueue(periodicWorkRequest);
+
     }
 }

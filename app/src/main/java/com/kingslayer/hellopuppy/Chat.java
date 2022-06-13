@@ -33,7 +33,7 @@ public class Chat extends AppCompatActivity {
 
         String myId = FirebaseAuth.getInstance().getUid();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
 
@@ -51,7 +51,10 @@ public class Chat extends AppCompatActivity {
                     }
                 }
                 findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-                setContentView(R.layout.activity_chat);
+                //setContentView(R.layout.activity_chat);
+                Intent intent = new Intent(getApplicationContext(), YouDontHaveGroup.class);
+                intent.putExtra("fromActivity", "Chat");
+                startActivity(intent);
             }
 
             @Override

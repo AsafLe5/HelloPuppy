@@ -21,9 +21,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HelloPuppy">
-
-        <activity android:name=".FindDogOthers"></activity>
-        <activity android:name=".FindDogOne"></activity>
+        <activity android:name=".YouDontHaveGroup"></activity>
+        <activity android:name=".FindDogOthers" />
+        <activity android:name=".FindDogOne" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -38,15 +38,16 @@
 
         <activity android:name=".ChooseShifts" />
         <activity android:name=".JoinRequests" />
-        <activity android:name=".GroupChatActivity"
-                    android:windowSoftInputMode="adjustPan"
-                    android:configChanges="keyboardHidden|orientation|screenSize">
+        <activity
+            android:name=".GroupChatActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.GroupChatActivity" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".WatchProfile" />
         <activity android:name=".CreateGroup" />
         <activity android:name=".Models.ModelGroup" />
@@ -86,6 +87,7 @@
         <activity android:name=".Group">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
