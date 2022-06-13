@@ -172,7 +172,7 @@ public class FindDogOne extends AppCompatActivity implements OnMapReadyCallback,
 
     private LatLng latLng;
     private String myGroupId;
-
+    private boolean onTrip = false;
     private ExtendedFloatingActionButton fab;
     private FusedLocationProviderClient mLocationClient;
     private boolean startButton = true;
@@ -194,6 +194,7 @@ public class FindDogOne extends AppCompatActivity implements OnMapReadyCallback,
 
 
         getSupportActionBar().setTitle("Find dog");
+
 
 
         startBtn.setOnClickListener(new View.OnClickListener() {
@@ -261,6 +262,11 @@ public class FindDogOne extends AppCompatActivity implements OnMapReadyCallback,
             }
         });
 
+        if (getIntent().hasExtra("onTrip")) {
+            Bundle B = getIntent().getExtras();
+            onTrip = true;
+            startBtn.performClick();
+        }
 
 
         //region $ Navigation View

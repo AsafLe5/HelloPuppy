@@ -178,14 +178,27 @@
                 android:text="Gender:"
                 android:textSize="24dp" />
 
-            <Spinner
-                android:id="@+id/dogs_gender"
-                android:layout_width="340dp"
+<!--            <Spinner-->
+<!--                android:id="@+id/dogs_gender"-->
+<!--                android:layout_width="340dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="680dp"-->
+<!--                android:layout_marginStart="110dp"-->
+<!--                android:textSize="24dp"-->
+<!--                android:hint="Enter your dog's gender"/>-->
+
+            <Button
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="680dp"
-                android:layout_marginStart="110dp"
+                android:id="@+id/dog_date_picker"
+                android:text="Select date"
                 android:textSize="24dp"
-                android:hint="Enter your dog's gender"/>
+                android:textColor="@color/black"
+                android:layout_marginStart="110dp"
+                style="?android:spinnerStyle"
+                android:onClick="openDogDatePicker"
+                android:layout_below="@+id/availability"
+                />
 
             <TextView
                 android:layout_width="100dp"

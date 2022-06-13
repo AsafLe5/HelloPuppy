@@ -71,7 +71,9 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     private String availability;
     private String dogGender;
     private DatePickerDialog datePickerDialog;
+    private DatePickerDialog dogDatePickerDialog;
     private Button dateButton;
+    private Button dogDateButton;
     private boolean allFieldsGotFilled = false;
 
 
@@ -84,9 +86,10 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         profileImageUri = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
 
         initDatePicker();
+        initDogDatePicker();
         dateButton = findViewById(R.id.date_picker_actions);
-        dateButton.setText(getTodaysDate());
-
+        //dateButton.setText(getTodaysDate());
+        dogDateButton = findViewById(R.id.dog_date_picker);
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.profile);
         getSupportActionBar().setTitle("Profile");
@@ -108,7 +111,12 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                     numOfFilledFields++;
 
                 }
+                if (dog.hasChild("Dog Birth Day")) {
+                    dogDateButton.setText(dog.child("Dog Birth Day").getValue().toString());
+//                    usersAge.setText(user.child("Age").getValue().toString());
+                    numOfFilledFields++;
 
+                }
 
 //                if (dog.hasChild("Location")) {
 //                    locat.setText(dog.child("Location").getValue().toString());
@@ -153,7 +161,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                     dogGenderSpinner.setSelection(0);
                     addToDogFB("Gender", "male");
                 }
-                if (numOfFilledFields >= 6){
+                if (numOfFilledFields >= 7){
                     allFieldsGotFilled = true;
                 }
             }
@@ -303,13 +311,13 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         availabilitySpinner.setOnItemSelectedListener(this);
         handleAvailability();
 
-        dogGenderSpinner = findViewById(R.id.dogs_gender);
-        ArrayAdapter<CharSequence> dogsGenderAdapter = ArrayAdapter.
-                createFromResource(this, R.array.genders, android.R.layout.simple_spinner_item);
-        dogsGenderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        dogGenderSpinner.setAdapter(dogsGenderAdapter);
-        dogGenderSpinner.setOnItemSelectedListener(this);
-        handleDogGender();
+//        dogGenderSpinner = findViewById(R.id.dogs_gender);
+//        ArrayAdapter<CharSequence> dogsGenderAdapter = ArrayAdapter.
+//                createFromResource(this, R.array.genders, android.R.layout.simple_spinner_item);
+//        dogsGenderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        dogGenderSpinner.setAdapter(dogsGenderAdapter);
+//        dogGenderSpinner.setOnItemSelectedListener(this);
+//        handleDogGender();
 
         buttonEditDogsBreed = findViewById(R.id.buttonEditBreed);
         buttonEditDogsBreed.setOnClickListener(new View.OnClickListener() {
@@ -352,6 +360,28 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
 
     }
 
+    private void initDogDatePicker() {
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month += 1;
+                String date = makeDateString(day, month, year);
+                dogDateButton.setText(date);
+                addToDogFB("Dog Birth Day", date);
+
+            }
+        };
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int style = AlertDialog.THEME_HOLO_LIGHT;
+
+        dogDatePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
+        dogDatePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+
+    }
+
     private String makeDateString(int day, int month, int year) {
         return getMonthFormat(month) + " " + day + " " + year;
     }
@@ -388,6 +418,9 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
 
     public void openDatePicker(View view) {
         datePickerDialog.show();
+    }
+    public void openDogDatePicker(View view) {
+        dogDatePickerDialog.show();
     }
 
     public void handleAvailability() {
@@ -545,12 +578,12 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                     addToUserFB("Availability", choice);
                 }
                 break;
-            case R.id.dogs_gender:
+/*            case R.id.dogs_gender:
                 if (dogGender != null) {
                     dogGender = choice;
                     addToDogFB("Gender", choice);
                 }
-                break;
+                break;*/
             case R.id.your_gender:
                 if (userGender != null) {
                     userGender = choice;

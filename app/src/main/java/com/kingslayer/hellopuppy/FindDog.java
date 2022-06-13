@@ -203,13 +203,20 @@ public class FindDog extends AppCompatActivity{
 //            // find what to do
 //        }
 
-        if(currentlyOnTrip.equals("") || currentlyOnTrip.equals(FirebaseAuth.getInstance().getUid())){
+        if(currentlyOnTrip.equals("")){
             Intent intent = new Intent(getApplicationContext(), FindDogOne.class);
             intent.putExtra("myGroupId", myGroupId);
+
             startActivity(intent);
 
         }
+        else if (currentlyOnTrip.equals(FirebaseAuth.getInstance().getUid())){
+            Intent intent = new Intent(getApplicationContext(), FindDogOne.class);
+            intent.putExtra("myGroupId", myGroupId);
+            intent.putExtra("onTrip", true);
 
+            startActivity(intent);
+        }
         else{
             Intent intent = new Intent(getApplicationContext(), FindDogOthers.class);
             intent.putExtra("name", nameOfWalker);
