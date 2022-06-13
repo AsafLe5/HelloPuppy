@@ -35,7 +35,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class FindDogOthers extends FragmentActivity implements OnMapReadyCallback{
+public class FindDogOthers extends AppCompatActivity implements OnMapReadyCallback{
 
     private BottomNavigationView bottomNavigationView;
 
@@ -59,6 +59,8 @@ public class FindDogOthers extends FragmentActivity implements OnMapReadyCallbac
         setContentView(R.layout.find_dog_others);
         name = findViewById(R.id.name);
         name.setText(currOnTrip);
+
+        getSupportActionBar().setTitle("Find dog");
 
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.find_dog);

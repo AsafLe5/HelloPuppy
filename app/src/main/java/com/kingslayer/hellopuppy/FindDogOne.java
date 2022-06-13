@@ -107,6 +107,7 @@ package com.kingslayer.hellopuppy;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -123,6 +124,7 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -153,8 +155,8 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class FindDogOne extends FragmentActivity implements OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class FindDogOne extends AppCompatActivity implements OnMapReadyCallback,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener  {
 
     private BottomNavigationView bottomNavigationView;
 
@@ -190,7 +192,8 @@ public class FindDogOne extends FragmentActivity implements OnMapReadyCallback,
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.find_dog);
 
-//        getSupportActionBar().setTitle("Profile");
+
+        getSupportActionBar().setTitle("Find dog");
 
 
         startBtn.setOnClickListener(new View.OnClickListener() {
@@ -290,6 +293,7 @@ public class FindDogOne extends FragmentActivity implements OnMapReadyCallback,
             }
         });
         //endregion
+
     }
 
     @SuppressLint("MissingPermission")
@@ -329,6 +333,7 @@ public class FindDogOne extends FragmentActivity implements OnMapReadyCallback,
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
 
         if (ActivityCompat.checkSelfPermission(FindDogOne.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(FindDogOne.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {

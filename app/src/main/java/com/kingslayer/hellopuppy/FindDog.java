@@ -108,9 +108,12 @@ package com.kingslayer.hellopuppy;
 import android.content.Intent;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -122,6 +125,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 public class FindDog extends AppCompatActivity{
+    private BottomNavigationView bottomNavigationView;
     private String myGroupId;
     private String currentlyOnTrip;
     private String nameOfWalker;
@@ -130,9 +134,11 @@ public class FindDog extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.find_dog);
         DatabaseReference fb = FirebaseDatabase.getInstance().getReference();
         getSupportActionBar().setTitle("Find dog");
-
+        bottomNavigationView = findViewById(R.id.bottom_navigator);
+        bottomNavigationView.setSelectedItemId(R.id.find_dog);
 
         fb.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -160,6 +166,36 @@ public class FindDog extends AppCompatActivity{
 
             }
         });
+
+        //region $ Navigation View
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.profile:
+                        startActivity(new Intent(getApplicationContext(), Profile.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.group:
+                        startActivity(new Intent(getApplicationContext(),Group.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.schedule:
+                        startActivity(new Intent(getApplicationContext(), Schedule.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.chat:
+                        startActivity(new Intent(getApplicationContext(),Chat.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.find_dog:
+                        return true;
+                }
+
+                return false;
+            }
+        });
+        //endregion
     }
 
     public void startPage(){
@@ -167,7 +203,7 @@ public class FindDog extends AppCompatActivity{
 //            // find what to do
 //        }
 
-        if(currentlyOnTrip.equals("")){
+        if(currentlyOnTrip.equals("") || currentlyOnTrip.equals(FirebaseAuth.getInstance().getUid())){
             Intent intent = new Intent(getApplicationContext(), FindDogOne.class);
             intent.putExtra("myGroupId", myGroupId);
             startActivity(intent);
