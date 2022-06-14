@@ -110,9 +110,6 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
 
             }
         });
-
-
-
     }
 
 

@@ -50,11 +50,11 @@ public class Chat extends AppCompatActivity {
                         return;
                     }
                 }
-                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-                //setContentView(R.layout.activity_chat);
-                Intent intent = new Intent(getApplicationContext(), YouDontHaveGroup.class);
-                intent.putExtra("fromActivity", "Chat");
-                startActivity(intent);
+//                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+//                setContentView(R.layout.activity_chat);
+//                Intent intent = new Intent(getApplicationContext(), YouDontHaveGroup.class);
+//                intent.putExtra("fromActivity", "Chat");
+//                startActivity(intent);
             }
 
             @Override

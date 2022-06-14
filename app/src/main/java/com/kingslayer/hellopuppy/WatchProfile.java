@@ -10,8 +10,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
+
+import org.jetbrains.annotations.NotNull;
 
 public class WatchProfile extends AppCompatActivity {
 
@@ -28,12 +36,19 @@ public class WatchProfile extends AppCompatActivity {
     private TextView dogAgeText;
     private TextView isVaccinatedText;
     private TextView isCastratedText;
+    private TextView dogGenderText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_watch_profile);
+
+        getSupportActionBar().setTitle("User profile");
+
         bottomNavigationView = findViewById(R.id.bottom_navigator);
+        bottomNavigationView.setSelectedItemId(R.id.group);
+
+        userPhoto = findViewById(R.id.imageView);
         nameText = findViewById(R.id.name_text);
         genderText = findViewById(R.id.user_gender_text);
         ageText = findViewById(R.id.age_text);
@@ -44,8 +59,10 @@ public class WatchProfile extends AppCompatActivity {
         dogAgeText = findViewById(R.id.dog_age_text);
         isVaccinatedText = findViewById(R.id.is_vaccinated_text);
         isCastratedText = findViewById(R.id.is_castrated_text);
+        dogGenderText = findViewById(R.id.dog_gender_text);
+
         if (getIntent().hasExtra("User")){
-            user = getIntent().getParcelableExtra("User").toString();
+            user = getIntent().getStringExtra("User");
         }
 
         setUserProfile();
@@ -85,10 +102,60 @@ public class WatchProfile extends AppCompatActivity {
 
     private void setUserProfile() {
 
-        DatabaseReference dbUserRef = FirebaseDatabase.getInstance()
-                .getReference().child("Users").child(user);
-        dbUserRef.child("Age").get(); /// lo batuah sheyaavod/\...
-        // ve az laasot kaha lekulam!!!!!!!!1
+        DatabaseReference dbUserRef = FirebaseDatabase.getInstance().getReference();
 
+        dbUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+
+                DataSnapshot dbUser = snapshot.child("Users").child(user);
+                DataSnapshot dbDog = snapshot.child("Dogs").child(user);
+
+                if (dbUser.hasChild("Full name")) {
+                    nameText.setText(dbUser.child("Full name").getValue().toString());
+                }
+
+                if (dbUser.hasChild("Birth Day")) {
+                    ageText.setText(dbUser.child("Birth Day").getValue().toString());
+                }
+
+                if (dbUser.hasChild("Location")) {
+                    locationText.setText(dbUser.child("Location").getValue().toString());
+                }
+
+                if (dbUser.hasChild("Gender")) {
+                    genderText.setText(dbUser.child("Gender").getValue().toString());
+                }
+
+                if (dbUser.hasChild("Availability")) {
+                    availabilityText.setText(dbUser.child("Availability").getValue().toString());
+                }
+
+                if (dbUser.hasChild("Profile photo")) {
+                    Picasso.get().load(dbUser.child("Profile photo").getValue().toString()).into(userPhoto);
+                }
+
+                if (dbDog.hasChild("Dog Birth Day")) {
+                    dogAgeText.setText(dbDog.child("Dog Birth Day").getValue().toString());
+                }
+
+                if (dbDog.hasChild("Name")) {
+                    dogNameText.setText(dbDog.child("Name").getValue().toString());
+                }
+
+                if (dbDog.hasChild("Age")) {
+                    dogAgeText.setText(dbDog.child("Age").getValue().toString());
+                }
+
+                if (dbDog.hasChild("Gender")) {
+                    dogGenderText.setText(dbDog.child("Gender").getValue().toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
     }
 }

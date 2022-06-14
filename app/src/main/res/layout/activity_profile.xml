@@ -178,14 +178,14 @@
                 android:text="Gender:"
                 android:textSize="24dp" />
 
-<!--            <Spinner-->
-<!--                android:id="@+id/dogs_gender"-->
-<!--                android:layout_width="340dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="680dp"-->
-<!--                android:layout_marginStart="110dp"-->
-<!--                android:textSize="24dp"-->
-<!--                android:hint="Enter your dog's gender"/>-->
+            <Spinner
+                android:id="@+id/dogs_gender"
+                android:layout_width="340dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="680dp"
+                android:layout_marginStart="110dp"
+                android:textSize="24dp"
+                android:hint="Enter your dog's gender"/>
 
             <Button
                 android:layout_width="250dp"

@@ -21,7 +21,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HelloPuppy">
-        <activity android:name=".YouDontHaveGroup"></activity>
         <activity android:name=".FindDogOthers" />
         <activity android:name=".FindDogOne" />
         <!--

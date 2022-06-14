@@ -1,6 +1,7 @@
 package com.kingslayer.hellopuppy.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,17 +11,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kingslayer.hellopuppy.GroupProfile;
 import com.kingslayer.hellopuppy.Models.ModelUser;
 import com.kingslayer.hellopuppy.R;
+import com.kingslayer.hellopuppy.WatchProfile;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 public class AdapterUserList extends RecyclerView.Adapter<AdapterUserList.HolderUserList>{
 
     private Context context;
     private ArrayList<ModelUser> usersChatList;
+    private String userId;
 
     public AdapterUserList(Context context, ArrayList<ModelUser> usersChatList){
         this.context = context;
@@ -43,6 +49,8 @@ public class AdapterUserList extends RecyclerView.Adapter<AdapterUserList.Holder
         // get the data of the user- his name and the dogs name
         String userName = user.getUserName();
         String dogsName = user.getDogsName();
+//        userId = user.getUserId();
+        holder.setUserId(user.getUserId());
         holder.dogName.setText(dogsName);
         holder.userName.setText(userName);
 
@@ -59,6 +67,9 @@ public class AdapterUserList extends RecyclerView.Adapter<AdapterUserList.Holder
             public void onClick(View v) {
 //                Toast.makeText(ModelUser.this,
 //                        "user clicked!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), WatchProfile.class);
+                intent.putExtra("User", holder.getUserId());
+                context.startActivity(intent);
 
             }
         });
@@ -75,12 +86,21 @@ public class AdapterUserList extends RecyclerView.Adapter<AdapterUserList.Holder
         private ImageView UserPicture;
         private TextView userName;
         private TextView dogName;
+        private String userId;
 
         public HolderUserList(@NonNull @NotNull View itemView) {
             super(itemView);
 //            UserPicture = itemView.findViewById(R.id.UserPicture);
             userName = itemView.findViewById(R.id.actualUserName);
             dogName = itemView.findViewById(R.id.actualDogName);
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+
+        public String getUserId() {
+            return userId;
         }
     }
 }

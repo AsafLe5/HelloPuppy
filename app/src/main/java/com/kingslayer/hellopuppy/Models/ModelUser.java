@@ -4,7 +4,8 @@ public class ModelUser {
     String userName, dogsName, availability, userId;
 
 
-    public ModelUser(){
+    public ModelUser(String userId){
+        this.userId = userId;
     }
 
     public String getUserId() {

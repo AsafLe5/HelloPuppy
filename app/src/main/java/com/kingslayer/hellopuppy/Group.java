@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -88,8 +90,6 @@ public class Group extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.group);
         createGroup = findViewById(R.id.button_create_group);
 
-
-
 //        buttonLogout = findViewById(R.id.button_logout);
 
 //        group1 = findViewById(R.id.group1);
@@ -137,26 +137,57 @@ public class Group extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.profile:
-                        startActivity(new Intent(getApplicationContext(), Profile.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.group:
-                        return true;
-                    case R.id.schedule:
-                        startActivity(new Intent(getApplicationContext(), Schedule.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.chat:
-                        startActivity(new Intent(getApplicationContext(),Chat.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.find_dog:
-                        startActivity(new Intent(getApplicationContext(),FindDog.class));
-                        overridePendingTransition(0,0);
-                        return true;
+                if(myGroupId != null){
+                    switch (item.getItemId()){
+                        case R.id.profile:
+                            startActivity(new Intent(getApplicationContext(), Profile.class));
+                            overridePendingTransition(0,0);
+                            return true;
+                        case R.id.group:
+                            return true;
+                        case R.id.schedule:
+                            startActivity(new Intent(getApplicationContext(), Schedule.class));
+                            overridePendingTransition(0,0);
+                            return true;
+                        case R.id.chat:
+                            startActivity(new Intent(getApplicationContext(),Chat.class));
+                            overridePendingTransition(0,0);
+                            return true;
+                        case R.id.find_dog:
+                            startActivity(new Intent(getApplicationContext(),FindDog.class));
+                            overridePendingTransition(0,0);
+                            return true;
 
+                    }
+                }
+                else {
+                    switch (item.getItemId()){
+                        case R.id.profile:
+                            startActivity(new Intent(getApplicationContext(), Profile.class));
+                            overridePendingTransition(0,0);
+                            return true;
+                        case R.id.group:
+                            return true;
+                        default:
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    if (!isFinishing()){
+                                        new AlertDialog.Builder(Group.this)
+                                                .setTitle("Warning!")
+                                                .setMessage("You Don't have a group yet!")
+                                                .setCancelable(false)
+                                                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        // Whatever...
+                                                    }
+                                                }).show();
+                                    }
+                                }
+                            });
+                    }
                 }
 
                 return false;

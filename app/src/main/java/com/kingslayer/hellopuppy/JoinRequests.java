@@ -108,7 +108,7 @@ public class JoinRequests extends AppCompatActivity {
                         if (memberId.equals("mask"))
                             continue;
 //                    snapshot.child("Users").child(member);
-                        ModelUser currentUser = new ModelUser();
+                        ModelUser currentUser = new ModelUser(memberId);
                         currentUser.setUserName(snapshot.child("Users").child(memberId)
                                 .child("Full name").getValue().toString());
                         currentUser.setAvailability(snapshot.child("Users").child(memberId)

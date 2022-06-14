@@ -53,6 +53,9 @@ public class GroupProfile extends AppCompatActivity {
         getSupportActionBar().setTitle("Group profile");
 
         buttonJoinRequests = findViewById(R.id.button_join_requests);
+        buttonJoinRequests.setVisibility(View.INVISIBLE);
+        buttonJoinRequests.setEnabled(false);
+
         usersList = null;
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.group);
@@ -112,17 +115,24 @@ public class GroupProfile extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
 
+                // only manager sees join requests button
+                String manager = snapshot.child("Groups").child(groupId).child("groupManagerId").getValue().toString();
+                if(manager.equals(FirebaseAuth.getInstance().getUid().toString())){
+                    buttonJoinRequests.setVisibility(View.VISIBLE);
+                    buttonJoinRequests.setEnabled(true);
+                }
+
                 membersArray = (List<String>) snapshot.child("Groups").child(groupId)
                         .child("MembersIds").getValue();
                 for(String member: membersArray){
-//                    snapshot.child("Users").child(member);
-                    ModelUser asd = new ModelUser();
+                    ModelUser asd = new ModelUser(member);
                     asd.setUserName(snapshot.child("Users").child(member)
                             .child("Full name").getValue().toString());
 
                     asd.setDogsName(snapshot.child("Dogs").child(member)
                             .child("Name").getValue().toString());
 
+//                    asd.setUserId(member);
                     usersModelMap.put(member, asd);
 
                 }

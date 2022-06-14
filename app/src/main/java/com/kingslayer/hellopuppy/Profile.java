@@ -8,12 +8,15 @@ import androidx.appcompat.widget.Toolbar;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -26,6 +29,8 @@ import android.widget.Toast;
 import com.github.drjacky.imagepicker.ImagePicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FacebookAuthProvider;
@@ -37,6 +42,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
@@ -75,6 +83,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     private Button dateButton;
     private Button dogDateButton;
     private boolean allFieldsGotFilled = false;
+    private boolean hasGroup = false;
 
 
 
@@ -164,6 +173,10 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                 if (numOfFilledFields >= 7){
                     allFieldsGotFilled = true;
                 }
+
+                if(user.hasChild("GroupId")){
+                    hasGroup = true;
+                }
             }
 
             @Override
@@ -178,25 +191,56 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (allFieldsGotFilled) {
-                    switch (item.getItemId()) {
-                        case R.id.group:
-                            startActivity(new Intent(getApplicationContext(), Group.class));
-                            overridePendingTransition(0, 0);
-                            return true;
-                        case R.id.profile:
-                            return true;
-                        case R.id.schedule:
-                            startActivity(new Intent(getApplicationContext(), Schedule.class));
-                            overridePendingTransition(0, 0);
-                            return true;
-                        case R.id.chat:
-                            startActivity(new Intent(getApplicationContext(), Chat.class));
-                            overridePendingTransition(0, 0);
-                            return true;
-                        case R.id.find_dog:
-                            startActivity(new Intent(getApplicationContext(), FindDog.class));
-                            overridePendingTransition(0, 0);
-                            return true;
+                    if(hasGroup){
+                        switch (item.getItemId()) {
+                            case R.id.group:
+                                startActivity(new Intent(getApplicationContext(), Group.class));
+                                overridePendingTransition(0, 0);
+                                return true;
+                            case R.id.profile:
+                                return true;
+                            case R.id.schedule:
+                                startActivity(new Intent(getApplicationContext(), Schedule.class));
+                                overridePendingTransition(0, 0);
+                                return true;
+                            case R.id.chat:
+                                startActivity(new Intent(getApplicationContext(), Chat.class));
+                                overridePendingTransition(0, 0);
+                                return true;
+                            case R.id.find_dog:
+                                startActivity(new Intent(getApplicationContext(), FindDog.class));
+                                overridePendingTransition(0, 0);
+                                return true;
+                        }
+                    }
+                    else{
+                        switch(item.getItemId()){
+                            case R.id.profile:
+                                return true;
+                            case R.id.group:
+                                startActivity(new Intent(getApplicationContext(), Group.class));
+                                overridePendingTransition(0,0);
+                                return true;
+                            default:
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        if (!isFinishing()){
+                                            new AlertDialog.Builder(Profile.this)
+                                                    .setTitle("Warning!")
+                                                    .setMessage("You Don't have a group yet!")
+                                                    .setCancelable(false)
+                                                    .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            // Whatever...
+                                                        }
+                                                    }).show();
+                                        }
+                                    }
+                                });
+                        }
                     }
                 } else {
                     runOnUiThread(new Runnable() {
@@ -261,6 +305,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             Picasso.get().load(photoUrl).into(profileImage);
         } else {
             Picasso.get().load(profileImageUri).into(profileImage);
+            savePictureInDb(profileImageUri);
         }
 
         buttonEditName = findViewById(R.id.buttonEditName);
@@ -311,13 +356,13 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         availabilitySpinner.setOnItemSelectedListener(this);
         handleAvailability();
 
-//        dogGenderSpinner = findViewById(R.id.dogs_gender);
-//        ArrayAdapter<CharSequence> dogsGenderAdapter = ArrayAdapter.
-//                createFromResource(this, R.array.genders, android.R.layout.simple_spinner_item);
-//        dogsGenderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        dogGenderSpinner.setAdapter(dogsGenderAdapter);
-//        dogGenderSpinner.setOnItemSelectedListener(this);
-//        handleDogGender();
+        dogGenderSpinner = findViewById(R.id.dogs_gender);
+        ArrayAdapter<CharSequence> dogsGenderAdapter = ArrayAdapter.
+                createFromResource(this, R.array.genders, android.R.layout.simple_spinner_item);
+        dogsGenderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dogGenderSpinner.setAdapter(dogsGenderAdapter);
+        dogGenderSpinner.setOnItemSelectedListener(this);
+        handleDogGender();
 
         buttonEditDogsBreed = findViewById(R.id.buttonEditBreed);
         buttonEditDogsBreed.setOnClickListener(new View.OnClickListener() {
@@ -379,7 +424,13 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
 
         dogDatePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
         dogDatePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+    }
 
+    void savePictureInDb(Uri profileImageUri){
+
+        String myId = FirebaseAuth.getInstance().getUid().toString();
+        FirebaseDatabase.getInstance().getReference("Users").child(myId)
+                .child("Profile photo").setValue(profileImageUri.toString());
     }
 
     private String makeDateString(int day, int month, int year) {
@@ -510,8 +561,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
 //            Uri uri  = Uri.parse(newProfileImage);
 //            Picasso.get().load(uri).into(profileImage);
 //        }
-
-
     }
 
     public void goToApplyText(String newText, String textViewToApply) {
@@ -594,7 +643,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             default:
                 break;
         }
-        //Toast.makeText(Toast.LENGTH_LONG,Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -618,7 +666,8 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                         }
                     });
             errorDialog.show();
-        } else
-            Toast.makeText(Profile.this, "there's services", Toast.LENGTH_LONG).show();
+        }
+//        else
+//            Toast.makeText(Profile.this, "there's services", Toast.LENGTH_LONG).show();
     }
 }

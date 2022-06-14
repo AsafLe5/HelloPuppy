@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,98 +11,100 @@
         android:id="@+id/imageView"
         android:layout_width="409dp"
         android:layout_height="253dp"
-        app:srcCompat="@drawable/ic_profile"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="2dp" />
+        app:srcCompat="@drawable/ic_profile" />
 
     <TextView
         android:id="@+id/name_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="name_text"
-        tools:layout_editor_absoluteX="34dp"
-        tools:layout_editor_absoluteY="281dp" />
-
-    <TextView
-        android:id="@+id/age_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="age_text"
-        tools:layout_editor_absoluteX="36dp"
-        tools:layout_editor_absoluteY="347dp" />
-
-    <TextView
-        android:id="@+id/location_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="location_text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="36dp" />
-
-    <TextView
-        android:id="@+id/availability_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="availability_text"
-        tools:layout_editor_absoluteX="36dp"
-        tools:layout_editor_absoluteY="448dp" />
-
-    <TextView
-        android:id="@+id/dog_name_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="dog_name_text"
-        tools:layout_editor_absoluteX="34dp"
-        tools:layout_editor_absoluteY="578dp" />
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="116dp"
-        android:layout_height="102dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_dog_photo"
-        tools:layout_editor_absoluteY="476dp" />
-
-    <TextView
-        android:id="@+id/dog_age_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="dog_age_text"
-        tools:layout_editor_absoluteX="34dp"
-        tools:layout_editor_absoluteY="653dp" />
-
-    <TextView
-        android:id="@+id/is_vaccinated_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="is_vaccinated_text"
-        tools:layout_editor_absoluteX="34dp"
-        tools:layout_editor_absoluteY="697dp" />
-
-    <TextView
-        android:id="@+id/is_castrated_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="is_castrated_text"
-        tools:layout_editor_absoluteX="34dp"
-        tools:layout_editor_absoluteY="739dp" />
+        android:layout_below="@+id/imageView" />
 
     <TextView
         android:id="@+id/user_gender_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="user_gender_text"
-        tools:layout_editor_absoluteX="36dp"
-        tools:layout_editor_absoluteY="319dp" />
+        android:layout_below="@+id/name_text"
+         />
+
+    <TextView
+        android:id="@+id/age_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="age_text"
+        android:layout_below="@+id/user_gender_text" />
+
+    <TextView
+        android:id="@+id/location_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="location_text"
+        android:layout_below="@+id/age_text" />
+
+    <TextView
+        android:id="@+id/availability_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="availability_text"
+        android:layout_below="@+id/location_text" />
+
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="116dp"
+        android:layout_height="102dp"
+        android:layout_below="@+id/availability_text"
+        app:srcCompat="@drawable/ic_dog_photo"
+        android:layout_centerHorizontal="true"
+         />
+
+    <TextView
+        android:id="@+id/dog_name_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="dog_name_text"
+        android:layout_below="@+id/imageView2" />
 
     <TextView
         android:id="@+id/dog_gender_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="dog_gender_text"
-        tools:layout_editor_absoluteX="36dp"
-        tools:layout_editor_absoluteY="611dp" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_below="@+id/dog_name_text"
+         />
+
+    <TextView
+        android:id="@+id/dog_age_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="dog_age_text"
+        android:layout_below="@+id/dog_gender_text" />
+
+    <TextView
+        android:id="@+id/is_vaccinated_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="is_vaccinated_text"
+        android:layout_below="@+id/dog_age_text"
+        />
+
+    <TextView
+        android:id="@+id/is_castrated_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="is_castrated_text"
+        android:layout_below="@+id/is_vaccinated_text" />
+
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:itemBackground="@color/purple_500"
+        app:itemIconTint="@drawable/serlector"
+        app:itemTextColor="@drawable/serlector"
+        app:menu="@menu/menu" />
+
+</RelativeLayout>
