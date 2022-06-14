@@ -6,15 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".Schedule">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Schedule"
-        android:textSize="50dp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:gravity="center"
-        android:id="@+id/schedule"/>
+
 
 
     <Button
@@ -22,28 +14,44 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Choose next week shifts"
-        android:layout_below="@+id/schedule"
+        android:layout_centerHorizontal="true"
         />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sunday:"
-        android:textSize="25dp"
-        android:layout_below="@+id/choose_shifts"
-        android:layout_marginTop="20dp"
-        android:id="@+id/sunday"
-        />
-    <TextView
-        android:id="@+id/sunday_shift"
+
+    <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="..."
-        android:layout_toEndOf="@+id/sunday"
-        android:layout_below="@+id/choose_shifts"
-        android:layout_marginTop="20dp"
-        android:textSize="25dp"
-        />
+        android:background="@color/white"
+        android:layout_margin="60dp">
+
+        <!-- Table Heading -->
+        <TableRow
+            android:background="@color/BlueViolet">
+
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Day"
+                android:textColor="@color/white"
+                android:padding="10sp"
+                android:textSize="14sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                />
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Person"
+                android:textColor="@color/white"
+                android:padding="10sp"
+                android:textSize="14sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                />
+
+
+        </TableRow>
+
+
+    </TableLayout>
 
 <!--    <TableLayout-->
 <!--         android:layout_width="match_parent"-->
