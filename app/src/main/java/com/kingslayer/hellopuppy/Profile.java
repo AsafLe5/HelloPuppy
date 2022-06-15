@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -60,7 +61,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     private Button buttonEditDogsAge;
     private Button buttonEditDogsGender;
     private Button buttonEditDogsBreed;
-    private Button buttonEditLocation;
+   //private Button buttonEditLocation;
     private Button buttonEditAvailability;
     private String profileImageStr;
     private Uri profileImageUri;
@@ -70,6 +71,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     //    private Intent intent;
     private Spinner userGenderSpinner;
     private Spinner availabilitySpinner;
+    private Spinner locationSpinner;
     private Spinner dogGenderSpinner;
 //    private TextView usersAge;
     private TextView dogsAge;
@@ -77,6 +79,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     View _rootView;
     private String userGender;
     private String availability;
+    private String myLocation;
     private String dogGender;
     private DatePickerDialog datePickerDialog;
     private DatePickerDialog dogDatePickerDialog;
@@ -105,7 +108,12 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
 
         dogsName = findViewById(R.id.dogs_name);
 //        usersAge = findViewById(R.id.your_age);
-        dogsAge = findViewById(R.id.dogs_age);
+        //dogsAge = findViewById(R.id.dogs_age);
+
+        initUserGenderSpinner();
+        initDogGenderSpinner();
+
+
 
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
         dbRef.addValueEventListener(new ValueEventListener() {
@@ -127,31 +135,26 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
 
                 }
 
-//                if (dog.hasChild("Location")) {
-//                    locat.setText(dog.child("Location").getValue().toString());
-//                    numOfFilledFields++;
-//                }
-
 
                 if (dog.hasChild("Name")) {
                     dogsName.setText(dog.child("Name").getValue().toString());
                     numOfFilledFields++;
                 }
 
-                if (dog.hasChild("Age")) {
-                    dogsAge.setText(dog.child("Age").getValue().toString());
-                    numOfFilledFields++;
-
-                }
+//                if (dog.hasChild("Age")) {
+//                    dogsAge.setText(dog.child("Age").getValue().toString());
+//                    numOfFilledFields++;
+//
+//                }
 
                 if (user.hasChild("Gender")) {
                     userGender = user.child("Gender").getValue().toString();
                     handleUserGender();
                     numOfFilledFields++;
-                } else {
+                } /*else {
                     userGenderSpinner.setSelection(0);
                     addToUserFB("Gender", "male");
-                }
+                }*/
 
                 if (user.hasChild("Availability")) {
                     availability = user.child("Availability").getValue().toString();
@@ -160,6 +163,15 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                 } else {
                     availabilitySpinner.setSelection(0);
                     addToUserFB("Availability", "One day a week");
+                }
+
+                if (user.hasChild("Location")) {
+                    myLocation = user.child("Location").getValue().toString();
+                    handleLocation();
+                    numOfFilledFields++;
+                } else {
+                    locationSpinner.setSelection(0);
+                    addToUserFB("Location", "Haven't choose yet");
                 }
 
                 if (dog.hasChild("Gender")) {
@@ -324,29 +336,29 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
 //            }
 //        });
 
-        buttonEditDogsAge = findViewById(R.id.buttonEditDogsAge);
-        buttonEditDogsAge.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openEditNameDialog("Enter dog's age", "dogs_age");
-            }
-        });
+       // buttonEditDogsAge = findViewById(R.id.buttonEditDogsAge);
+//        buttonEditDogsAge.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                openEditNameDialog("Enter dog's age", "dogs_age");
+//            }
+//        });
 
-        buttonEditLocation = findViewById(R.id.buttonEditLocation);
-        buttonEditLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openEditNameDialog("Enter your location", "location");
-            }
-        });
+//        buttonEditLocation = findViewById(R.id.buttonEditLocation);
+//        buttonEditLocation.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                openEditNameDialog("Enter your location", "location");
+//            }
+//        });
 
-        userGenderSpinner = findViewById(R.id.your_gender);
-        ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.
-                createFromResource(this, R.array.genders, android.R.layout.simple_spinner_item);
-        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        userGenderSpinner.setAdapter(genderAdapter);
-        userGenderSpinner.setOnItemSelectedListener(this);
-        handleUserGender();
+//        userGenderSpinner = findViewById(R.id.your_gender);
+//        ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.
+//                createFromResource(this, R.array.genders, android.R.layout.simple_spinner_item);
+//        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        userGenderSpinner.setAdapter(genderAdapter);
+//        userGenderSpinner.setOnItemSelectedListener(this);
+       handleUserGender();
 
         availabilitySpinner = findViewById(R.id.availability);
         ArrayAdapter<CharSequence> availabilityAdapter = ArrayAdapter.
@@ -356,13 +368,21 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         availabilitySpinner.setOnItemSelectedListener(this);
         handleAvailability();
 
-        dogGenderSpinner = findViewById(R.id.dogs_gender);
-        ArrayAdapter<CharSequence> dogsGenderAdapter = ArrayAdapter.
-                createFromResource(this, R.array.genders, android.R.layout.simple_spinner_item);
-        dogsGenderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        dogGenderSpinner.setAdapter(dogsGenderAdapter);
-        dogGenderSpinner.setOnItemSelectedListener(this);
-        handleDogGender();
+        locationSpinner = findViewById(R.id.location_spinner);
+        ArrayAdapter<CharSequence> locationAdapter = ArrayAdapter.
+                createFromResource(this, R.array.cities, android.R.layout.simple_spinner_item);
+        locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        locationSpinner.setAdapter(locationAdapter);
+        locationSpinner.setOnItemSelectedListener(this);
+        handleLocation();
+
+//        dogGenderSpinner = findViewById(R.id.dogs_gender);
+//        ArrayAdapter<CharSequence> dogsGenderAdapter = ArrayAdapter.
+//                createFromResource(this, R.array.genders, android.R.layout.simple_spinner_item);
+//        dogsGenderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        dogGenderSpinner.setAdapter(dogsGenderAdapter);
+//        dogGenderSpinner.setOnItemSelectedListener(this);
+//        handleDogGender();
 
         buttonEditDogsBreed = findViewById(R.id.buttonEditBreed);
         buttonEditDogsBreed.setOnClickListener(new View.OnClickListener() {
@@ -372,6 +392,72 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                         "dogs_breed");
             }
         });
+    }
+
+    private void initDogGenderSpinner() {
+        dogGenderSpinner = (Spinner) findViewById(R.id.dog_gender_spinner);
+        ArrayAdapter<String> dogGenderAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item) {
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+
+                View v = super.getView(position, convertView, parent);
+                if (position == getCount()) {
+                    ((TextView)v.findViewById(android.R.id.text1)).setText("");
+                    ((TextView)v.findViewById(android.R.id.text1)).setHint(getItem(getCount())); //"Hint to be displayed"
+                }
+
+                return v;
+            }
+
+            @Override
+            public int getCount() {
+                return super.getCount()-1; // you dont display last item. It is used as hint.
+            }
+
+        };
+
+        dogGenderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dogGenderAdapter.add("Male");
+        dogGenderAdapter.add("Female");
+        dogGenderAdapter.add("Choose your dog's gender"); //This is the text that will be displayed as hint.
+
+        dogGenderSpinner.setAdapter(dogGenderAdapter);
+        dogGenderSpinner.setSelection(dogGenderAdapter.getCount()); //set the hint the default selection so it appears on launch.
+        dogGenderSpinner.setOnItemSelectedListener(this);
+    }
+
+    private void initUserGenderSpinner() {
+        userGenderSpinner = (Spinner) findViewById(R.id.user_gender_spinner);
+        ArrayAdapter<String> userGenderAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item) {
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+
+                View v = super.getView(position, convertView, parent);
+                if (position == getCount()) {
+                    ((TextView)v.findViewById(android.R.id.text1)).setText("");
+                    ((TextView)v.findViewById(android.R.id.text1)).setHint(getItem(getCount())); //"Hint to be displayed"
+                }
+
+                return v;
+            }
+
+            @Override
+            public int getCount() {
+                return super.getCount()-1; // you dont display last item. It is used as hint.
+            }
+
+        };
+
+        userGenderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        userGenderAdapter.add("Male");
+        userGenderAdapter.add("Female");
+        userGenderAdapter.add("Choose your gender"); //This is the text that will be displayed as hint.
+
+        userGenderSpinner.setAdapter(userGenderAdapter);
+        userGenderSpinner.setSelection(userGenderAdapter.getCount()); //set the hint the default selection so it appears on launch.
+        userGenderSpinner.setOnItemSelectedListener(this);
     }
 
     private String getTodaysDate() {
@@ -505,9 +591,85 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         }
     }
 
+    public void handleLocation() {
+        if (myLocation != null) {
+            int i = 0;
+            switch (myLocation) {
+                case "Ẕefat":
+                    i++;
+                case "Tiberias":
+                    i++;
+                case "Tel aviv–Yafo":
+                    i++;
+                case "LeẔiyyon":
+                    i++;
+                case "Reẖovot":
+                    i++;
+                case "Ramla":
+                    i++;
+                case "Ramat Gan":
+                    i++;
+                case "Shemona":
+                    i++;
+                case "Netanya":
+                    i++;
+                case "Nazareth":
+                    i++;
+                case "Nahariyya":
+                    i++;
+                case "Meron":
+                    i++;
+                case "Lod":
+                    i++;
+                case "Karmiel":
+                    i++;
+                case "Jerusalem":
+                    i++;
+                case "Holon":
+                    i++;
+                case "Herzliyya":
+                    i++;
+                case "Haifa":
+                    i++;
+                case "Hadera":
+                    i++;
+                case "Givatayim":
+                    i++;
+                case "Elat":
+                    i++;
+                case "Dor":
+                    i++;
+                case "Dimona":
+                    i++;
+                case "Caesarea":
+                    i++;
+                case "Beersheba":
+                    i++;
+                case "Ashqelon":
+                    i++;
+                case "Ashdod":
+                    i++;
+                case "Arad":
+                    i++;
+                case "Akko":
+                    i++;
+                case "Afula":
+                    i++;
+
+            }
+            locationSpinner.setSelection(i-1);
+        } else {
+            // trigger onDataChange to get userGender
+
+            DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+            dbRef.child("Tempi").setValue("deleteInAMinute");
+            dbRef.child("Tempi").removeValue();
+        }
+    }
+
     public void handleDogGender() {
         if (dogGender != null) {
-            if (dogGender.equals("male")) {
+            if (dogGender.equals("Male")) {
                 if (dogGenderSpinner != null)
                     dogGenderSpinner.setSelection(0);
             } else {
@@ -525,7 +687,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
 
     public void handleUserGender() {
         if (userGender != null) {
-            if (userGender.equals("male")) {
+            if (userGender.equals("Male")) {
                 if (userGenderSpinner != null)
                     userGenderSpinner.setSelection(0);
             } else {
@@ -577,22 +739,18 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
 //                addToUserFB("Age", newText);
 //                break;
 
-            case ("dogs_age"):
-                TextView t3 = findViewById(R.id.dogs_age);
-                t3.setText(newText);
-                addToDogFB("Age", newText);
-                break;
+//            case ("dogs_age"):
+//                TextView t3 = findViewById(R.id.dogs_age);
+//                t3.setText(newText);
+//                addToDogFB("Age", newText);
+//                break;
 
-            case ("your_gender"):
-                //TextView t4 = findViewById(R.id.your_gender);
-                //t4.setText(newText);
-                //addToUserFB("Gender", newText);
-                break;
 
-            case ("location"): /** TODO: handle with GPS later*/
-                TextView t5 = findViewById(R.id.location);
-                t5.setText(newText);
-                break;
+
+//            case ("location"): /** TODO: handle with GPS later*/
+//                TextView t5 = findViewById(R.id.location);
+//                t5.setText(newText);
+//                break;
         }
     }
 
@@ -627,13 +785,20 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                     addToUserFB("Availability", choice);
                 }
                 break;
-/*            case R.id.dogs_gender:
+            case R.id.location_spinner:
+                if (myLocation != null) {
+                    myLocation = choice;
+                    addToUserFB("Location", choice);
+                }
+                break;
+            case R.id.dog_gender_spinner:
                 if (dogGender != null) {
                     dogGender = choice;
                     addToDogFB("Gender", choice);
                 }
-                break;*/
-            case R.id.your_gender:
+                break;
+
+            case R.id.user_gender_spinner:
                 if (userGender != null) {
                     userGender = choice;
                     addToUserFB("Gender", choice);
