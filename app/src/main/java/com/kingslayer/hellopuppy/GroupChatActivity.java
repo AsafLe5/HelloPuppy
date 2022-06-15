@@ -56,12 +56,12 @@ public class GroupChatActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.chat);
 
-        getSupportActionBar().setTitle("Chat");
+//        getSupportActionBar().setTitle("");
 
         // init views
-        groupPic = findViewById(R.id.GroupPicture);
-        toolbar = findViewById(R.id.toolbar);
-        groupTitle = findViewById(R.id.groupTitle);
+//        groupPic = findViewById(R.id.GroupPicture);
+//        toolbar = findViewById(R.id.toolbar);
+//        groupTitle = findViewById(R.id.groupTitle);
         attachBtn = findViewById(R.id.attachBtn);
         messageEt = findViewById(R.id.messageEt);
         sendBtn = findViewById(R.id.sendBtn);
@@ -190,8 +190,11 @@ public class GroupChatActivity extends AppCompatActivity {
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for(DataSnapshot ds: snapshot.getChildren()){
                     String theGroupTitle = ds.child("Name").getValue().toString();
+                    getSupportActionBar().setTitle("Group chat- " + theGroupTitle);
+
 //                    String theGroupDescription = ds.child("Description").getValue().toString();
-                    groupTitle.setText(theGroupTitle);
+//                    groupTitle.setText(theGroupTitle);
+
 //
 //                    String theGroupPic = ds.child("").getValue().toString();
 //                    try{

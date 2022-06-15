@@ -28,8 +28,7 @@ public class Chat extends AppCompatActivity {
         setContentView(R.layout.loading_page);
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.chat);
-        getSupportActionBar().setTitle("Chat");
-
+        getSupportActionBar().setTitle("");
 
         String myId = FirebaseAuth.getInstance().getUid();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
@@ -50,11 +49,6 @@ public class Chat extends AppCompatActivity {
                         return;
                     }
                 }
-//                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-//                setContentView(R.layout.activity_chat);
-//                Intent intent = new Intent(getApplicationContext(), YouDontHaveGroup.class);
-//                intent.putExtra("fromActivity", "Chat");
-//                startActivity(intent);
             }
 
             @Override

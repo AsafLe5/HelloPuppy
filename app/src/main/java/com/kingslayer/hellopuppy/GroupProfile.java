@@ -1,7 +1,10 @@
 package com.kingslayer.hellopuppy;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.facebook.login.LoginManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -237,6 +241,89 @@ public class GroupProfile extends AppCompatActivity {
         }
         adapterUserList = new AdapterUserList(GroupProfile.this, usersList);
         users.setAdapter(adapterUserList);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_group_profile, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case R.id.leave_group:
+                checkAndLeave();
+                break;
+
+        }
+        return true;
+    }
+
+    public void checkAndLeave(){
+        new AlertDialog.Builder(GroupProfile.this)
+                .setTitle("Pay attention!")
+                .setMessage("Are you sure you want to leave this group?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        leaveGroup();
+                    }
+                }).show();
+    }
+
+    public void leaveGroup(){
+        boolean isMeCurrOnTrip = false;
+        // remove me from MembersIds of the group
+        if(membersArray.contains(FirebaseAuth.getInstance().getUid().toString())){
+            membersArray.remove(FirebaseAuth.getInstance().getUid().toString());
+        }
+        FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
+                .child("MembersIds").setValue(membersArray);
+
+        // remove my schedule
+        FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
+                .child("ScheduleChoices").child(FirebaseAuth.getInstance()
+                                .getUid().toString()).removeValue();
+
+        // delete my group id
+        FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance()
+                .getUid().toString()).child("GroupId").removeValue();
+
+//        DatabaseReference groupRef = FirebaseDatabase.getInstance().getReference("Groups").child(groupId);
+//        groupRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+////                if(snapshot.hasChild("MembersIds")){
+////                    members = (List<String>) snapshot.child("MembersIds").getValue();
+////                    members.remove(FirebaseAuth.getInstance().getUid().toString());
+////                }
+//
+//                if(snapshot.hasChild("FindDog")){
+//                    String onTrip = snapshot.child("FindDog").child("CurrentlyOnTrip").getValue().toString();
+//                    if(onTrip.equals(FirebaseAuth.getInstance().getUid().toString())){
+//                        isMeCurrOnTrip = true;
+//                    }
+//                }
+
+//                if(snapshot.hasChild("ScheduleChoices")){
+//                    if(snapshot.child("ScheduleChoices").hasChild(FirebaseAuth.getInstance()
+//                            .getUid().toString())){
+//                        snapshot.child("ScheduleChoices").child(FirebaseAuth.getInstance()
+//                                .getUid().toString()).re
+//
+//                    }
+//                }
+
+//            }
+
+//            @Override
+//            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+//
+//            }
+//        });
     }
 }
 

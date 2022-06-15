@@ -50,7 +50,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 public class Login extends AppCompatActivity {
     private/* const */ int RC_SIGN_IN = 1; // add consts
     private SignInButton signInButtonGoogle;
-    private GoogleSignInClient mGoogleSignInClient;
+    private static GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mFirebaseAuth;
 
     private ImageView imageProfile;
@@ -144,6 +144,10 @@ public class Login extends AppCompatActivity {
                 }
             }
         };
+    }
+
+    public static GoogleSignInClient getmGoogleSignInClient() {
+        return mGoogleSignInClient;
     }
 
     private void signIn(){
