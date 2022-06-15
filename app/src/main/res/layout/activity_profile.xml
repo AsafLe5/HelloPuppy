@@ -38,16 +38,28 @@
                 android:layout_height="40dp"
                 android:text="name"
                 android:textSize="35dp"
-                android:layout_marginTop="280dp"
-                android:textColor="@color/black"/>
+                android:layout_marginTop="265dp"
+                android:textColor="@color/black"
+                android:layout_marginLeft="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="569dp"
+                android:text="Name:"
+                android:textSize="22dp"
+                android:layout_marginLeft="20dp"/>
 
             <TextView
                 android:id="@+id/dogs_name"
-                android:layout_width="match_parent"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_marginTop="570dp"
-                android:textSize="24dp"
-                android:hint="Enter your dog's name"/>
+                android:layout_marginEnd="113dp"
+                android:hint="Enter your dog's name"
+                android:textSize="15dp" />
 
             <Button
                 android:id="@+id/buttonEditName"
@@ -57,30 +69,53 @@
                 android:layout_marginTop="562dp"
                 android:background="@drawable/ic_edit" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="620dp"
+                android:text="Birth Day:"
+                android:textSize="22dp"
+                android:layout_marginLeft="20dp"/>
+
+
 
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="330dp"
                 android:text="Gender:"
-                android:textSize="24dp" />
+                android:textSize="22dp"
+                android:layout_marginLeft="20dp"/>
+
+
+            <!--            <Spinner-->
+<!--                android:id="@+id/your_gender"-->
+<!--                android:layout_width="340dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="700dp"-->
+<!--                android:layout_marginStart="110dp"-->
+<!--                android:hint="Enter your gender"-->
+<!--                android:textSize="24dp"-->
+<!--                />-->
 
             <Spinner
-                android:id="@+id/your_gender"
-                android:layout_width="340dp"
+                android:id="@+id/user_gender_spinner"
+                android:layout_width="189dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="330dp"
-                android:layout_marginStart="110dp"
-                android:hint="Enter your gender"
-                android:textSize="24dp"
-                />
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="322dp"
+                android:layout_marginEnd="61dp"
+                android:textSize="22dp" />
 
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="380dp"
-                android:text="Age:"
-                android:textSize="24dp" />
+                android:text="Birth Day:"
+                android:textSize="22dp"
+                android:layout_marginLeft="20dp"/>
 
 <!--            <TextView-->
 <!--                android:id="@+id/your_age"-->
@@ -92,120 +127,134 @@
 <!--                android:hint="Enter your age"/>-->
 
             <Button
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
                 android:id="@+id/date_picker_actions"
-                android:text="Select date"
-                android:textSize="24dp"
-                android:textColor="@color/black"
-                android:layout_marginStart="110dp"
                 style="?android:spinnerStyle"
-                android:layout_below="@+id/your_gender"
+                android:layout_width="189dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="125dp"
+                android:layout_marginTop="374dp"
                 android:onClick="openDatePicker"
-                />
+                android:text="Select date"
+                android:textColor="@color/black"
+                android:textSize="18dp" />
+
+<!--            <TextView-->
+<!--                android:id="@+id/dogs_age"-->
+<!--                android:layout_width="162dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_alignParentStart="true"-->
+<!--                android:layout_marginStart="135dp"-->
+<!--                android:layout_marginTop="620dp"-->
+<!--                android:hint="Enter your dog's age"-->
+<!--                android:textSize="15dp" />-->
 
 <!--            <Button-->
-<!--                android:id="@+id/buttonEditAge"-->
+<!--                android:id="@+id/buttonEditDogsAge"-->
 <!--                android:layout_width="50dp"-->
 <!--                android:layout_height="wrap_content"-->
 <!--                android:layout_marginStart="340dp"-->
-<!--                android:layout_marginTop="370dp"-->
+<!--                android:layout_marginTop="620dp"-->
 <!--                android:background="@drawable/ic_edit" />-->
-
-
-            <TextView
-                android:id="@+id/dogs_age"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="620dp"
-                android:textSize="24dp"
-                android:hint="Enter your dog's age"/>
-
-            <Button
-                android:id="@+id/buttonEditDogsAge"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="340dp"
-                android:layout_marginTop="620dp"
-                android:background="@drawable/ic_edit" />
 
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="430dp"
                 android:text="Location:"
-                android:textSize="24dp" />
+                android:textSize="22dp"
+                android:layout_marginLeft="20dp"/>
+
+<!--            <TextView-->
+<!--                android:id="@+id/location"-->
+<!--                android:layout_width="340dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_below="@+id/date_picker_actions"-->
+<!--                android:layout_marginStart="110dp"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:hint="Enter your location"-->
+<!--                android:textSize="24dp" />-->
+
+<!--            <Button-->
+<!--                android:id="@+id/buttonEditLocation"-->
+<!--                android:layout_width="50dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="340dp"-->
+<!--                android:layout_marginTop="420dp"-->
+<!--                android:background="@drawable/ic_edit" />-->
 
             <TextView
-                android:id="@+id/location"
-                android:layout_width="340dp"
+                android:layout_width="138dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="110dp"
-                android:textSize="24dp"
-                android:hint="Enter your location"
-                android:layout_below="@+id/date_picker_actions"
-                />
-
-            <Button
-                android:id="@+id/buttonEditLocation"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="340dp"
-                android:layout_marginTop="420dp"
-                android:background="@drawable/ic_edit" />
-
-            <TextView
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="480dp"
                 android:text="Availability:"
-                android:textSize="24dp" />
+                android:textSize="22dp" />
 
             <Spinner
                 android:id="@+id/availability"
                 android:layout_width="340dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="480dp"
+                android:layout_marginTop="482dp"
                 android:layout_marginStart="130dp"
-                android:textSize="24dp"
+                android:textSize="22dp"
                 android:hint="Enter Availability In A"/>
 
+            <Spinner
+                android:id="@+id/location_spinner"
+                android:layout_width="189dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="435dp"
+                android:layout_marginStart="135dp"
+                android:hint="Choose your location"
+                android:textSize="22dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:textColor="@color/black"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="514dp"
+                android:text="My Dog"
+                android:textSize="35dp" />
 
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="680dp"
+                android:layout_marginTop="670dp"
                 android:text="Gender:"
-                android:textSize="24dp" />
+                android:textSize="22dp"
+                android:layout_marginLeft="20dp"/>
 
             <Spinner
-                android:id="@+id/dogs_gender"
-                android:layout_width="340dp"
+                android:id="@+id/dog_gender_spinner"
+                android:layout_width="189dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="680dp"
-                android:layout_marginStart="110dp"
-                android:textSize="24dp"
-                android:hint="Enter your dog's gender"/>
+                android:layout_marginStart="125dp"
+                android:layout_marginTop="665dp"
+                android:textSize="22dp" />
 
             <Button
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
                 android:id="@+id/dog_date_picker"
-                android:text="Select date"
-                android:textSize="24dp"
-                android:textColor="@color/black"
-                android:layout_marginStart="110dp"
                 style="?android:spinnerStyle"
-                android:onClick="openDogDatePicker"
+                android:layout_width="189dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/availability"
-                />
+                android:layout_marginStart="125dp"
+                android:layout_marginTop="106dp"
+                android:onClick="openDogDatePicker"
+                android:text="Select date"
+                android:textColor="@color/black"
+                android:textSize="18dp" />
 
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="730dp"
                 android:text="Breed:"
-                android:textSize="24dp" />
+                android:textSize="22dp"
+                android:layout_marginLeft="20dp"/>
 
             <TextView
                 android:id="@+id/dogs_breed"
@@ -213,8 +262,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="730dp"
                 android:layout_marginStart="110dp"
-                android:textSize="24dp"
-                android:hint="Enter your dog's breed"/>
+                android:textSize="22dp"
+                android:hint="Enter your dog's breed"
+                />
 
             <Button
                 android:id="@+id/buttonEditBreed"
@@ -223,8 +273,14 @@
                 android:layout_marginStart="340dp"
                 android:layout_marginTop="720dp"
                 android:background="@drawable/ic_edit" />
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ardfgio"
+                android:layout_marginTop="800dp"
+                android:textColor="@color/white"/>
         </RelativeLayout>
+
 
     </ScrollView>
 

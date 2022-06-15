@@ -43,6 +43,41 @@
         <item>good</item>
         <item>really good</item>
     </string-array>
+    <string-array name="cities">
+        <item>Afula</item>
+        <item>Akko</item>
+        <item>Arad</item>
+        <item>Ashdod</item>
+        <item>Ashqelon</item>
+        <item>Beersheba</item>
+        <item>Caesarea</item>
+        <item>Dimona</item>
+        <item>Dor</item>
+        <item>Elat</item>
+        <item>Givatayim</item>
+        <item>Hadera</item>
+        <item>Haifa</item>
+        <item>Herzliyya</item>
+        <item>Holon</item>
+        <item>Jerusalem</item>
+        <item>Karmiel</item>
+        <item>Lod</item>
+        <item>Meron</item>
+        <item>Nahariyya</item>
+        <item>Nazareth</item>
+        <item>Netanya</item>
+        <item>Shemona</item>
+        <item>Ramat Gan</item>
+        <item>Ramla</item>
+        <item>Reẖovot</item>
+        <item>LeẔiyyon</item>
+        <item>Tel aviv–Yafo</item>
+        <item>Tiberias</item>
+        <item>Ẕefat</item>
+    </string-array>
+
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
