@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ import com.kingslayer.hellopuppy.GroupProfile;
 import com.kingslayer.hellopuppy.Models.ModelUser;
 import com.kingslayer.hellopuppy.R;
 import com.kingslayer.hellopuppy.WatchProfile;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -54,12 +56,7 @@ public class AdapterUserList extends RecyclerView.Adapter<AdapterUserList.Holder
         holder.dogName.setText(dogsName);
         holder.userName.setText(userName);
 
-        try {
-//            Picasso.get().load().placeholder(R.drawable.ic_profile);
-        }
-        catch (Exception e){
-
-        }
+        Picasso.get().load(user.getUserProfile()).into(holder.UserPicture);
 
         // handle user click
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -93,6 +90,7 @@ public class AdapterUserList extends RecyclerView.Adapter<AdapterUserList.Holder
 //            UserPicture = itemView.findViewById(R.id.UserPicture);
             userName = itemView.findViewById(R.id.actualUserName);
             dogName = itemView.findViewById(R.id.actualDogName);
+            UserPicture = itemView.findViewById(R.id.UserPicture);
         }
 
         public void setUserId(String userId) {

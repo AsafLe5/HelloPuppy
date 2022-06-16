@@ -192,10 +192,7 @@ public class FindDogOne extends AppCompatActivity implements OnMapReadyCallback,
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.find_dog);
 
-
         getSupportActionBar().setTitle("Find dog");
-
-
 
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override

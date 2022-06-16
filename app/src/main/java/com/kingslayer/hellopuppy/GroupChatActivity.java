@@ -190,7 +190,7 @@ public class GroupChatActivity extends AppCompatActivity {
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for(DataSnapshot ds: snapshot.getChildren()){
                     String theGroupTitle = ds.child("Name").getValue().toString();
-                    getSupportActionBar().setTitle("Group chat- " + theGroupTitle);
+                    getSupportActionBar().setTitle(theGroupTitle + " chat");
 
 //                    String theGroupDescription = ds.child("Description").getValue().toString();
 //                    groupTitle.setText(theGroupTitle);

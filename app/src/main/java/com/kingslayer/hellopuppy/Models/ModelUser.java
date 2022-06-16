@@ -1,11 +1,22 @@
 package com.kingslayer.hellopuppy.Models;
 
+import android.net.Uri;
+
 public class ModelUser {
-    String userName, dogsName, availability, userId;
+    private String userName, dogsName, availability, userId;
+    private String userProfile;
 
 
     public ModelUser(String userId){
         this.userId = userId;
+    }
+
+    public String getUserProfile() {
+        return userProfile;
+    }
+
+    public void setUserProfile(String userProfile) {
+        this.userProfile = userProfile;
     }
 
     public String getUserId() {

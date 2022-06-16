@@ -56,7 +56,8 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
         String explanation = group.getExplanation();
         holder.explanation.setText(explanation);
 
-        groupId = group.getGroupId();
+//        groupId = group.getGroupId();
+        holder.setGroupId(group.getGroupId());
 
 //        FirebaseDatabase.getInstance().getReference().child("Groups")
 //                .child(groupId).child("Join requests")
@@ -88,7 +89,7 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
 
 
                 Intent intent = new Intent(getApplicationContext(), GroupProfile.class);
-                intent.putExtra("GroupId", groupId);
+                intent.putExtra("GroupId", holder.getGroupId());
                 context.startActivity(intent);
                 //open group chat
 //                Intent intent = new Intent(context, GroupChatActivity.class);
@@ -105,9 +106,8 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
             public void onClick(View v) {
                 membersIds.add(FirebaseAuth.getInstance().getUid());
                 FirebaseDatabase.getInstance().getReference().child("Groups")
-                        .child(groupId).child("Join requests")
+                        .child(holder.getGroupId()).child("Join requests")
                         .setValue(membersIds);
-
             }
         });
     }
@@ -126,6 +126,7 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
         private TextView explanation;
         private TextView groupName;
         private ImageView groupPic;
+        private String groupId;
 
         public HolderGroupsList(@NonNull @NotNull View itemView) {
             super(itemView);
@@ -138,6 +139,14 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
 //            UserPicture = itemView.findViewById(R.id.UserPicture);
 //            userName = itemView.findViewById(R.id.actualUserName);
 //            dogName = itemView.findViewById(R.id.actualDogName);
+        }
+
+        public String getGroupId() {
+            return groupId;
+        }
+
+        public void setGroupId(String groupId) {
+            this.groupId = groupId;
         }
     }
 }

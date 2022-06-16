@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,6 +45,8 @@ public class GroupProfile extends AppCompatActivity {
     private Map<String,ModelUser> usersModelMap = new HashMap<String,ModelUser>();;
     private boolean modUser = true;
     private boolean modDog = false;
+    private boolean isManager = false;
+    private TextView explanation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,28 +59,29 @@ public class GroupProfile extends AppCompatActivity {
 
         getSupportActionBar().setTitle("Group profile");
 
-        buttonJoinRequests = findViewById(R.id.button_join_requests);
-        buttonJoinRequests.setVisibility(View.INVISIBLE);
-        buttonJoinRequests.setEnabled(false);
+//        buttonJoinRequests = findViewById(R.id.button_join_requests);
+//        buttonJoinRequests.setVisibility(View.INVISIBLE);
+//        buttonJoinRequests.setEnabled(false);
 
         usersList = null;
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.group);
         users = findViewById(R.id.users);
+        explanation = findViewById(R.id.explanation_text);
         firebaseAuth = FirebaseAuth.getInstance();
         loadUsers();
-
-        buttonJoinRequests.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), JoinRequests.class);
-                intent.putExtra("GroupId", groupId);
-                startActivity(intent);
-                overridePendingTransition(0,0);
-//                startActivity(new Intent(getApplicationContext(), Profile.class));
-//                overridePendingTransition(0, 0);
-            }
-        });
+//
+//        buttonJoinRequests.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getApplicationContext(), JoinRequests.class);
+//                intent.putExtra("GroupId", groupId);
+//                startActivity(intent);
+//                overridePendingTransition(0,0);
+////                startActivity(new Intent(getApplicationContext(), Profile.class));
+////                overridePendingTransition(0, 0);
+//            }
+//        });
 
         //region $ Navigation View
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -119,11 +123,18 @@ public class GroupProfile extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
 
+                // set the description of the group
+                if(snapshot.child("Groups").child(groupId).hasChild("Description")){
+                    explanation.setText(snapshot.child("Groups").child(groupId).child("Description")
+                            .getValue().toString());
+                }
+
                 // only manager sees join requests button
                 String manager = snapshot.child("Groups").child(groupId).child("groupManagerId").getValue().toString();
                 if(manager.equals(FirebaseAuth.getInstance().getUid().toString())){
-                    buttonJoinRequests.setVisibility(View.VISIBLE);
-                    buttonJoinRequests.setEnabled(true);
+                    isManager = true;
+//                    buttonJoinRequests.setVisibility(View.VISIBLE);
+//                    buttonJoinRequests.setEnabled(true);
                 }
 
                 membersArray = (List<String>) snapshot.child("Groups").child(groupId)
@@ -135,6 +146,10 @@ public class GroupProfile extends AppCompatActivity {
 
                     asd.setDogsName(snapshot.child("Dogs").child(member)
                             .child("Name").getValue().toString());
+                    if(snapshot.child("Users").child(member).hasChild("Profile photo")){
+                        asd.setUserProfile(snapshot.child("Users").child(member)
+                                .child("Profile photo").getValue().toString());
+                    }
 
 //                    asd.setUserId(member);
                     usersModelMap.put(member, asd);
@@ -245,20 +260,64 @@ public class GroupProfile extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_group_profile, menu);
+        if (!isManager)
+            getMenuInflater().inflate(R.menu.menu_group_profile, menu);
+        else
+            getMenuInflater().inflate(R.menu.menu_group_profile_manager, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        switch (id){
-            case R.id.leave_group:
-                checkAndLeave();
-                break;
+        if (!isManager){
+            int id = item.getItemId();
+            switch (id){
+                case R.id.leave_group:
+                    checkAndLeave();
+                    break;
+            }
+        }
+        else{
+            int id = item.getItemId();
+            switch (id){
+                case R.id.requests:
+                    Intent intent = new Intent(getApplicationContext(), JoinRequests.class);
+                    intent.putExtra("GroupId", groupId);
+                    startActivity(intent);
+                    overridePendingTransition(0,0);
+                    break;
+                case R.id.manage_group:
+                    Intent intent2 = new Intent(getApplicationContext(), ManageGroup.class);
+                    intent2.putExtra("GroupId", groupId);
+                    startActivity(intent2);
+                    overridePendingTransition(0,0);
+                    break;
 
+                case R.id.delete_group:
+                    checkAndDelete();
+                    break;
+            }
         }
         return true;
+    }
+
+    public void checkAndDelete(){
+        new AlertDialog.Builder(GroupProfile.this)
+                .setTitle("Pay attention!")
+                .setMessage("Are you sure you want to delete this group?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteGroup();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).show();
+
     }
 
     public void checkAndLeave(){
@@ -271,7 +330,26 @@ public class GroupProfile extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         leaveGroup();
                     }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
                 }).show();
+    }
+
+    public void deleteGroup(){
+        // remove group id for every member in the group
+        for(String member: membersArray){
+            FirebaseDatabase.getInstance().getReference("Users").child(member)
+                    .child("GroupId").removeValue();
+        }
+
+        //delete the group
+        FirebaseDatabase.getInstance().getReference("Groups").child(groupId).removeValue();
+
+        Intent intent = new Intent(getApplicationContext(), Group.class);
+        startActivity(intent);
     }
 
     public void leaveGroup(){
@@ -291,6 +369,9 @@ public class GroupProfile extends AppCompatActivity {
         // delete my group id
         FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance()
                 .getUid().toString()).child("GroupId").removeValue();
+
+        Intent intent = new Intent(getApplicationContext(), Group.class);
+        startActivity(intent);
 
 //        DatabaseReference groupRef = FirebaseDatabase.getInstance().getReference("Groups").child(groupId);
 //        groupRef.addListenerForSingleValueEvent(new ValueEventListener() {
