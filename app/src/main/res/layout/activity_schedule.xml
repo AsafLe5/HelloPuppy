@@ -7,8 +7,6 @@
     tools:context=".Schedule">
 
 
-
-
     <Button
         android:id="@+id/choose_shifts"
         android:layout_width="wrap_content"
@@ -47,9 +45,148 @@
                 android:gravity="center_horizontal"
                 />
 
-
         </TableRow>
 
+        <TableRow>
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="row1Name"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row1_day"
+                />
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="row1Age"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row1_name"
+                />
+        </TableRow>
+        <TableRow>
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="row1Name"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row2_day"
+                />
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="row1Age"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row2_name"
+                />
+        </TableRow>
+        <TableRow>
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="row1Name"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row3_day"
+                />
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="row1Age"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row3_name"
+                />
+        </TableRow>
+        <TableRow>
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="row1Name"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row4_day"
+                />
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="row1Age"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row4_name"
+                />
+        </TableRow>
+        <TableRow>
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="row1Name"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row5_day"
+                />
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="row1Age"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row5_name"
+                />
+        </TableRow>
+        <TableRow>
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="row1Name"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row6_day"
+                />
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="row1Age"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row6_name"
+                />
+        </TableRow>
+        <TableRow>
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="row1Name"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row7_day"
+                />
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="row1Age"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row7_name"
+                />
+        </TableRow>
 
     </TableLayout>
 
