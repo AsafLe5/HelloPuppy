@@ -11,16 +11,27 @@
         android:id="@+id/choose_shifts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Choose next week shifts"
         android:layout_centerHorizontal="true"
-        />
+        android:layout_marginTop="520dp"
+        android:text="Choose next week shifts" />
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This week shifts"
+        android:layout_centerHorizontal="true"
+        android:textSize="30dp"
+
+        android:layout_marginTop="15dp"/>
 
     <TableLayout
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:layout_margin="60dp">
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        >
 
         <!-- Table Heading -->
         <TableRow
@@ -50,7 +61,7 @@
         <TableRow>
             <TextView android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="row1Name"
+                android:text="Sunday"
                 android:padding="10sp"
                 android:textSize="12sp"
                 android:layout_weight="4"
@@ -70,7 +81,7 @@
         <TableRow>
             <TextView android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="row1Name"
+                android:text="Monday"
                 android:padding="10sp"
                 android:textSize="12sp"
                 android:layout_weight="4"
@@ -90,7 +101,7 @@
         <TableRow>
             <TextView android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="row1Name"
+                android:text="Tuesday"
                 android:padding="10sp"
                 android:textSize="12sp"
                 android:layout_weight="4"
@@ -110,7 +121,7 @@
         <TableRow>
             <TextView android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="row1Name"
+                android:text="Wednesday"
                 android:padding="10sp"
                 android:textSize="12sp"
                 android:layout_weight="4"
@@ -130,7 +141,7 @@
         <TableRow>
             <TextView android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="row1Name"
+                android:text="Thursday"
                 android:padding="10sp"
                 android:textSize="12sp"
                 android:layout_weight="4"
@@ -150,7 +161,7 @@
         <TableRow>
             <TextView android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="row1Name"
+                android:text="Friday"
                 android:padding="10sp"
                 android:textSize="12sp"
                 android:layout_weight="4"
@@ -170,7 +181,7 @@
         <TableRow>
             <TextView android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="row1Name"
+                android:text="Saturday"
                 android:padding="10sp"
                 android:textSize="12sp"
                 android:layout_weight="4"

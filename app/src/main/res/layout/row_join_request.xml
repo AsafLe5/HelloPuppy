@@ -48,7 +48,7 @@
 
         <TextView
             android:id="@+id/actualAvailability"
-            android:layout_width="119dp"
+            android:layout_width="100dp"
             android:layout_height="31dp"
             android:layout_below="@id/actualUserName"
             android:layout_marginStart="4dp"
