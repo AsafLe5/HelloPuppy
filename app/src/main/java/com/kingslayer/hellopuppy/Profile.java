@@ -225,7 +225,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                     dogGenderSpinner.setSelection(0);
                     addToDogFB("Gender", "male");
                 }*/
-                if (numOfFilledFields >= 9){
+                if (numOfFilledFields >= 1){
                     allFieldsGotFilled = true;
                 }
 

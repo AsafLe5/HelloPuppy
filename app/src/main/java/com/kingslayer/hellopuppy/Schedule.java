@@ -40,6 +40,10 @@ public class Schedule extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.schedule);
         chooseShifts = findViewById(R.id.choose_shifts);
 
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        reference.child("Tempi").setValue("deleteInAMinute");
+        reference.child("Tempi").removeValue();
+
         chooseShifts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,22 +56,22 @@ public class Schedule extends AppCompatActivity {
         });
 
         String myId = FirebaseAuth.getInstance().getUid();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+//        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
 
-                for(DataSnapshot ds: snapshot.getChildren()){
+//                for(DataSnapshot ds: snapshot.getChildren()){
 
                     assert myId != null;
-                    if(ds.child("Users").getKey().equals(myId) && ds.child("Users").hasChild("GroupId")){
-                        groupId = ds.child("GroupId").getValue().toString();
-                        if(ds.child("Groups").child(groupId).child("groupManagerId").getValue()
+                    if(snapshot.child("Users").hasChild(myId) && snapshot.child("Users").child(myId).hasChild("GroupId")){
+                        groupId = snapshot.child("Users").child(myId).child("GroupId").getValue().toString();
+                        if(snapshot.child("Groups").child(groupId).child("groupManagerId").getValue()
                                 .toString().equals(myId)){
                             isManager = true;
                         }
                     }
-                }
+//                }
             }
 
             @Override
