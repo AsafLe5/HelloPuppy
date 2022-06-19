@@ -4,22 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -75,7 +69,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     private Uri profileImageUri;
     private ImageView profileImage;
     private TextView dogsName;
-    private TextView dogsBreed;
     FloatingActionButton addProfileImage;
     //    private Intent intent;
     private Spinner userGenderSpinner;
@@ -100,21 +93,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     private Button dogDateButton;
     private boolean allFieldsGotFilled = false;
     private boolean hasGroup = false;
-
-    private FloatingActionButton dogImageBtn;
-
-    private Uri imageUri;
-    private static final int IMAGE_REQUEST = 2;
-    private static final int CAMERA_REQUEST_CODE = 100;
-    private static final int STORAGE_REQUEST_CODE = 200;
-    private static final int IMAGE_PICK_CAMERA_CODE = 300;
-    private static final int IMAGE_PICK_GALLERY_CODE = 400;
-
-    private String[] cameraPermissions;
-    private String[] storagePermissions;
-
-    private ImageView dogImage;
-    private Boolean isDogPic = false;
 
 
     @Override
@@ -142,10 +120,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         initIsVaccinatedSpinner();
         initIsCastratedSpinner();
 
-        // permissions
-        cameraPermissions = new String[]{Manifest.permission.CAMERA,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
 
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
@@ -172,10 +146,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                     dogsName.setText(dog.child("Name").getValue().toString());
                     numOfFilledFields++;
                 }
-                if (dog.hasChild("Dogs breed")) {
-                    dogsBreed.setText(dog.child("Dogs breed").getValue().toString());
-                    numOfFilledFields++;
-                }
 
 //                if (dog.hasChild("Age")) {
 //                    dogsAge.setText(dog.child("Age").getValue().toString());
@@ -192,14 +162,14 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                     addToUserFB("Gender", "male");
                 }*/
 
-                if (dog.hasChild("Is vaccinated")) {
-                    isVaccinated = dog.child("Is vaccinated").getValue().toString();
+                if (user.hasChild("Is vaccinated")) {
+                    isVaccinated = user.child("Is vaccinated").getValue().toString();
                     handleIsVaccinated();
                     numOfFilledFields++;
                 }
 
-                if (dog.hasChild("Is castrated")) {
-                    isCastrated = dog.child("Is castrated").getValue().toString();
+                if (user.hasChild("Is castrated")) {
+                    isCastrated = user.child("Is castrated").getValue().toString();
                     handleIsCastrated();
                     numOfFilledFields++;
                 }
@@ -226,28 +196,16 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                     dogGender = dog.child("Gender").getValue().toString();
                     handleDogGender();
                     numOfFilledFields++;
-                } else {
+                }/* else {
                     dogGenderSpinner.setSelection(0);
                     addToDogFB("Gender", "male");
-                }
+                }*/
                 if (numOfFilledFields >= 9){
                     allFieldsGotFilled = true;
                 }
 
                 if(user.hasChild("GroupId")){
                     hasGroup = true;
-                }
-
-                if(dog.hasChild("Dog's photo")){
-                    String dogsImage = dog.child("Dog's photo").getValue().toString();
-                    Picasso.get().load(dogsImage).into(dogImage);
-                }
-                if(user.hasChild("Profile photo")){
-                    String userImage = user.child("Profile photo").getValue().toString();
-                    Picasso.get().load(userImage).into(profileImage);
-                }
-                else{
-                    userProfileFromLogin();
                 }
             }
 
@@ -257,14 +215,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             }
         });
 
-        dogImageBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                isDogPic = true;
-                openImage();
-                isDogPic = false;
-            }
-        });
 
         //region $ Navigation View
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -352,7 +302,13 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         addProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openImage();
+                ImagePicker.Companion.with(Profile.this)
+                        .crop()                    //Crop image(Optional), Check Customization for more option
+                        .cropOval()                //Allow dimmed layer to have a circle inside
+                        .compress(1024)        //Let the user to resize crop bounds
+                        .maxResultSize(1080, 1080)
+                        .start();
+//                intent.putExtra("NewProfileImage", Objects.requireNonNull(user.getPhotoUrl()).toString());
             }
         });
         nameTextView = findViewById(R.id.nameTextView);
@@ -360,7 +316,27 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         profileImage = findViewById(R.id.profileImage);
 
 
-//        userProfileFromLogin();
+        if (isFacebookUser()) {
+            String facebookUserId = "";
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            // find the Facebook profile and get the user's id
+            for (UserInfo profile : user.getProviderData()) {
+                // check if the provider id matches "facebook.com"
+                if (FacebookAuthProvider.PROVIDER_ID.equals(profile.getProviderId())) {
+                    facebookUserId = profile.getUid();
+                }
+            }
+
+            // construct the URL to the profile picture, with a custom height
+            // alternatively, use '?type=small|medium|large' instead of ?height=
+            String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?height=500";
+
+            // (optional) use Picasso to download and show to image
+            Picasso.get().load(photoUrl).into(profileImage);
+        } else {
+            Picasso.get().load(profileImageUri).into(profileImage);
+            savePictureInDb(profileImageUri);
+        }
 
         buttonEditName = findViewById(R.id.buttonEditName);
         buttonEditName.setOnClickListener(new View.OnClickListener() {
@@ -394,35 +370,10 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         buttonEditDogsBreed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openEditNameDialog("Enter your dog's breed",
+                openEditNameDialog("Enter dog's breed",
                         "dogs_breed");
             }
         });
-    }
-
-    private void userProfileFromLogin(){
-        if (isFacebookUser()) {
-            String facebookUserId = "";
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            // find the Facebook profile and get the user's id
-            for (UserInfo profile : user.getProviderData()) {
-                // check if the provider id matches "facebook.com"
-                if (FacebookAuthProvider.PROVIDER_ID.equals(profile.getProviderId())) {
-                    facebookUserId = profile.getUid();
-                }
-            }
-
-            // construct the URL to the profile picture, with a custom height
-            // alternatively, use '?type=small|medium|large' instead of ?height=
-            String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?height=500";
-
-            // (optional) use Picasso to download and show to image
-            Picasso.get().load(photoUrl).into(profileImage);
-        } else {
-            Picasso.get().load(profileImageUri).into(profileImage);
-            savePictureInDb(profileImageUri);
-        }
-
     }
 
     private void initDogGenderSpinner() {
@@ -451,25 +402,11 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         dogGenderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dogGenderAdapter.add("Male");
         dogGenderAdapter.add("Female");
-        dogGenderAdapter.add("Choose your dog's gender"); //This is the text that will be displayed as hint.
+        dogGenderAdapter.add("Choose dog's gender"); //This is the text that will be displayed as hint.
 
         dogGenderSpinner.setAdapter(dogGenderAdapter);
         dogGenderSpinner.setSelection(dogGenderAdapter.getCount()); //set the hint the default selection so it appears on launch.
         dogGenderSpinner.setOnItemSelectedListener(this);
-    }
-
-    void savePictureInDb(Uri profileImageUri){
-
-        String myId = FirebaseAuth.getInstance().getUid().toString();
-        FirebaseDatabase.getInstance().getReference("Users").child(myId)
-                .child("Profile photo").setValue(profileImageUri.toString());
-    }
-
-    void savePictureDogInDb(Uri profileImageUri){
-
-        String myId = FirebaseAuth.getInstance().getUid().toString();
-        FirebaseDatabase.getInstance().getReference("Dogs").child(myId)
-                .child("Dog's photo").setValue(profileImageUri.toString());
     }
 
     private void initUserGenderSpinner() {
@@ -647,12 +584,12 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         dogDatePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
     }
 
-//    void savePictureInDb(Uri profileImageUri){
-//
-//        String myId = FirebaseAuth.getInstance().getUid().toString();
-//        FirebaseDatabase.getInstance().getReference("Users").child(myId)
-//                .child("Profile photo").setValue(profileImageUri.toString());
-//    }
+    void savePictureInDb(Uri profileImageUri){
+
+        String myId = FirebaseAuth.getInstance().getUid().toString();
+        FirebaseDatabase.getInstance().getReference("Users").child(myId)
+                .child("Profile photo").setValue(profileImageUri.toString());
+    }
 
     private String makeDateString(int day, int month, int year) {
         return getMonthFormat(month) + " " + day + " " + year;
@@ -882,10 +819,10 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         editNameDialog.show(getSupportFragmentManager(), null);
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     public void goToApplyText(String newText, String textViewToApply) {
         switch (textViewToApply) {
@@ -894,11 +831,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                 t.setText(newText);
                 addToDogFB("Name", newText);
                 break;
-            case ("dogs_breed"):
-                TextView tv = findViewById(R.id.dogs_breed);
-                tv.setText(newText);
-                addToDogFB("Dogs breed", newText);
-                break;
 
 //            case ("your_age"):
 //                TextView t2 = findViewById(R.id.your_age);
@@ -921,364 +853,94 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         }
     }
 
-//    public void addToUserFB(String attribute, String newText) {
-//        FirebaseDatabase.getInstance().getReference().child("Users")
-//                .child(FirebaseAuth.getInstance().getUid().toString())
-//                .child(attribute).setValue(newText);
-//    }
-//
-//    public void addToDogFB(String attribute, String newText) {
-//        FirebaseDatabase.getInstance().getReference().child("Dogs")
-//                .child(FirebaseAuth.getInstance().getUid().toString())
-//                .child(attribute).setValue(newText);
-//    }
-
-//    boolean isFacebookUser() {
-//        for (UserInfo user : FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
-//            if (user.getProviderId().equals("facebook.com")) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-
-//    @Override
-//    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//        String choice = adapterView.getItemAtPosition(i).toString();
-//        switch (adapterView.getId()) {
-//            case R.id.availability:
-//                if (availability != null) {
-//                    availability = choice;
-//                    addToUserFB("Availability", choice);
-//                }
-//                break;
-//            case R.id.location_spinner:
-//                if (myLocation != null) {
-//                    myLocation = choice;
-//                    addToUserFB("Location", choice);
-//                }
-//                break;
-//            case R.id.dog_gender_spinner:
-//                if (dogGender != null) {
-//                    dogGender = choice;
-//                    addToDogFB("Gender", choice);
-//                }
-//                break;
-//
-//            case R.id.user_gender_spinner:
-//                userGender = choice;
-//                addToUserFB("Gender", choice);
-//                break;
-//            case R.id.is_vaccinated_spinner:
-//                isVaccinated = choice;
-//                addToDogFB("Is vaccinated", choice);
-//            case R.id.is_castrated_spinner:
-//                isCastrated = choice;
-//                addToDogFB("Is castrated", choice);
-//            default:
-//                break;
-//        }
-//    }
-//
-//    @Override
-//    public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//    }
-
-    // checks whether there is google api service, without it maps won't work.
-//    @Override
-//    protected void onPostResume() {
-//        super.onPostResume();
-//        int errorCode = GoogleApiAvailability.getInstance()
-//                .isGooglePlayServicesAvailable(this);
-//
-//        if (errorCode != ConnectionResult.SUCCESS) {
-//            Dialog errorDialog = GoogleApiAvailability.getInstance()
-//                    .getErrorDialog(this, errorCode, errorCode, new DialogInterface.OnCancelListener() {
-//                        @Override
-//                        public void onCancel(DialogInterface dialogInterface) {
-//                            Toast.makeText(Profile.this, "no services", Toast.LENGTH_LONG).show();
-//                        }
-//                    });
-//            errorDialog.show();
-//        }
-////        else
-////            Toast.makeText(Profile.this, "there's services", Toast.LENGTH_LONG).show();
-//    }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-////        if(CHANGE_PROFILE_CODE == 1){
-////            String newProfileImage= data.getStringExtra("result");
-////            Uri newProfileImage= (Uri) data.getExtras().get("profilePicture");
-//
-////            Uri uri  = Uri.parse(newProfileImage);
-////            Picasso.get().load(newProfileImage).into(profileImage);
-////            Bundle extras = intent.getExtras();
-////            String newProfileImage = extras.getString("NewProfileImage");
-////            Uri uri  = Uri.parse(newProfileImage);
-////            Picasso.get().load(uri).into(profileImage);
-////        }
-//    }
-
-    private String getFileExtention(Uri uri) {
-        ContentResolver contentResolver = getContentResolver();
-        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+    public void addToUserFB(String attribute, String newText) {
+        FirebaseDatabase.getInstance().getReference().child("Users")
+                .child(FirebaseAuth.getInstance().getUid().toString())
+                .child(attribute).setValue(newText);
     }
-//        @Override
-//        protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
-//            super.onActivityResult(requestCode, resultCode, data);
-//        }
 
-//    public void goToApplyText(String newText, String textViewToApply) {
-//        switch (textViewToApply) {
-//            case ("dogs_name"):
-//                TextView t = findViewById(R.id.dogs_name);
-//                t.setText(newText);
-//                addToDogFB("Name", newText);
-//                break;
+    public void addToDogFB(String attribute, String newText) {
+        FirebaseDatabase.getInstance().getReference().child("Dogs")
+                .child(FirebaseAuth.getInstance().getUid().toString())
+                .child(attribute).setValue(newText);
+    }
 
-//            case ("your_age"):
-//                TextView t2 = findViewById(R.id.your_age);
-//                t2.setText(newText);
-//                addToUserFB("Age", newText);
-//                break;
-
-//            case ("dogs_age"):
-//                TextView t3 = findViewById(R.id.dogs_age);
-//                t3.setText(newText);
-//                addToDogFB("Age", newText);
-//                break;
-
-
-
-//            case ("location"): /** TODO: handle with GPS later*/
-//                TextView t5 = findViewById(R.id.location);
-//                t5.setText(newText);
-//                break;
-//            }
-//        }
-
-        public void addToUserFB(String attribute, String newText) {
-            FirebaseDatabase.getInstance().getReference().child("Users")
-                    .child(FirebaseAuth.getInstance().getUid().toString())
-                    .child(attribute).setValue(newText);
-        }
-
-        public void addToDogFB(String attribute, String newText) {
-            FirebaseDatabase.getInstance().getReference().child("Dogs")
-                    .child(FirebaseAuth.getInstance().getUid().toString())
-                    .child(attribute).setValue(newText);
-        }
-
-        boolean isFacebookUser() {
-            for (UserInfo user : FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
-                if (user.getProviderId().equals("facebook.com")) {
-                    return true;
-                }
+    boolean isFacebookUser() {
+        for (UserInfo user : FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
+            if (user.getProviderId().equals("facebook.com")) {
+                return true;
             }
-            return false;
         }
+        return false;
+    }
 
-        @Override
-        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            String choice = adapterView.getItemAtPosition(i).toString();
-            switch (adapterView.getId()) {
-                case R.id.availability:
-                    if (availability != null) {
-                        availability = choice;
-                        addToUserFB("Availability", choice);
-                    }
-                    break;
-                case R.id.location_spinner:
-                    if (myLocation != null) {
-                        myLocation = choice;
-                        addToUserFB("Location", choice);
-                    }
-                    break;
-                case R.id.dog_gender_spinner:
-                    if (dogGender != null) {
-                        dogGender = choice;
-                        addToDogFB("Gender", choice);
-                    }
-                    break;
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        String choice = adapterView.getItemAtPosition(i).toString();
+        switch (adapterView.getId()) {
+            case R.id.availability:
+                if (availability != null) {
+                    availability = choice;
+                    addToUserFB("Availability", choice);
+                }
+                break;
+            case R.id.location_spinner:
+                if (myLocation != null) {
+                    myLocation = choice;
+                    addToUserFB("Location", choice);
+                }
+                break;
+            case R.id.dog_gender_spinner:
+                if (dogGender != null) {
+                    dogGender = choice;
+                    addToDogFB("Gender", choice);
+                }
+                break;
 
             case R.id.user_gender_spinner:
                 if (userGender != null) {
                     userGender = choice;
                     addToUserFB("Gender", choice);
+                    break;
                 }
-                break;
             case R.id.is_vaccinated_spinner:
-                if (isVaccinated!=null) {
+                if (isVaccinated != null) {
                     isVaccinated = choice;
                     addToDogFB("Is vaccinated", choice);
                 }
-                break;
             case R.id.is_castrated_spinner:
                 if (isCastrated != null) {
                     isCastrated = choice;
                     addToDogFB("Is castrated", choice);
                 }
-                break;
             default:
                 break;
         }
     }
 
-        @Override
-        public void onNothingSelected(AdapterView<?> adapterView) {
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    // checks whether there is google api service, without it maps won't work.
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        int errorCode = GoogleApiAvailability.getInstance()
+                .isGooglePlayServicesAvailable(this);
+
+        if (errorCode != ConnectionResult.SUCCESS) {
+            Dialog errorDialog = GoogleApiAvailability.getInstance()
+                    .getErrorDialog(this, errorCode, errorCode, new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialogInterface) {
+                            Toast.makeText(Profile.this, "no services", Toast.LENGTH_LONG).show();
+                        }
+                    });
+            errorDialog.show();
         }
-
-        // checks whether there is google api service, without it maps won't work.
-        @Override
-        protected void onPostResume() {
-            super.onPostResume();
-            int errorCode = GoogleApiAvailability.getInstance()
-                    .isGooglePlayServicesAvailable(this);
-
-            if (errorCode != ConnectionResult.SUCCESS) {
-                Dialog errorDialog = GoogleApiAvailability.getInstance()
-                        .getErrorDialog(this, errorCode, errorCode, new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialogInterface) {
-                                Toast.makeText(Profile.this, "no services", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                errorDialog.show();
-            }
 //        else
 //            Toast.makeText(Profile.this, "there's services", Toast.LENGTH_LONG).show();
-        }
-
-        private void openImage(){
-            String[] options = {"Camera", "Gallery"};
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Pick Group Image:").setItems(options, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if(which == 0){
-                        //camera clicked
-                        if(!checkCameraPermissions()){
-                            pickImageFromCamera();
-                            //requestCameraPermissions();
-                        }
-                        else{
-                            pickImageFromCamera();
-                        }
-                    }
-                    else{
-                        //gallery clicked
-                        if(!checkStoragePermission()){
-                            requestStoragePermissions();
-                        }
-                        else{
-                            pickImageFromGallery();
-                        }
-                    }
-                }
-            }).show();
-        }
-
-        private void pickImageFromGallery(){
-            Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.setType("image/*");
-            startActivityForResult(intent, IMAGE_PICK_GALLERY_CODE);
-        }
-
-        private void pickImageFromCamera(){
-            ContentValues cv = new ContentValues();
-            cv.put(MediaStore.Images.Media.TITLE, "Group Image Icon Title");
-            cv.put(MediaStore.Images.Media.DESCRIPTION, "Group Image Icon Description");
-            imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cv);
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-            startActivityForResult(intent, IMAGE_PICK_CAMERA_CODE);
-        }
-
-        private boolean checkStoragePermission(){
-            boolean res = ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
-            return res;
-        }
-
-        private void requestStoragePermissions(){
-            ActivityCompat.requestPermissions(this, storagePermissions, STORAGE_REQUEST_CODE);
-        }
-
-        private boolean checkCameraPermissions(){
-            boolean res = ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
-            boolean res2 = ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
-            return res && res2;
-        }
-
-        private void requestCameraPermissions(){
-            ActivityCompat.requestPermissions(this, cameraPermissions, CAMERA_REQUEST_CODE);
-        }
-
-        @Override
-        protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
-            super.onActivityResult(requestCode, resultCode, data);
-            if(resultCode == RESULT_OK){
-                if(requestCode == IMAGE_PICK_GALLERY_CODE){
-                    if (data != null) {
-                        imageUri = data.getData();
-                        if (imageUri != null) {
-                            savePictureInDb();
-                        }
-                    }
-                }
-                else{
-                    if (imageUri != null) {
-                        savePictureInDb();
-                    }
-                }
-                //imageUri = data.getData();
-                //uploadImage();
-            }
-        }
-
-        void savePictureInDb(){
-
-            if(isDogPic){
-                savePictureDogInDb(imageUri);
-                Picasso.get().load(imageUri).into(dogImage);
-            }
-            else{
-                savePictureInDb(imageUri);
-                Picasso.get().load(imageUri).into(profileImage);
-            }
-        }
-
-        @Override
-        public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {
-            switch (requestCode){
-                case CAMERA_REQUEST_CODE:{
-                    if(grantResults.length>0){
-                        boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                        boolean storageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                        if( cameraAccepted && storageAccepted){
-                            // permission allowed
-                            pickImageFromCamera();
-                        }
-                    }
-                }
-                break;
-                case STORAGE_REQUEST_CODE:{
-                    if(grantResults.length>0){
-                        boolean storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                        if(storageAccepted){
-                            // permission allowed
-                            pickImageFromGallery();
-                        }
-                    }
-                }
-            }
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
+    }
 }
