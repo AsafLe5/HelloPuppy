@@ -306,7 +306,7 @@
                     android:layout_weight="3"
                     android:layout_height="wrap_content"
                     android:textSize="18dp"
-                    android:hint="Enter your dog's breed"
+                    android:hint="Enter dog's breed"
                     />
                 <LinearLayout
                     android:layout_width="25dp"
