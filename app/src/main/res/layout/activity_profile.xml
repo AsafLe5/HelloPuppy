@@ -18,9 +18,10 @@
             <ImageView
                 android:id="@+id/profileImage"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="260dp"
                 android:minHeight="260dp"
-                android:minWidth="260dp"/>
+                android:minWidth="260dp"
+                android:layout_marginTop="0dp"/>
 
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -318,13 +319,31 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <ImageView
+                android:id="@+id/dogImage"
+                android:layout_width="match_parent"
+                android:layout_height="260dp"
+                android:minHeight="260dp"
+                android:minWidth="260dp"
+                android:layout_marginTop="860dp"/>
+
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/addDogImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="880dp"
+                android:clickable="true"
+                app:srcCompat="@drawable/ic_upload_image" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ardfgio"
-                android:layout_marginTop="860dp"
+                android:layout_marginTop="950dp"
                 android:textColor="@color/white"/>
         </RelativeLayout>
+
 
 
     </ScrollView>
@@ -338,6 +357,5 @@
         app:itemIconTint="@drawable/serlector"
         app:itemTextColor="@drawable/serlector"
         app:menu="@menu/menu" />
-
 
 </RelativeLayout>
