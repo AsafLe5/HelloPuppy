@@ -78,7 +78,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     private Uri profileImageUri;
     private ImageView profileImage;
     private TextView dogsName;
-
+    private TextView dogsBreed;
     private FloatingActionButton addProfileImage;
     private FloatingActionButton dogImageBtn;
 
@@ -138,6 +138,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         getSupportActionBar().setTitle("Profile");
 
         dogsName = findViewById(R.id.dogs_name);
+        dogsBreed = findViewById(R.id.dogs_breed);
         dogImageBtn = findViewById(R.id.addDogImage);
         dogImage = findViewById(R.id.dogImage);
 
@@ -173,6 +174,10 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
 
                 if (dog.hasChild("Name")) {
                     dogsName.setText(dog.child("Name").getValue().toString());
+                    numOfFilledFields++;
+                }
+                if (dog.hasChild("Dogs breed")) {
+                    dogsBreed.setText(dog.child("Dogs breed").getValue().toString());
                     numOfFilledFields++;
                 }
 
@@ -357,7 +362,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         nameTextView = findViewById(R.id.nameTextView);
         nameTextView.setText(profileNameString);
         profileImage = findViewById(R.id.profileImage);
-        System.out.println("g");
 
 //        userProfileFromLogin();
 
@@ -888,6 +892,11 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                 TextView t = findViewById(R.id.dogs_name);
                 t.setText(newText);
                 addToDogFB("Name", newText);
+                break;
+            case ("dogs_breed"):
+                TextView tv = findViewById(R.id.dogs_breed);
+                tv.setText(newText);
+                addToDogFB("Dogs breed", newText);
                 break;
         }
     }
