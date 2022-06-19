@@ -69,6 +69,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     private Uri profileImageUri;
     private ImageView profileImage;
     private TextView dogsName;
+    private TextView dogsBreed;
     FloatingActionButton addProfileImage;
     //    private Intent intent;
     private Spinner userGenderSpinner;
@@ -113,6 +114,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         getSupportActionBar().setTitle("Profile");
 
         dogsName = findViewById(R.id.dogs_name);
+        dogsBreed = findViewById(R.id.dogs_breed);
 //        usersAge = findViewById(R.id.your_age);
         //dogsAge = findViewById(R.id.dogs_age);
 
@@ -147,6 +149,10 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                     dogsName.setText(dog.child("Name").getValue().toString());
                     numOfFilledFields++;
                 }
+                if (dog.hasChild("Dogs breed")) {
+                    dogsBreed.setText(dog.child("Dogs breed").getValue().toString());
+                    numOfFilledFields++;
+                }
 
 //                if (dog.hasChild("Age")) {
 //                    dogsAge.setText(dog.child("Age").getValue().toString());
@@ -163,14 +169,14 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                     addToUserFB("Gender", "male");
                 }*/
 
-                if (user.hasChild("Is vaccinated")) {
-                    isVaccinated = user.child("Is vaccinated").getValue().toString();
+                if (dog.hasChild("Is vaccinated")) {
+                    isVaccinated = dog.child("Is vaccinated").getValue().toString();
                     handleIsVaccinated();
                     numOfFilledFields++;
                 }
 
-                if (user.hasChild("Is castrated")) {
-                    isCastrated = user.child("Is castrated").getValue().toString();
+                if (dog.hasChild("Is castrated")) {
+                    isCastrated = dog.child("Is castrated").getValue().toString();
                     handleIsCastrated();
                     numOfFilledFields++;
                 }
@@ -197,9 +203,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                     dogGender = dog.child("Gender").getValue().toString();
                     handleDogGender();
                     numOfFilledFields++;
-                } else {
-                    dogGenderSpinner.setSelection(0);
-                    addToDogFB("Gender", "male");
                 }
                 if (numOfFilledFields >= 9){
                     allFieldsGotFilled = true;
@@ -347,6 +350,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             }
         });
 
+
         handleUserGender();
         handleIsVaccinated();
         handleIsCastrated();
@@ -371,7 +375,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         buttonEditDogsBreed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openEditNameDialog("Enter your dog's breed",
+                openEditNameDialog("Enter dog's breed",
                         "dogs_breed");
             }
         });
@@ -403,7 +407,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         dogGenderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dogGenderAdapter.add("Male");
         dogGenderAdapter.add("Female");
-        dogGenderAdapter.add("Choose your dog's gender"); //This is the text that will be displayed as hint.
+        dogGenderAdapter.add("Choose dog's gender"); //This is the text that will be displayed as hint.
 
         dogGenderSpinner.setAdapter(dogGenderAdapter);
         dogGenderSpinner.setSelection(dogGenderAdapter.getCount()); //set the hint the default selection so it appears on launch.
@@ -832,6 +836,11 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                 t.setText(newText);
                 addToDogFB("Name", newText);
                 break;
+            case ("dogs_breed"):
+                TextView tv = findViewById(R.id.dogs_breed);
+                tv.setText(newText);
+                addToDogFB("Dogs breed", newText);
+                break;
 
 //            case ("your_age"):
 //                TextView t2 = findViewById(R.id.your_age);
@@ -899,15 +908,23 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                 break;
 
             case R.id.user_gender_spinner:
-                userGender = choice;
-                addToUserFB("Gender", choice);
+                if (userGender != null) {
+                    userGender = choice;
+                    addToUserFB("Gender", choice);
+                }
                 break;
             case R.id.is_vaccinated_spinner:
-                isVaccinated = choice;
-                addToDogFB("Is vaccinated", choice);
+                if (isVaccinated!=null) {
+                    isVaccinated = choice;
+                    addToDogFB("Is vaccinated", choice);
+                }
+                break;
             case R.id.is_castrated_spinner:
-                isCastrated = choice;
-                addToDogFB("Is castrated", choice);
+                if (isCastrated != null) {
+                    isCastrated = choice;
+                    addToDogFB("Is castrated", choice);
+                }
+                break;
             default:
                 break;
         }
