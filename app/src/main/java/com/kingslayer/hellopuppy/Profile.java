@@ -104,7 +104,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
 //    private Button dogDateButton;
     private boolean allFieldsGotFilled = false;
     private boolean hasGroup = false;
-    private Boolean isDogPic = false;
+    private boolean isDogPic = false;
 
     private Uri imageUri;
     private static final int CAMERA_REQUEST_CODE = 100;
@@ -257,7 +257,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             public void onClick(View view) {
                 isDogPic = true;
                 openImage();
-                isDogPic = false;
             }
         });
 
@@ -347,6 +346,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         addProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isDogPic = false;
                 openImage();
             }
         });
@@ -1116,29 +1116,157 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         }
     }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
 
-    }
-
-    // checks whether there is google api service, without it maps won't work.
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        int errorCode = GoogleApiAvailability.getInstance()
-                .isGooglePlayServicesAvailable(this);
-
-        if (errorCode != ConnectionResult.SUCCESS) {
-            Dialog errorDialog = GoogleApiAvailability.getInstance()
-                    .getErrorDialog(this, errorCode, errorCode, new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialogInterface) {
-                            Toast.makeText(Profile.this, "no services", Toast.LENGTH_LONG).show();
-                        }
-                    });
-            errorDialog.show();
         }
+
+        // checks whether there is google api service, without it maps won't work.
+        @Override
+        protected void onPostResume() {
+            super.onPostResume();
+            int errorCode = GoogleApiAvailability.getInstance()
+                    .isGooglePlayServicesAvailable(this);
+
+            if (errorCode != ConnectionResult.SUCCESS) {
+                Dialog errorDialog = GoogleApiAvailability.getInstance()
+                        .getErrorDialog(this, errorCode, errorCode, new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialogInterface) {
+                                Toast.makeText(Profile.this, "no services", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                errorDialog.show();
+            }
 //        else
 //            Toast.makeText(Profile.this, "there's services", Toast.LENGTH_LONG).show();
-    }
+        }
+
+        private void openImage(){
+            String[] options = {"Camera", "Gallery"};
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Pick Group Image:").setItems(options, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if(which == 0){
+                        //camera clicked
+                        if(!checkCameraPermissions()){
+                            pickImageFromCamera();
+                            //requestCameraPermissions();
+                        }
+                        else{
+                            pickImageFromCamera();
+                        }
+                    }
+                    else{
+                        //gallery clicked
+                        if(!checkStoragePermission()){
+                            requestStoragePermissions();
+                        }
+                        else{
+                            pickImageFromGallery();
+                        }
+                    }
+                }
+            }).show();
+        }
+
+        private void pickImageFromGallery(){
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("image/*");
+            startActivityForResult(intent, IMAGE_PICK_GALLERY_CODE);
+        }
+
+        private void pickImageFromCamera(){
+            ContentValues cv = new ContentValues();
+            cv.put(MediaStore.Images.Media.TITLE, "Group Image Icon Title");
+            cv.put(MediaStore.Images.Media.DESCRIPTION, "Group Image Icon Description");
+            imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cv);
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            startActivityForResult(intent, IMAGE_PICK_CAMERA_CODE);
+        }
+
+        private boolean checkStoragePermission(){
+            boolean res = ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
+            return res;
+        }
+
+        private void requestStoragePermissions(){
+            ActivityCompat.requestPermissions(this, storagePermissions, STORAGE_REQUEST_CODE);
+        }
+
+        private boolean checkCameraPermissions(){
+            boolean res = ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
+            boolean res2 = ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
+            return res && res2;
+        }
+
+        private void requestCameraPermissions(){
+            ActivityCompat.requestPermissions(this, cameraPermissions, CAMERA_REQUEST_CODE);
+        }
+
+        @Override
+        protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            if(resultCode == RESULT_OK){
+                if(requestCode == IMAGE_PICK_GALLERY_CODE){
+                    if (data != null) {
+                        imageUri = data.getData();
+                        if (imageUri != null) {
+                            savePictureInDb();
+                        }
+                    }
+                }
+                else{
+                    if (imageUri != null) {
+                        savePictureInDb();
+                    }
+                }
+                //imageUri = data.getData();
+                //uploadImage();
+            }
+        }
+
+        void savePictureInDb(){
+
+            if(isDogPic){
+                savePictureDogInDb(imageUri);
+                Picasso.get().load(imageUri).into(dogImage);
+            }
+            else{
+                savePictureInDb(imageUri);
+                Picasso.get().load(imageUri).into(profileImage);
+            }
+        }
+
+        @Override
+        public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {
+            switch (requestCode){
+                case CAMERA_REQUEST_CODE:{
+                    if(grantResults.length>0){
+                        boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                        boolean storageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                        if( cameraAccepted && storageAccepted){
+                            // permission allowed
+                            pickImageFromCamera();
+                        }
+                    }
+                }
+                break;
+                case STORAGE_REQUEST_CODE:{
+                    if(grantResults.length>0){
+                        boolean storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                        if(storageAccepted){
+                            // permission allowed
+                            pickImageFromGallery();
+                        }
+                    }
+                }
+            }
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
 }
