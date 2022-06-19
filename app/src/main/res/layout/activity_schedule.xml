@@ -7,22 +7,31 @@
     tools:context=".Schedule">
 
 
-
-
     <Button
         android:id="@+id/choose_shifts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Choose next week shifts"
         android:layout_centerHorizontal="true"
-        />
+        android:layout_marginTop="520dp"
+        android:text="Choose next week shifts" />
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This week shifts"
+        android:layout_centerHorizontal="true"
+        android:textSize="30dp"
+
+        android:layout_marginTop="15dp"/>
 
     <TableLayout
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:layout_margin="60dp">
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        >
 
         <!-- Table Heading -->
         <TableRow
@@ -47,9 +56,148 @@
                 android:gravity="center_horizontal"
                 />
 
-
         </TableRow>
 
+        <TableRow>
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Sunday"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row1_day"
+                />
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="row1Age"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row1_name"
+                />
+        </TableRow>
+        <TableRow>
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Monday"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row2_day"
+                />
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="row1Age"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row2_name"
+                />
+        </TableRow>
+        <TableRow>
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Tuesday"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row3_day"
+                />
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="row1Age"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row3_name"
+                />
+        </TableRow>
+        <TableRow>
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Wednesday"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row4_day"
+                />
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="row1Age"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row4_name"
+                />
+        </TableRow>
+        <TableRow>
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Thursday"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row5_day"
+                />
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="row1Age"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row5_name"
+                />
+        </TableRow>
+        <TableRow>
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Friday"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row6_day"
+                />
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="row1Age"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row6_name"
+                />
+        </TableRow>
+        <TableRow>
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Saturday"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row7_day"
+                />
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="row1Age"
+                android:padding="10sp"
+                android:textSize="12sp"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:id="@+id/row7_name"
+                />
+        </TableRow>
 
     </TableLayout>
 
