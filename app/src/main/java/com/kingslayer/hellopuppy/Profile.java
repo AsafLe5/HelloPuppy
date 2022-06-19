@@ -4,16 +4,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +29,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -53,6 +60,8 @@ import com.squareup.picasso.Picasso;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class Profile extends AppCompatActivity implements EditNameDialog.EditNameDialogListener, AdapterView.OnItemSelectedListener {
@@ -68,6 +77,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     private String profileImageStr;
     private Uri profileImageUri;
     private ImageView profileImage;
+    private ImageView dogImage;
     private TextView dogsName;
     FloatingActionButton addProfileImage;
     //    private Intent intent;
@@ -75,6 +85,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     private Spinner availabilitySpinner;
     private Spinner locationSpinner;
     private Spinner dogGenderSpinner;
+    private Spinner isVaccinatedSpinner;
 //    private TextView usersAge;
     private TextView dogsAge;
     BottomNavigationView bottomNavigationView;
@@ -83,14 +94,25 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     private String availability;
     private String myLocation;
     private String dogGender;
+    private String isVaccinated;
     private DatePickerDialog datePickerDialog;
     private DatePickerDialog dogDatePickerDialog;
     private Button dateButton;
     private Button dogDateButton;
+
+    private FloatingActionButton dogImageBtn;
     private boolean allFieldsGotFilled = false;
     private boolean hasGroup = false;
 
+    private Uri imageUri;
+    private static final int IMAGE_REQUEST = 2;
+    private static final int CAMERA_REQUEST_CODE = 100;
+    private static final int STORAGE_REQUEST_CODE = 200;
+    private static final int IMAGE_PICK_CAMERA_CODE = 300;
+    private static final int IMAGE_PICK_GALLERY_CODE = 400;
 
+    private String[] cameraPermissions;
+    private String[] storagePermissions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,12 +131,18 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         getSupportActionBar().setTitle("Profile");
 
         dogsName = findViewById(R.id.dogs_name);
+        dogImageBtn = findViewById(R.id.addDogImage);
+        dogImage = findViewById(R.id.dogImage);
 //        usersAge = findViewById(R.id.your_age);
         //dogsAge = findViewById(R.id.dogs_age);
 
         initUserGenderSpinner();
         initDogGenderSpinner();
 
+        // permissions
+        cameraPermissions = new String[]{Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
 
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
@@ -128,13 +156,11 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                     dateButton.setText(user.child("Birth Day").getValue().toString());
 //                    usersAge.setText(user.child("Age").getValue().toString());
                     numOfFilledFields++;
-
                 }
                 if (dog.hasChild("Dog Birth Day")) {
                     dogDateButton.setText(dog.child("Dog Birth Day").getValue().toString());
 //                    usersAge.setText(user.child("Age").getValue().toString());
                     numOfFilledFields++;
-
                 }
 
 
@@ -191,6 +217,11 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                 if(user.hasChild("GroupId")){
                     hasGroup = true;
                 }
+
+                if(dog.hasChild("Dog's photo")){
+                    String dogsImage = dog.child("Dog's photo").getValue().toString();
+                    Picasso.get().load(dogsImage).into(dogImage);
+                }
             }
 
             @Override
@@ -199,6 +230,12 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             }
         });
 
+        dogImageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openImage();
+            }
+        });
 
         //region $ Navigation View
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -286,13 +323,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         addProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImagePicker.Companion.with(Profile.this)
-                        .crop()                    //Crop image(Optional), Check Customization for more option
-                        .cropOval()                //Allow dimmed layer to have a circle inside
-                        .compress(1024)        //Let the user to resize crop bounds
-                        .maxResultSize(1080, 1080)
-                        .start();
-//                intent.putExtra("NewProfileImage", Objects.requireNonNull(user.getPhotoUrl()).toString());
+                openImage();
             }
         });
         nameTextView = findViewById(R.id.nameTextView);
@@ -377,6 +408,15 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         locationSpinner.setAdapter(locationAdapter);
         locationSpinner.setOnItemSelectedListener(this);
         handleLocation();
+
+
+        isVaccinatedSpinner = findViewById(R.id.is_vaccinated_spinner);
+        ArrayAdapter<CharSequence> isVaccinatedAdapter = ArrayAdapter.
+                createFromResource(this, R.array.yes_or_no, android.R.layout.simple_spinner_item);
+        isVaccinatedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        isVaccinatedSpinner.setAdapter(locationAdapter);
+        isVaccinatedSpinner.setOnItemSelectedListener(this);
+        handleIsVaccinated();
 
 //        dogGenderSpinner = findViewById(R.id.dogs_gender);
 //        ArrayAdapter<CharSequence> dogsGenderAdapter = ArrayAdapter.
@@ -545,6 +585,13 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                 .child("Profile photo").setValue(profileImageUri.toString());
     }
 
+    void savePictureDogInDb(Uri profileImageUri){
+
+        String myId = FirebaseAuth.getInstance().getUid().toString();
+        FirebaseDatabase.getInstance().getReference("Dogs").child(myId)
+                .child("Dog's photo").setValue(profileImageUri.toString());
+    }
+
     private String makeDateString(int day, int month, int year) {
         return getMonthFormat(month) + " " + day + " " + year;
     }
@@ -615,6 +662,25 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             dbRef.child("Tempi").setValue("deleteInAMinute");
             dbRef.child("Tempi").removeValue();
         }
+    }
+
+    public void handleIsVaccinated(){
+        if (isVaccinated != null) {
+            switch (isVaccinated) {
+                case "Yes":
+                    isVaccinatedSpinner.setSelection(0);
+                    break;
+                case "No":
+                    isVaccinatedSpinner.setSelection(1);
+                    break;
+            }
+        } else {
+            // trigger onDataChange to get userGender
+            DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+            dbRef.child("Tempi").setValue("deleteInAMinute");
+            dbRef.child("Tempi").removeValue();
+        }
+
     }
 
     public void handleLocation() {
@@ -735,20 +801,26 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         editNameDialog.show(getSupportFragmentManager(), null);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-//        if(CHANGE_PROFILE_CODE == 1){
-//            String newProfileImage= data.getStringExtra("result");
-//            Uri newProfileImage= (Uri) data.getExtras().get("profilePicture");
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+////        if(CHANGE_PROFILE_CODE == 1){
+////            String newProfileImage= data.getStringExtra("result");
+////            Uri newProfileImage= (Uri) data.getExtras().get("profilePicture");
+//
+////            Uri uri  = Uri.parse(newProfileImage);
+////            Picasso.get().load(newProfileImage).into(profileImage);
+////            Bundle extras = intent.getExtras();
+////            String newProfileImage = extras.getString("NewProfileImage");
+////            Uri uri  = Uri.parse(newProfileImage);
+////            Picasso.get().load(uri).into(profileImage);
+////        }
+//    }
 
-//            Uri uri  = Uri.parse(newProfileImage);
-//            Picasso.get().load(newProfileImage).into(profileImage);
-//            Bundle extras = intent.getExtras();
-//            String newProfileImage = extras.getString("NewProfileImage");
-//            Uri uri  = Uri.parse(newProfileImage);
-//            Picasso.get().load(uri).into(profileImage);
-//        }
+    private String getFileExtention(Uri uri){
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 
     public void goToApplyText(String newText, String textViewToApply) {
@@ -860,5 +932,163 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         }
 //        else
 //            Toast.makeText(Profile.this, "there's services", Toast.LENGTH_LONG).show();
+    }
+
+    private void openImage() {
+        String[] options = {"Camera", "Gallery"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Pick Group Image:").setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(which == 0){
+                    //camera clicked
+                    if(!checkCameraPermissions()){
+                        pickImageFromCamera();
+                        //requestCameraPermissions();
+                    }
+                    else{
+                        pickImageFromCamera();
+                    }
+                }
+                else{
+                    //gallery clicked
+                    if(!checkStoragePermission()){
+                        requestStoragePermissions();
+                    }
+                    else{
+                        pickImageFromGallery();
+                    }
+                }
+            }
+        }).show();
+//        Intent intent = new Intent();
+//        intent.setType("image/");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        startActivityForResult(intent, IMAGE_REQUEST);
+    }
+
+    private void pickImageFromGallery(){
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, IMAGE_PICK_GALLERY_CODE);
+    }
+
+    private void pickImageFromCamera(){
+        ContentValues cv = new ContentValues();
+        cv.put(MediaStore.Images.Media.TITLE, "Group Image Icon Title");
+        cv.put(MediaStore.Images.Media.DESCRIPTION, "Group Image Icon Description");
+        imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cv);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(intent, IMAGE_PICK_CAMERA_CODE);
+    }
+
+    private boolean checkStoragePermission(){
+        boolean res = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
+        return res;
+    }
+
+    private void requestStoragePermissions(){
+        ActivityCompat.requestPermissions(this, storagePermissions, STORAGE_REQUEST_CODE);
+    }
+
+    private boolean checkCameraPermissions(){
+        boolean res = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
+        boolean res2 = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
+        return res && res2;
+    }
+
+    private void requestCameraPermissions(){
+        ActivityCompat.requestPermissions(this, cameraPermissions, CAMERA_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            if(requestCode == IMAGE_PICK_GALLERY_CODE){
+                if (data != null) {
+                    imageUri = data.getData();
+                    if (imageUri != null) {
+                        savePictureInDb();
+                    }
+                }
+            }
+            else{
+                if (imageUri != null) {
+                    savePictureInDb();
+                }
+            }
+            //imageUri = data.getData();
+            //uploadImage();
+        }
+    }
+
+    void savePictureInDb(){
+//        final ProgressDialog pd = new ProgressDialog(this);
+//        pd.setMessage("Uploading");
+//        pd.show();
+        savePictureDogInDb(imageUri);
+
+//        DatabaseReference dbDog = FirebaseDatabase.getInstance().getReference("Dogs")
+//                .child(FirebaseAuth.getInstance().getUid().toString());
+        Picasso.get().load(imageUri).into(dogImage);
+//        pd.dismiss();
+
+
+
+//        StorageReference fileRef = FirebaseStorage.getInstance().getReference("Dog profile photos")
+//                .child(FirebaseAuth.getInstance().getUid().toString());
+////                        "." + getFileExtention(imageUri));
+//
+//        fileRef.putFile(imageUri)
+//                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                    @Override
+//                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                        pd.dismiss();
+//                        Toast.makeText(Profile.this,
+//                                "Image uploaded successfully"
+//                                , Toast.LENGTH_SHORT).show();
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull @NotNull Exception e) {
+//                        pd.dismiss();
+//                        Toast.makeText(Profile.this,
+//                                "Can't upload image"
+//                                , Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {
+        switch (requestCode){
+            case CAMERA_REQUEST_CODE:{
+                if(grantResults.length>0){
+                    boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean storageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    if( cameraAccepted && storageAccepted){
+                        // permission allowed
+                        pickImageFromCamera();
+                    }
+                }
+            }
+            break;
+            case STORAGE_REQUEST_CODE:{
+                if(grantResults.length>0){
+                    boolean storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if(storageAccepted){
+                        // permission allowed
+                        pickImageFromGallery();
+                    }
+                }
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

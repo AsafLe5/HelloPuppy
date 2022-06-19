@@ -54,7 +54,7 @@ public class WatchProfile extends AppCompatActivity {
         ageText = findViewById(R.id.age_text);
         locationText = findViewById(R.id.location_text);
         availabilityText = findViewById(R.id.availability_text);
-        //dogPhoto = findViewById(R.id.);
+        dogPhoto = findViewById(R.id.imageView2);
         dogNameText = findViewById(R.id.dog_name_text);
         dogAgeText = findViewById(R.id.dog_age_text);
         isVaccinatedText = findViewById(R.id.is_vaccinated_text);
@@ -149,6 +149,11 @@ public class WatchProfile extends AppCompatActivity {
 
                 if (dbDog.hasChild("Gender")) {
                     dogGenderText.setText(dbDog.child("Gender").getValue().toString());
+                }
+
+                if(dbDog.hasChild("Dog's photo")){
+                    String dogsImage = dbDog.child("Dog's photo").getValue().toString();
+                    Picasso.get().load(dogsImage).into(dogPhoto);
                 }
             }
 
