@@ -99,7 +99,8 @@
                 android:layout_width="350dp"
                 android:layout_centerHorizontal="true"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/linear_layout_user_date">
+                android:layout_below="@+id/linear_layout_user_date"
+                android:paddingTop="5dp">
                 <TextView
                     android:layout_width="0dp"
                     android:layout_weight="1"
@@ -118,7 +119,7 @@
             <LinearLayout
                 android:id="@+id/linear_layout_availability"
                 android:layout_width="350dp"
-                android:paddingTop="10dp"
+                android:paddingTop="15dp"
                 android:layout_centerHorizontal="true"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/linear_layout_location">
@@ -165,7 +166,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:text="Name:"
                     android:textSize="20dp"/>
 
@@ -173,7 +174,7 @@
                     android:id="@+id/dogs_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="3"
                     android:hint="Enter your dog's name"
                     android:textSize="18dp" />
                 <LinearLayout
@@ -193,7 +194,8 @@
                 android:layout_width="350dp"
                 android:layout_centerHorizontal="true"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/linear_layout_dog_name">
+                android:layout_below="@+id/linear_layout_dog_name"
+                android:paddingTop="5dp">
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -235,39 +237,92 @@
             </LinearLayout>
 
 
+            <LinearLayout
+                android:id="@+id/linear_layout_is_vaccinated"
+                android:layout_width="350dp"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/linear_layout_dog_date"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Vaccinated:"
+                    android:textSize="20dp" />
+
+                <Spinner
+                    android:id="@+id/is_vaccinated_spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:textSize="18dp" />
+            </LinearLayout>
 
 
+            <LinearLayout
+                android:id="@+id/linear_layout_is_castrated"
+                android:layout_width="350dp"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/linear_layout_is_vaccinated"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="15dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Castrated:"
+                    android:textSize="20dp" />
+
+                <Spinner
+                    android:id="@+id/is_castrated_spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:textSize="18dp" />
+            </LinearLayout>
 
 
-            <TextView
-                android:layout_width="100dp"
+            <LinearLayout
+                android:id="@+id/linear_layout_dog_breed"
+                android:layout_width="350dp"
+                android:layout_centerHorizontal="true"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="730dp"
-                android:text="Breed:"
-                android:textSize="22dp"/>
+                android:layout_below="@+id/linear_layout_is_castrated"
+                android:paddingTop="15dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:text="Breed:"
+                    android:textSize="20dp"/>
 
-            <TextView
-                android:id="@+id/dogs_breed"
-                android:layout_width="340dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="730dp"
-                android:layout_marginStart="110dp"
-                android:textSize="22dp"
-                android:hint="Enter your dog's breed"
-                />
+                <TextView
+                    android:id="@+id/dogs_breed"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    android:hint="Enter your dog's breed"
+                    />
+                <LinearLayout
+                    android:layout_width="25dp"
+                    android:layout_height="25dp">
+                    <Button
+                        android:id="@+id/buttonEditBreed"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/ic_edit" />
+                </LinearLayout>
+            </LinearLayout>
 
-            <Button
-                android:id="@+id/buttonEditBreed"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="340dp"
-                android:layout_marginTop="720dp"
-                android:background="@drawable/ic_edit" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ardfgio"
-                android:layout_marginTop="800dp"
+                android:layout_marginTop="860dp"
                 android:textColor="@color/white"/>
         </RelativeLayout>
 

@@ -104,7 +104,7 @@ public class Schedule extends AppCompatActivity {
 
         if(groupId != null){
             PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(
-                    MakeShifts.class, 7, TimeUnit.DAYS).build();
+                    MakeShifts.class, 15, TimeUnit.MINUTES).build();
             WorkManager.getInstance().enqueue(periodicWorkRequest);
         }
 

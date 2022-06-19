@@ -72,6 +72,8 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     FloatingActionButton addProfileImage;
     //    private Intent intent;
     private Spinner userGenderSpinner;
+    private Spinner isVaccinatedSpinner;
+    private Spinner isCastratedSpinner;
     private Spinner availabilitySpinner;
     private Spinner locationSpinner;
     private Spinner dogGenderSpinner;
@@ -80,6 +82,8 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     BottomNavigationView bottomNavigationView;
     View _rootView;
     private String userGender;
+    private String isVaccinated;
+    private String isCastrated;
     private String availability;
     private String myLocation;
     private String dogGender;
@@ -114,6 +118,8 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
 
         initUserGenderSpinner();
         initDogGenderSpinner();
+        initIsVaccinatedSpinner();
+        initIsCastratedSpinner();
 
 
 
@@ -134,7 +140,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                     dogDateButton.setText(dog.child("Dog Birth Day").getValue().toString());
 //                    usersAge.setText(user.child("Age").getValue().toString());
                     numOfFilledFields++;
-
                 }
 
 
@@ -157,6 +162,18 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                     userGenderSpinner.setSelection(0);
                     addToUserFB("Gender", "male");
                 }*/
+
+                if (user.hasChild("Is vaccinated")) {
+                    isVaccinated = user.child("Is vaccinated").getValue().toString();
+                    handleIsVaccinated();
+                    numOfFilledFields++;
+                }
+
+                if (user.hasChild("Is castrated")) {
+                    isCastrated = user.child("Is castrated").getValue().toString();
+                    handleIsCastrated();
+                    numOfFilledFields++;
+                }
 
                 if (user.hasChild("Availability")) {
                     availability = user.child("Availability").getValue().toString();
@@ -184,7 +201,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                     dogGenderSpinner.setSelection(0);
                     addToDogFB("Gender", "male");
                 }
-                if (numOfFilledFields >= 7){
+                if (numOfFilledFields >= 9){
                     allFieldsGotFilled = true;
                 }
 
@@ -330,38 +347,9 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             }
         });
 
-//        buttonEditAge = findViewById(R.id.buttonEditAge);
-//        buttonEditAge.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                openEditNameDialog("Enter your age", "your_age");
-//            }
-//        });
-
-       // buttonEditDogsAge = findViewById(R.id.buttonEditDogsAge);
-//        buttonEditDogsAge.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                openEditNameDialog("Enter dog's age", "dogs_age");
-//            }
-//        });
-
-//        buttonEditLocation = findViewById(R.id.buttonEditLocation);
-//        buttonEditLocation.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                openEditNameDialog("Enter your location", "location");
-//            }
-//        });
-
-//        userGenderSpinner = findViewById(R.id.your_gender);
-//        ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.
-//                createFromResource(this, R.array.genders, android.R.layout.simple_spinner_item);
-//        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        userGenderSpinner.setAdapter(genderAdapter);
-//        userGenderSpinner.setOnItemSelectedListener(this);
-       handleUserGender();
-
+        handleUserGender();
+        handleIsVaccinated();
+        handleIsCastrated();
         availabilitySpinner = findViewById(R.id.availability);
         ArrayAdapter<CharSequence> availabilityAdapter = ArrayAdapter.
                 createFromResource(this, R.array.availabilities, android.R.layout.simple_spinner_item);
@@ -378,13 +366,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         locationSpinner.setOnItemSelectedListener(this);
         handleLocation();
 
-//        dogGenderSpinner = findViewById(R.id.dogs_gender);
-//        ArrayAdapter<CharSequence> dogsGenderAdapter = ArrayAdapter.
-//                createFromResource(this, R.array.genders, android.R.layout.simple_spinner_item);
-//        dogsGenderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        dogGenderSpinner.setAdapter(dogsGenderAdapter);
-//        dogGenderSpinner.setOnItemSelectedListener(this);
-//        handleDogGender();
 
         buttonEditDogsBreed = findViewById(R.id.buttonEditBreed);
         buttonEditDogsBreed.setOnClickListener(new View.OnClickListener() {
@@ -460,6 +441,72 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         userGenderSpinner.setAdapter(userGenderAdapter);
         userGenderSpinner.setSelection(userGenderAdapter.getCount()); //set the hint the default selection so it appears on launch.
         userGenderSpinner.setOnItemSelectedListener(this);
+    }
+
+    private void initIsVaccinatedSpinner() {
+        isVaccinatedSpinner = (Spinner) findViewById(R.id.is_vaccinated_spinner);
+        ArrayAdapter<String> isVaccinatedAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item) {
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+
+                View v = super.getView(position, convertView, parent);
+                if (position == getCount()) {
+                    ((TextView)v.findViewById(android.R.id.text1)).setText("");
+                    ((TextView)v.findViewById(android.R.id.text1)).setHint(getItem(getCount())); //"Hint to be displayed"
+                }
+
+                return v;
+            }
+
+            @Override
+            public int getCount() {
+                return super.getCount()-1; // you dont display last item. It is used as hint.
+            }
+
+        };
+
+        isVaccinatedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        isVaccinatedAdapter.add("Yes");
+        isVaccinatedAdapter.add("No");
+        isVaccinatedAdapter.add("Yes or no"); //This is the text that will be displayed as hint.
+
+        isVaccinatedSpinner.setAdapter(isVaccinatedAdapter);
+        isVaccinatedSpinner.setSelection(isVaccinatedAdapter.getCount()); //set the hint the default selection so it appears on launch.
+        isVaccinatedSpinner.setOnItemSelectedListener(this);
+    }
+
+    private void initIsCastratedSpinner() {
+        isCastratedSpinner = (Spinner) findViewById(R.id.is_castrated_spinner);
+        ArrayAdapter<String> isCastratedAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item) {
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+
+                View v = super.getView(position, convertView, parent);
+                if (position == getCount()) {
+                    ((TextView)v.findViewById(android.R.id.text1)).setText("");
+                    ((TextView)v.findViewById(android.R.id.text1)).setHint(getItem(getCount())); //"Hint to be displayed"
+                }
+
+                return v;
+            }
+
+            @Override
+            public int getCount() {
+                return super.getCount()-1; // you dont display last item. It is used as hint.
+            }
+
+        };
+
+        isCastratedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        isCastratedAdapter.add("Yes");
+        isCastratedAdapter.add("No");
+        isCastratedAdapter.add("Yes or no"); //This is the text that will be displayed as hint.
+
+        isCastratedSpinner.setAdapter(isCastratedAdapter);
+        isCastratedSpinner.setSelection(isCastratedAdapter.getCount()); //set the hint the default selection so it appears on launch.
+        isCastratedSpinner.setOnItemSelectedListener(this);
     }
 
     private String getTodaysDate() {
@@ -729,6 +776,44 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         }
     }
 
+    public void handleIsVaccinated() {
+        if (isVaccinated != null) {
+            if (isVaccinated.equals("Yes")) {
+                if (isVaccinatedSpinner != null)
+                    isVaccinatedSpinner.setSelection(0);
+            } else {
+                if (isVaccinatedSpinner != null)
+                    isVaccinatedSpinner.setSelection(1);
+            }
+        } else {
+            // trigger onDataChange to get isVaccinated
+
+            DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+            dbRef.child("Tempi").setValue("deleteInAMinute");
+            dbRef.child("Tempi").removeValue();
+        }
+    }
+
+    public void handleIsCastrated() {
+        if (isCastrated != null) {
+            if (isCastrated.equals("Yes")) {
+                if (isCastratedSpinner != null)
+                    isCastratedSpinner.setSelection(0);
+            } else {
+                if (isCastratedSpinner != null)
+                    isCastratedSpinner.setSelection(1);
+            }
+        } else {
+            // trigger onDataChange to get isCastrated
+
+            DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+            dbRef.child("Tempi").setValue("deleteInAMinute");
+            dbRef.child("Tempi").removeValue();
+        }
+    }
+
+
+
 
     public void openEditNameDialog(String hint, String strViewToChange) {
         EditNameDialog editNameDialog = new EditNameDialog(hint, strViewToChange);
@@ -738,17 +823,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        if(CHANGE_PROFILE_CODE == 1){
-//            String newProfileImage= data.getStringExtra("result");
-//            Uri newProfileImage= (Uri) data.getExtras().get("profilePicture");
-
-//            Uri uri  = Uri.parse(newProfileImage);
-//            Picasso.get().load(newProfileImage).into(profileImage);
-//            Bundle extras = intent.getExtras();
-//            String newProfileImage = extras.getString("NewProfileImage");
-//            Uri uri  = Uri.parse(newProfileImage);
-//            Picasso.get().load(uri).into(profileImage);
-//        }
     }
 
     public void goToApplyText(String newText, String textViewToApply) {
@@ -825,12 +899,15 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                 break;
 
             case R.id.user_gender_spinner:
-                if (userGender != null) {
-                    userGender = choice;
-                    addToUserFB("Gender", choice);
-                }
+                userGender = choice;
+                addToUserFB("Gender", choice);
                 break;
-
+            case R.id.is_vaccinated_spinner:
+                isVaccinated = choice;
+                addToDogFB("Is vaccinated", choice);
+            case R.id.is_castrated_spinner:
+                isCastrated = choice;
+                addToDogFB("Is castrated", choice);
             default:
                 break;
         }
