@@ -63,47 +63,47 @@ import java.util.Objects;
 
 public class Profile extends AppCompatActivity implements EditNameDialog.EditNameDialogListener, AdapterView.OnItemSelectedListener {
     private TextView nameTextView;
+
     private Button buttonEditName;
     private Button buttonEditGender;
-//    private Button buttonEditAge;
     private Button buttonEditDogsAge;
     private Button buttonEditDogsGender;
     private Button buttonEditDogsBreed;
-   //private Button buttonEditLocation;
     private Button buttonEditAvailability;
+    private Button dateButton;
+    private Button dogDateButton;
+
     private String profileImageStr;
     private Uri profileImageUri;
     private ImageView profileImage;
     private TextView dogsName;
-    FloatingActionButton addProfileImage;
-    //    private Intent intent;
+
+    private FloatingActionButton addProfileImage;
+    private FloatingActionButton dogImageBtn;
+
     private Spinner userGenderSpinner;
     private Spinner isVaccinatedSpinner;
     private Spinner isCastratedSpinner;
     private Spinner availabilitySpinner;
     private Spinner locationSpinner;
     private Spinner dogGenderSpinner;
-//    private TextView usersAge;
     private TextView dogsAge;
-    BottomNavigationView bottomNavigationView;
-    View _rootView;
+    private BottomNavigationView bottomNavigationView;
     private String userGender;
     private String isVaccinated;
     private String isCastrated;
     private String availability;
     private String myLocation;
     private String dogGender;
+
     private DatePickerDialog datePickerDialog;
     private DatePickerDialog dogDatePickerDialog;
-    private Button dateButton;
-    private Button dogDateButton;
+
     private boolean allFieldsGotFilled = false;
     private boolean hasGroup = false;
-
-    private FloatingActionButton dogImageBtn;
+    private Boolean isDogPic = false;
 
     private Uri imageUri;
-    private static final int IMAGE_REQUEST = 2;
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int STORAGE_REQUEST_CODE = 200;
     private static final int IMAGE_PICK_CAMERA_CODE = 300;
@@ -113,8 +113,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     private String[] storagePermissions;
 
     private ImageView dogImage;
-    private Boolean isDogPic = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -909,107 +907,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
 //                break;
         }
     }
-
-//    public void addToUserFB(String attribute, String newText) {
-//        FirebaseDatabase.getInstance().getReference().child("Users")
-//                .child(FirebaseAuth.getInstance().getUid().toString())
-//                .child(attribute).setValue(newText);
-//    }
-//
-//    public void addToDogFB(String attribute, String newText) {
-//        FirebaseDatabase.getInstance().getReference().child("Dogs")
-//                .child(FirebaseAuth.getInstance().getUid().toString())
-//                .child(attribute).setValue(newText);
-//    }
-
-//    boolean isFacebookUser() {
-//        for (UserInfo user : FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
-//            if (user.getProviderId().equals("facebook.com")) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-
-//    @Override
-//    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//        String choice = adapterView.getItemAtPosition(i).toString();
-//        switch (adapterView.getId()) {
-//            case R.id.availability:
-//                if (availability != null) {
-//                    availability = choice;
-//                    addToUserFB("Availability", choice);
-//                }
-//                break;
-//            case R.id.location_spinner:
-//                if (myLocation != null) {
-//                    myLocation = choice;
-//                    addToUserFB("Location", choice);
-//                }
-//                break;
-//            case R.id.dog_gender_spinner:
-//                if (dogGender != null) {
-//                    dogGender = choice;
-//                    addToDogFB("Gender", choice);
-//                }
-//                break;
-//
-//            case R.id.user_gender_spinner:
-//                userGender = choice;
-//                addToUserFB("Gender", choice);
-//                break;
-//            case R.id.is_vaccinated_spinner:
-//                isVaccinated = choice;
-//                addToDogFB("Is vaccinated", choice);
-//            case R.id.is_castrated_spinner:
-//                isCastrated = choice;
-//                addToDogFB("Is castrated", choice);
-//            default:
-//                break;
-//        }
-//    }
-//
-//    @Override
-//    public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//    }
-
-    // checks whether there is google api service, without it maps won't work.
-//    @Override
-//    protected void onPostResume() {
-//        super.onPostResume();
-//        int errorCode = GoogleApiAvailability.getInstance()
-//                .isGooglePlayServicesAvailable(this);
-//
-//        if (errorCode != ConnectionResult.SUCCESS) {
-//            Dialog errorDialog = GoogleApiAvailability.getInstance()
-//                    .getErrorDialog(this, errorCode, errorCode, new DialogInterface.OnCancelListener() {
-//                        @Override
-//                        public void onCancel(DialogInterface dialogInterface) {
-//                            Toast.makeText(Profile.this, "no services", Toast.LENGTH_LONG).show();
-//                        }
-//                    });
-//            errorDialog.show();
-//        }
-////        else
-////            Toast.makeText(Profile.this, "there's services", Toast.LENGTH_LONG).show();
-//    }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-////        if(CHANGE_PROFILE_CODE == 1){
-////            String newProfileImage= data.getStringExtra("result");
-////            Uri newProfileImage= (Uri) data.getExtras().get("profilePicture");
-//
-////            Uri uri  = Uri.parse(newProfileImage);
-////            Picasso.get().load(newProfileImage).into(profileImage);
-////            Bundle extras = intent.getExtras();
-////            String newProfileImage = extras.getString("NewProfileImage");
-////            Uri uri  = Uri.parse(newProfileImage);
-////            Picasso.get().load(uri).into(profileImage);
-////        }
-//    }
 
     private String getFileExtention(Uri uri) {
         ContentResolver contentResolver = getContentResolver();
