@@ -177,7 +177,6 @@ public class MakeShifts extends Worker {
             case "Credits":
                 creditsOnDays[row][1] = choice;
                 break;
-
         }
     }
 
