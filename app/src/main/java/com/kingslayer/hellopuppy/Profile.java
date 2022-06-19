@@ -353,7 +353,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         nameTextView = findViewById(R.id.nameTextView);
         nameTextView.setText(profileNameString);
         profileImage = findViewById(R.id.profileImage);
-
+        System.out.println("g");
 
 //        userProfileFromLogin();
 
