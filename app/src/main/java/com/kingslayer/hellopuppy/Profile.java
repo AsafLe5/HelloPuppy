@@ -65,11 +65,11 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     private TextView nameTextView;
     private Button buttonEditName;
     private Button buttonEditGender;
-//    private Button buttonEditAge;
+    //    private Button buttonEditAge;
     private Button buttonEditDogsAge;
     private Button buttonEditDogsGender;
     private Button buttonEditDogsBreed;
-   //private Button buttonEditLocation;
+    //private Button buttonEditLocation;
     private Button buttonEditAvailability;
     private Button dateButton;
     private Button dogDateButton;
@@ -78,7 +78,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     private Uri profileImageUri;
     private ImageView profileImage;
     private TextView dogsName;
-
+    private TextView dogsBreed;
     private FloatingActionButton addProfileImage;
     private FloatingActionButton dogImageBtn;
 
@@ -88,7 +88,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     private Spinner availabilitySpinner;
     private Spinner locationSpinner;
     private Spinner dogGenderSpinner;
-//    private TextView usersAge;
+    //    private TextView usersAge;
     private TextView dogsAge;
     BottomNavigationView bottomNavigationView;
     View _rootView;
@@ -100,7 +100,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     private String dogGender;
     private DatePickerDialog datePickerDialog;
     private DatePickerDialog dogDatePickerDialog;
-//    private Button dateButton;
+    //    private Button dateButton;
 //    private Button dogDateButton;
     private boolean allFieldsGotFilled = false;
     private boolean hasGroup = false;
@@ -111,6 +111,10 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     private static final int STORAGE_REQUEST_CODE = 200;
     private static final int IMAGE_PICK_CAMERA_CODE = 300;
     private static final int IMAGE_PICK_GALLERY_CODE = 400;
+    boolean firstTimeDogGender = true;
+    boolean firstTimeVacc = true;
+    boolean firstTimeUserGender = true;
+    boolean firstTimeCast = true;
 
     private String[] cameraPermissions;
     private String[] storagePermissions;
@@ -134,6 +138,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         getSupportActionBar().setTitle("Profile");
 
         dogsName = findViewById(R.id.dogs_name);
+        dogsBreed = findViewById(R.id.dogs_breed);
         dogImageBtn = findViewById(R.id.addDogImage);
         dogImage = findViewById(R.id.dogImage);
 
@@ -171,6 +176,10 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                     dogsName.setText(dog.child("Name").getValue().toString());
                     numOfFilledFields++;
                 }
+                if (dog.hasChild("Dogs breed")) {
+                    dogsBreed.setText(dog.child("Dogs breed").getValue().toString());
+                    numOfFilledFields++;
+                }
 
 //                if (dog.hasChild("Age")) {
 //                    dogsAge.setText(dog.child("Age").getValue().toString());
@@ -187,14 +196,14 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                     addToUserFB("Gender", "male");
                 }*/
 
-                if (user.hasChild("Is vaccinated")) {
-                    isVaccinated = user.child("Is vaccinated").getValue().toString();
+                if (dog.hasChild("Is vaccinated")) {
+                    isVaccinated = dog.child("Is vaccinated").getValue().toString();
                     handleIsVaccinated();
                     numOfFilledFields++;
                 }
 
-                if (user.hasChild("Is castrated")) {
-                    isCastrated = user.child("Is castrated").getValue().toString();
+                if (dog.hasChild("Is castrated")) {
+                    isCastrated = dog.child("Is castrated").getValue().toString();
                     handleIsCastrated();
                     numOfFilledFields++;
                 }
@@ -353,7 +362,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         nameTextView = findViewById(R.id.nameTextView);
         nameTextView.setText(profileNameString);
         profileImage = findViewById(R.id.profileImage);
-        System.out.println("g");
 
 //        userProfileFromLogin();
 
@@ -820,7 +828,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             if (userGender.equals("Male")) {
                 if (userGenderSpinner != null)
                     userGenderSpinner.setSelection(0);
-            } else {
+            } else /*if (userGender.equals("Female"))*/{
                 if (userGenderSpinner != null)
                     userGenderSpinner.setSelection(1);
             }
@@ -885,6 +893,11 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                 t.setText(newText);
                 addToDogFB("Name", newText);
                 break;
+            case ("dogs_breed"):
+                TextView tv = findViewById(R.id.dogs_breed);
+                tv.setText(newText);
+                addToDogFB("Dogs breed", newText);
+                break;
         }
     }
 
@@ -927,184 +940,191 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                 }
                 break;
             case R.id.dog_gender_spinner:
-                if (dogGender != null) {
+                if (!firstTimeDogGender) {
                     dogGender = choice;
                     addToDogFB("Gender", choice);
                 }
+                firstTimeDogGender = false;
                 break;
 
             case R.id.user_gender_spinner:
-                if (userGender != null) {
+                if (!firstTimeUserGender) {
                     userGender = choice;
                     addToUserFB("Gender", choice);
-                    break;
+
                 }
+                firstTimeUserGender  = false;
+                break;
             case R.id.is_vaccinated_spinner:
-                if (isVaccinated != null) {
+                if (!firstTimeVacc) {
                     isVaccinated = choice;
                     addToDogFB("Is vaccinated", choice);
                 }
+                firstTimeVacc  = false;
+                break;
             case R.id.is_castrated_spinner:
-                if (isCastrated != null) {
+                if (!firstTimeCast) {
                     isCastrated = choice;
                     addToDogFB("Is castrated", choice);
                 }
+                firstTimeCast  = false;
+                break;
             default:
                 break;
         }
     }
 
-        @Override
-        public void onNothingSelected(AdapterView<?> adapterView) {
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    // checks whether there is google api service, without it maps won't work.
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        int errorCode = GoogleApiAvailability.getInstance()
+                .isGooglePlayServicesAvailable(this);
+
+        if (errorCode != ConnectionResult.SUCCESS) {
+            Dialog errorDialog = GoogleApiAvailability.getInstance()
+                    .getErrorDialog(this, errorCode, errorCode, new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialogInterface) {
+                            Toast.makeText(Profile.this, "no services", Toast.LENGTH_LONG).show();
+                        }
+                    });
+            errorDialog.show();
         }
-
-        // checks whether there is google api service, without it maps won't work.
-        @Override
-        protected void onPostResume() {
-            super.onPostResume();
-            int errorCode = GoogleApiAvailability.getInstance()
-                    .isGooglePlayServicesAvailable(this);
-
-            if (errorCode != ConnectionResult.SUCCESS) {
-                Dialog errorDialog = GoogleApiAvailability.getInstance()
-                        .getErrorDialog(this, errorCode, errorCode, new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialogInterface) {
-                                Toast.makeText(Profile.this, "no services", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                errorDialog.show();
-            }
 //        else
 //            Toast.makeText(Profile.this, "there's services", Toast.LENGTH_LONG).show();
-        }
+    }
 
-        private void openImage(){
-            String[] options = {"Camera", "Gallery"};
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Pick Group Image:").setItems(options, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if(which == 0){
-                        //camera clicked
-                        if(!checkCameraPermissions()){
-                            pickImageFromCamera();
-                            //requestCameraPermissions();
-                        }
-                        else{
-                            pickImageFromCamera();
-                        }
+    private void openImage(){
+        String[] options = {"Camera", "Gallery"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Pick Group Image:").setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(which == 0){
+                    //camera clicked
+                    if(!checkCameraPermissions()){
+                        pickImageFromCamera();
+                        //requestCameraPermissions();
                     }
                     else{
-                        //gallery clicked
-                        if(!checkStoragePermission()){
-                            requestStoragePermissions();
-                        }
-                        else{
-                            pickImageFromGallery();
-                        }
-                    }
-                }
-            }).show();
-        }
-
-        private void pickImageFromGallery(){
-            Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.setType("image/*");
-            startActivityForResult(intent, IMAGE_PICK_GALLERY_CODE);
-        }
-
-        private void pickImageFromCamera(){
-            ContentValues cv = new ContentValues();
-            cv.put(MediaStore.Images.Media.TITLE, "Group Image Icon Title");
-            cv.put(MediaStore.Images.Media.DESCRIPTION, "Group Image Icon Description");
-            imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cv);
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-            startActivityForResult(intent, IMAGE_PICK_CAMERA_CODE);
-        }
-
-        private boolean checkStoragePermission(){
-            boolean res = ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
-            return res;
-        }
-
-        private void requestStoragePermissions(){
-            ActivityCompat.requestPermissions(this, storagePermissions, STORAGE_REQUEST_CODE);
-        }
-
-        private boolean checkCameraPermissions(){
-            boolean res = ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
-            boolean res2 = ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
-            return res && res2;
-        }
-
-        private void requestCameraPermissions(){
-            ActivityCompat.requestPermissions(this, cameraPermissions, CAMERA_REQUEST_CODE);
-        }
-
-        @Override
-        protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
-            super.onActivityResult(requestCode, resultCode, data);
-            if(resultCode == RESULT_OK){
-                if(requestCode == IMAGE_PICK_GALLERY_CODE){
-                    if (data != null) {
-                        imageUri = data.getData();
-                        if (imageUri != null) {
-                            savePictureInDb();
-                        }
+                        pickImageFromCamera();
                     }
                 }
                 else{
+                    //gallery clicked
+                    if(!checkStoragePermission()){
+                        requestStoragePermissions();
+                    }
+                    else{
+                        pickImageFromGallery();
+                    }
+                }
+            }
+        }).show();
+    }
+
+    private void pickImageFromGallery(){
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, IMAGE_PICK_GALLERY_CODE);
+    }
+
+    private void pickImageFromCamera(){
+        ContentValues cv = new ContentValues();
+        cv.put(MediaStore.Images.Media.TITLE, "Group Image Icon Title");
+        cv.put(MediaStore.Images.Media.DESCRIPTION, "Group Image Icon Description");
+        imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cv);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(intent, IMAGE_PICK_CAMERA_CODE);
+    }
+
+    private boolean checkStoragePermission(){
+        boolean res = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
+        return res;
+    }
+
+    private void requestStoragePermissions(){
+        ActivityCompat.requestPermissions(this, storagePermissions, STORAGE_REQUEST_CODE);
+    }
+
+    private boolean checkCameraPermissions(){
+        boolean res = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
+        boolean res2 = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
+        return res && res2;
+    }
+
+    private void requestCameraPermissions(){
+        ActivityCompat.requestPermissions(this, cameraPermissions, CAMERA_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            if(requestCode == IMAGE_PICK_GALLERY_CODE){
+                if (data != null) {
+                    imageUri = data.getData();
                     if (imageUri != null) {
                         savePictureInDb();
                     }
                 }
-                //imageUri = data.getData();
-                //uploadImage();
-            }
-        }
-
-        void savePictureInDb(){
-
-            if(isDogPic){
-                savePictureDogInDb(imageUri);
-                Picasso.get().load(imageUri).into(dogImage);
             }
             else{
-                savePictureInDb(imageUri);
-                Picasso.get().load(imageUri).into(profileImage);
+                if (imageUri != null) {
+                    savePictureInDb();
+                }
             }
+            //imageUri = data.getData();
+            //uploadImage();
         }
+    }
 
-        @Override
-        public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {
-            switch (requestCode){
-                case CAMERA_REQUEST_CODE:{
-                    if(grantResults.length>0){
-                        boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                        boolean storageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                        if( cameraAccepted && storageAccepted){
-                            // permission allowed
-                            pickImageFromCamera();
-                        }
-                    }
-                }
-                break;
-                case STORAGE_REQUEST_CODE:{
-                    if(grantResults.length>0){
-                        boolean storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                        if(storageAccepted){
-                            // permission allowed
-                            pickImageFromGallery();
-                        }
+    void savePictureInDb(){
+
+        if(isDogPic){
+            savePictureDogInDb(imageUri);
+            Picasso.get().load(imageUri).into(dogImage);
+        }
+        else{
+            savePictureInDb(imageUri);
+            Picasso.get().load(imageUri).into(profileImage);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {
+        switch (requestCode){
+            case CAMERA_REQUEST_CODE:{
+                if(grantResults.length>0){
+                    boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean storageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    if( cameraAccepted && storageAccepted){
+                        // permission allowed
+                        pickImageFromCamera();
                     }
                 }
             }
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            break;
+            case STORAGE_REQUEST_CODE:{
+                if(grantResults.length>0){
+                    boolean storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if(storageAccepted){
+                        // permission allowed
+                        pickImageFromGallery();
+                    }
+                }
+            }
         }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 }
