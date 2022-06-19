@@ -27,6 +27,7 @@ public class Schedule extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private Button chooseShifts;
     private String groupId;
+    private boolean isManager = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,7 @@ public class Schedule extends AppCompatActivity {
         });
 
         String myId = FirebaseAuth.getInstance().getUid();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -59,8 +60,12 @@ public class Schedule extends AppCompatActivity {
                 for(DataSnapshot ds: snapshot.getChildren()){
 
                     assert myId != null;
-                    if(ds.getKey().equals(myId) && ds.hasChild("GroupId")){
+                    if(ds.child("Users").getKey().equals(myId) && ds.child("Users").hasChild("GroupId")){
                         groupId = ds.child("GroupId").getValue().toString();
+                        if(ds.child("Groups").child(groupId).child("groupManagerId").getValue()
+                                .toString().equals(myId)){
+                            isManager = true;
+                        }
                     }
                 }
             }
@@ -102,9 +107,9 @@ public class Schedule extends AppCompatActivity {
         //endregion
 
 
-        if(groupId != null){
+        if(groupId != null && isManager){
             PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(
-                    MakeShifts.class, 15, TimeUnit.MINUTES).build();
+                    MakeShifts.class, 16, TimeUnit.MINUTES).build();
             WorkManager.getInstance().enqueue(periodicWorkRequest);
         }
 
