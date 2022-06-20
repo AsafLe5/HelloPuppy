@@ -90,7 +90,6 @@ public class AdapterRemoveUser extends RecyclerView.Adapter<AdapterRemoveUser.Ho
                 Intent intent = new Intent(getApplicationContext(), WatchProfile.class);
                 intent.putExtra("User", holder.getUserId());
                 context.startActivity(intent);
-
             }
         });
     }
