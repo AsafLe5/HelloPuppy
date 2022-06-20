@@ -1,6 +1,7 @@
 package com.kingslayer.hellopuppy.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +17,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.kingslayer.hellopuppy.Models.ModelUser;
 import com.kingslayer.hellopuppy.R;
+import com.kingslayer.hellopuppy.WatchProfile;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class AdapterJoinRequests extends
         RecyclerView.Adapter<AdapterJoinRequests.HolderJoinRequestsList> {
@@ -61,6 +65,7 @@ public class AdapterJoinRequests extends
         holder.availability.setText(availability);
         holder.userName.setText(userName);
 
+        holder.setUserId(user.getUserId());
 
         holder.itemView.findViewById(R.id.accept).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,6 +147,15 @@ public class AdapterJoinRequests extends
             }
         });
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), WatchProfile.class);
+                intent.putExtra("User", holder.getUserId());
+                context.startActivity(intent);
+            }
+        });
+
     }
 
     @Override
@@ -154,12 +168,21 @@ public class AdapterJoinRequests extends
         private ImageView UserPicture;
         private TextView userName;
         private TextView availability;
+        private String userId;
 
         public HolderJoinRequestsList(@NonNull @NotNull View itemView) {
             super(itemView);
 //            UserPicture = itemView.findViewById(R.id.UserPicture);
             userName = itemView.findViewById(R.id.actualUserName);
             availability = itemView.findViewById(R.id.Availability);
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+
+        public String getUserId() {
+            return userId;
         }
     }
 }

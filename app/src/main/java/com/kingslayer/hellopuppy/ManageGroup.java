@@ -81,7 +81,6 @@ public class ManageGroup extends AppCompatActivity {
                         overridePendingTransition(0, 0);
                         return true;
                 }
-
                 return false;
             }
         });
@@ -96,14 +95,6 @@ public class ManageGroup extends AppCompatActivity {
         DbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-//
-//                // only manager sees join requests button
-//                String manager = snapshot.child("Groups").child(groupId).child("groupManagerId").getValue().toString();
-//                if(manager.equals(FirebaseAuth.getInstance().getUid().toString())){
-//                    isManager = true;
-////                    buttonJoinRequests.setVisibility(View.VISIBLE);
-////                    buttonJoinRequests.setEnabled(true);
-//                }
 
                 membersArray = (List<String>) snapshot.child("Groups").child(groupId)
                         .child("MembersIds").getValue();
@@ -122,7 +113,6 @@ public class ManageGroup extends AppCompatActivity {
 
 //                    asd.setUserId(member);
                     usersModelMap.put(member, asd);
-
                 }
                 updateMod();
             }

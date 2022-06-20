@@ -109,7 +109,6 @@ public class AdapterRemoveUser extends RecyclerView.Adapter<AdapterRemoveUser.Ho
 
         public HolderRemoveUserList(@NonNull @NotNull View itemView) {
             super(itemView);
-//            UserPicture = itemView.findViewById(R.id.UserPicture);
             userName = itemView.findViewById(R.id.actualUserName);
             dogName = itemView.findViewById(R.id.actualDogName);
             UserPicture = itemView.findViewById(R.id.UserPicture);
