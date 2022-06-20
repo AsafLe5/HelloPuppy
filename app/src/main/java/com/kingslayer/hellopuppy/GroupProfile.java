@@ -42,7 +42,8 @@ public class GroupProfile extends AppCompatActivity {
     private Button buttonJoinRequests;
     private String groupId;
     private List<String> membersArray;
-    private Map<String,ModelUser> usersModelMap = new HashMap<String,ModelUser>();;
+    private Map<String, ModelUser> usersModelMap = new HashMap<String, ModelUser>();
+    ;
     private boolean modUser = true;
     private boolean modDog = false;
     private boolean isManager = false;
@@ -70,18 +71,6 @@ public class GroupProfile extends AppCompatActivity {
         explanation = findViewById(R.id.explanation_text);
         firebaseAuth = FirebaseAuth.getInstance();
         loadUsers();
-//
-//        buttonJoinRequests.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getApplicationContext(), JoinRequests.class);
-//                intent.putExtra("GroupId", groupId);
-//                startActivity(intent);
-//                overridePendingTransition(0,0);
-////                startActivity(new Intent(getApplicationContext(), Profile.class));
-////                overridePendingTransition(0, 0);
-//            }
-//        });
 
         //region $ Navigation View
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -124,14 +113,14 @@ public class GroupProfile extends AppCompatActivity {
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
 
                 // set the description of the group
-                if(snapshot.child("Groups").child(groupId).hasChild("Description")){
+                if (snapshot.child("Groups").child(groupId).hasChild("Description")) {
                     explanation.setText(snapshot.child("Groups").child(groupId).child("Description")
                             .getValue().toString());
                 }
 
                 // only manager sees join requests button
                 String manager = snapshot.child("Groups").child(groupId).child("groupManagerId").getValue().toString();
-                if(manager.equals(FirebaseAuth.getInstance().getUid().toString())){
+                if (manager.equals(FirebaseAuth.getInstance().getUid().toString())) {
                     isManager = true;
 //                    buttonJoinRequests.setVisibility(View.VISIBLE);
 //                    buttonJoinRequests.setEnabled(true);
@@ -139,14 +128,14 @@ public class GroupProfile extends AppCompatActivity {
 
                 membersArray = (List<String>) snapshot.child("Groups").child(groupId)
                         .child("MembersIds").getValue();
-                for(String member: membersArray){
+                for (String member : membersArray) {
                     ModelUser asd = new ModelUser(member);
                     asd.setUserName(snapshot.child("Users").child(member)
                             .child("Full name").getValue().toString());
 
                     asd.setDogsName(snapshot.child("Dogs").child(member)
                             .child("Name").getValue().toString());
-                    if(snapshot.child("Users").child(member).hasChild("Profile photo")){
+                    if (snapshot.child("Users").child(member).hasChild("Profile photo")) {
                         asd.setUserProfile(snapshot.child("Users").child(member)
                                 .child("Profile photo").getValue().toString());
                     }
@@ -164,94 +153,11 @@ public class GroupProfile extends AppCompatActivity {
             }
         });
         DbRef.child("Users").child("Tempi").setValue("deleteInAMinute");
-        //DbRef.child("Users").child("Tempi").removeValue();
 
-
-//
-//        membersIdsDR.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-//                usersList.size();
-//                long c = snapshot.getChildrenCount();
-//                int a = 4;
-//                membersArray = (List<String>) snapshot.getValue();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-//
-//            }
-//        });
-//        membersIdsDR.child("Tempi").setValue("deleteInAMinute");
-//        membersIdsDR.child("Tempi").removeValue();
-//        usersDR.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-//                for (String userIdString : membersArray) {
-//                    for (DataSnapshot attribute : snapshot.child(userIdString).getChildren()) {
-//                        switch (attribute.getKey().toString()) {
-//                            case "Full name":
-//                                if (modDog != true)
-//                                    usersModelMap.put(userIdString, new ModelUser());
-//                                usersModelMap.get(userIdString).setUserName(attribute.getValue().toString());
-//                               // UsersModelMap[attribute.getKey()] = new ModelUser();
-//                                //newUserModel.setUserName(attribute.getValue().toString());
-//                                break;
-//
-//                            default:
-//                        }
-//                    }
-//                }
-//                modUser = true;
-//                if (modDog)
-//                    updateMod();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-//
-//            }
-//        });
-//        dogsDR.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-//                for (String userIdString : membersArray) {
-//                    for (DataSnapshot dogAttribute : snapshot.child(userIdString).getChildren()) {
-//                        switch (dogAttribute.getKey().toString()) {
-//                            case "Name":
-//                                if (modUser != true)
-//                                    usersModelMap.put(userIdString, new ModelUser());
-//                                ModelUser asd = usersModelMap.get(userIdString);
-//                                asd.setDogsName(dogAttribute.getValue().toString());
-//                                break;
-///*
-//                            case "Full":
-//
-//                                break;
-//*/
-//                            default:
-//                        }
-//                        //String a = attribute.getValue().toString();
-//                        System.out.println("dfg");
-//                    }
-//                    //snapshot.child(user).getValue();
-//                }
-//                modDog = true;
-//                if (modUser)
-//                    updateMod();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-//
-//            }
-//        });
-//
-//        membersIdsDR.child("Tempi").setValue("deleteInAMinute");
-//        membersIdsDR.child("Tempi").removeValue();
     }
-    void updateMod(){
-        for (Map.Entry<String, ModelUser> model : usersModelMap.entrySet()){
+
+    void updateMod() {
+        for (Map.Entry<String, ModelUser> model : usersModelMap.entrySet()) {
             usersList.add(model.getValue());
         }
         adapterUserList = new AdapterUserList(GroupProfile.this, usersList);
@@ -269,28 +175,27 @@ public class GroupProfile extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (!isManager){
+        if (!isManager) {
             int id = item.getItemId();
-            switch (id){
+            switch (id) {
                 case R.id.leave_group:
                     checkAndLeave();
                     break;
             }
-        }
-        else{
+        } else {
             int id = item.getItemId();
-            switch (id){
+            switch (id) {
                 case R.id.requests:
                     Intent intent = new Intent(getApplicationContext(), JoinRequests.class);
                     intent.putExtra("GroupId", groupId);
                     startActivity(intent);
-                    overridePendingTransition(0,0);
+                    overridePendingTransition(0, 0);
                     break;
                 case R.id.manage_group:
                     Intent intent2 = new Intent(getApplicationContext(), ManageGroup.class);
                     intent2.putExtra("GroupId", groupId);
                     startActivity(intent2);
-                    overridePendingTransition(0,0);
+                    overridePendingTransition(0, 0);
                     break;
 
                 case R.id.delete_group:
@@ -301,7 +206,7 @@ public class GroupProfile extends AppCompatActivity {
         return true;
     }
 
-    public void checkAndDelete(){
+    public void checkAndDelete() {
         new AlertDialog.Builder(GroupProfile.this)
                 .setTitle("Pay attention!")
                 .setMessage("Are you sure you want to delete this group?")
@@ -320,7 +225,7 @@ public class GroupProfile extends AppCompatActivity {
 
     }
 
-    public void checkAndLeave(){
+    public void checkAndLeave() {
         new AlertDialog.Builder(GroupProfile.this)
                 .setTitle("Pay attention!")
                 .setMessage("Are you sure you want to leave this group?")
@@ -338,9 +243,9 @@ public class GroupProfile extends AppCompatActivity {
                 }).show();
     }
 
-    public void deleteGroup(){
+    public void deleteGroup() {
         // remove group id for every member in the group
-        for(String member: membersArray){
+        for (String member : membersArray) {
             FirebaseDatabase.getInstance().getReference("Users").child(member)
                     .child("GroupId").removeValue();
         }
@@ -352,10 +257,10 @@ public class GroupProfile extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void leaveGroup(){
+    public void leaveGroup() {
         boolean isMeCurrOnTrip = false;
         // remove me from MembersIds of the group
-        if(membersArray.contains(FirebaseAuth.getInstance().getUid().toString())){
+        if (membersArray.contains(FirebaseAuth.getInstance().getUid().toString())) {
             membersArray.remove(FirebaseAuth.getInstance().getUid().toString());
         }
         FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
@@ -364,47 +269,35 @@ public class GroupProfile extends AppCompatActivity {
         // remove my schedule
         FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
                 .child("ScheduleChoices").child(FirebaseAuth.getInstance()
-                                .getUid().toString()).removeValue();
+                .getUid().toString()).removeValue();
 
         // delete my group id
         FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance()
                 .getUid().toString()).child("GroupId").removeValue();
 
+
+        // if I was the one on trip
+        DatabaseReference groupRef = FirebaseDatabase.getInstance().getReference("Groups").child(groupId);
+        groupRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if (snapshot.hasChild("FindDog")) {
+                    FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
+                            .child("FindDog").child("CurrentlyOnTrip").removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
         Intent intent = new Intent(getApplicationContext(), Group.class);
         startActivity(intent);
 
-//        DatabaseReference groupRef = FirebaseDatabase.getInstance().getReference("Groups").child(groupId);
-//        groupRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-////                if(snapshot.hasChild("MembersIds")){
-////                    members = (List<String>) snapshot.child("MembersIds").getValue();
-////                    members.remove(FirebaseAuth.getInstance().getUid().toString());
-////                }
-//
-//                if(snapshot.hasChild("FindDog")){
-//                    String onTrip = snapshot.child("FindDog").child("CurrentlyOnTrip").getValue().toString();
-//                    if(onTrip.equals(FirebaseAuth.getInstance().getUid().toString())){
-//                        isMeCurrOnTrip = true;
-//                    }
-//                }
 
-//                if(snapshot.hasChild("ScheduleChoices")){
-//                    if(snapshot.child("ScheduleChoices").hasChild(FirebaseAuth.getInstance()
-//                            .getUid().toString())){
-//                        snapshot.child("ScheduleChoices").child(FirebaseAuth.getInstance()
-//                                .getUid().toString()).re
-//
-//                    }
-//                }
-
-//            }
-
-//            @Override
-//            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-//
-//            }
-//        });
     }
+
+
 }
 
