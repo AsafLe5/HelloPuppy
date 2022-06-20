@@ -3,7 +3,6 @@ package com.kingslayer.hellopuppy;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -11,8 +10,6 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,7 +21,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -35,11 +31,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
-import com.github.drjacky.imagepicker.ImagePicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FacebookAuthProvider;
@@ -51,9 +44,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
@@ -112,7 +102,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
     private static final int IMAGE_PICK_CAMERA_CODE = 300;
     private static final int IMAGE_PICK_GALLERY_CODE = 400;
     boolean firstTimeDogGender = true;
-    boolean firstTimeVacc = true;
+    boolean firstTimeVaccine = true;
     boolean firstTimeUserGender = true;
     boolean firstTimeCast = true;
 
@@ -956,11 +946,11 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                 firstTimeUserGender  = false;
                 break;
             case R.id.is_vaccinated_spinner:
-                if (!firstTimeVacc) {
+                if (!firstTimeVaccine) {
                     isVaccinated = choice;
                     addToDogFB("Is vaccinated", choice);
                 }
-                firstTimeVacc  = false;
+                firstTimeVaccine = false;
                 break;
             case R.id.is_castrated_spinner:
                 if (!firstTimeCast) {
