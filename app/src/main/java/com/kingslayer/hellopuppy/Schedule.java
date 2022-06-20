@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,6 +50,15 @@ public class Schedule extends AppCompatActivity {
     List<String> chosenDays = new ArrayList<>(7); //each cell contain uid of selected user chosen this day.
     boolean isUpdated = false;
     boolean firstTime = true;
+    private List<TextView> namePerRow;
+//    private TextView row1Name;
+//    private TextView row2Name;
+//    private TextView row3Name;
+//    private TextView row4Name;
+//    private TextView row5Name;
+//    private TextView row6Name;
+//    private TextView row7Name;
+    private Map<String, String> groupNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +66,18 @@ public class Schedule extends AppCompatActivity {
         setContentView(R.layout.activity_schedule);
 
         getSupportActionBar().setTitle("Schedule");
-
+        namePerRow = new ArrayList<>();
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.schedule);
         chooseShifts = findViewById(R.id.choose_shifts);
-
+        namePerRow.add(findViewById(R.id.row1_name));
+        namePerRow.add(findViewById(R.id.row2_name));
+        namePerRow.add(findViewById(R.id.row3_name));
+        namePerRow.add(findViewById(R.id.row4_name));
+        namePerRow.add(findViewById(R.id.row5_name));
+        namePerRow.add(findViewById(R.id.row6_name));
+        namePerRow.add(findViewById(R.id.row7_name));
+        groupNames = new HashMap<>();
         chooseShifts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,9 +176,11 @@ public class Schedule extends AppCompatActivity {
             Date currentTime = Calendar.getInstance().getTime();
             System.out.println("hey");
             arrangeShifts();
+
             customHandler.postDelayed(this, 2*toMins);
         }
     };
+
 
     private void arrangeShifts() {
 
@@ -195,7 +214,7 @@ public class Schedule extends AppCompatActivity {
                             .getChildrenCount() == 8) {
                         for (DataSnapshot user : snapshot.child("Groups").child(myGroupId)
                                 .child("ScheduleChoices").getChildren()) {
-
+                            groupNames.put(user.getKey().toString(),snapshot.child("Users").child(user.getKey()).child("Full name").getValue().toString());
                             for (DataSnapshot day : snapshot.child("Groups").child(myGroupId)
                                     .child("ScheduleChoices").child(user.getKey().toString()).getChildren()) {
                                 writeInArray(i, user.getKey().toString(), day.getKey().toString(), day.getValue().toString());
@@ -207,6 +226,7 @@ public class Schedule extends AppCompatActivity {
                         saveInDb();
                     }
                 }
+                arrangeShiftInTable();
             }
 
 
@@ -390,4 +410,10 @@ public class Schedule extends AppCompatActivity {
         }
         int a= 0;
     }
+    private void arrangeShiftInTable() {
+        for (int i = 0; i<namePerRow.size(); i++){
+            namePerRow.get(i).setText(groupNames.get(chosenDays.get(i)));
+        }
+    }
+
 }
