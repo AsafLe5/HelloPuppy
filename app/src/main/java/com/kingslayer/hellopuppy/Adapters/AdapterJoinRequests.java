@@ -88,7 +88,6 @@ public class AdapterJoinRequests extends
                 FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
                         .child("ScheduleChoices").child(user.getUserId().toString()).child("Credits").setValue(5);
 
-
 //                DbRef.addValueEventListener(new ValueEventListener() {
 //                    @Override
 //                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
