@@ -14,7 +14,9 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/profileImage"
                 android:layout_width="match_parent"
@@ -28,9 +30,12 @@
                 android:id="@+id/addProfileImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="200dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="35dp"
                 android:clickable="true"
                 app:srcCompat="@drawable/ic_upload_image" />
+        </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/linear_layout_user_name"
@@ -147,7 +152,6 @@
                 android:paddingTop="10dp"
                 android:layout_centerHorizontal="true"
                 android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
                 android:layout_below="@+id/linear_layout_availability">
                 <TextView
                     android:layout_width="wrap_content"
@@ -158,12 +162,52 @@
                     android:textSize="32dp" />
             </LinearLayout>
 
+
+            <RelativeLayout
+                android:layout_width="350dp"
+                android:layout_height="150dp"
+                android:id="@+id/dog_picture"
+                android:layout_gravity="bottom|center"
+                android:layout_below="@+id/linear_layout_my_dog"
+                android:orientation="horizontal"
+                android:layout_centerHorizontal="true">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_centerInParent="true"
+                    android:layout_weight="1">
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/dogImage"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:minWidth="150dp"
+                    android:gravity="center"
+                    android:minHeight="150dp"
+                    android:scaleType="centerCrop"
+                    app:shapeAppearanceOverlay="@style/ivStyle_Circle" />
+            </LinearLayout>
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/addDogImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:clickable="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:srcCompat="@drawable/ic_upload_image" />
+            </RelativeLayout>
+
             <LinearLayout
                 android:id="@+id/linear_layout_dog_name"
                 android:layout_width="350dp"
                 android:layout_centerHorizontal="true"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/linear_layout_my_dog">
+                android:layout_below="@+id/dog_picture">
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -268,7 +312,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@+id/linear_layout_is_vaccinated"
                 android:layout_centerHorizontal="true"
-                android:paddingTop="15dp">
+                android:paddingTop="5dp">
 
                 <TextView
                     android:layout_width="0dp"
@@ -319,28 +363,13 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/dogImage"
-                android:layout_width="match_parent"
-                android:layout_height="260dp"
-                android:minHeight="260dp"
-                android:minWidth="260dp"
-                android:layout_marginTop="860dp"/>
 
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/addDogImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="880dp"
-                android:clickable="true"
-                app:srcCompat="@drawable/ic_upload_image" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ardfgio"
-                android:layout_marginTop="950dp"
+                android:layout_marginTop="1030dp"
                 android:textColor="@color/white"/>
         </RelativeLayout>
 
