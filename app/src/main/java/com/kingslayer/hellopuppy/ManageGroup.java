@@ -52,7 +52,7 @@ public class ManageGroup extends AppCompatActivity {
 
         usersList = null;
         bottomNavigationView = findViewById(R.id.bottom_navigator);
-        bottomNavigationView.setSelectedItemId(R.id.group);
+        //bottomNavigationView.setSelectedItemId(R.id.group);
         users = findViewById(R.id.users);
         firebaseAuth = FirebaseAuth.getInstance();
         loadUsers();
@@ -96,14 +96,6 @@ public class ManageGroup extends AppCompatActivity {
         DbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-//
-//                // only manager sees join requests button
-//                String manager = snapshot.child("Groups").child(groupId).child("groupManagerId").getValue().toString();
-//                if(manager.equals(FirebaseAuth.getInstance().getUid().toString())){
-//                    isManager = true;
-////                    buttonJoinRequests.setVisibility(View.VISIBLE);
-////                    buttonJoinRequests.setEnabled(true);
-//                }
 
                 membersArray = (List<String>) snapshot.child("Groups").child(groupId)
                         .child("MembersIds").getValue();
