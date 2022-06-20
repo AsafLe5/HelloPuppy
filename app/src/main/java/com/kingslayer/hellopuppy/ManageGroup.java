@@ -115,6 +115,11 @@ public class ManageGroup extends AppCompatActivity {
                     asd.setDogsName(snapshot.child("Dogs").child(member)
                             .child("Name").getValue().toString());
 
+                    if(snapshot.child("Users").child(member).hasChild("Profile photo")){
+                        asd.setUserProfile(snapshot.child("Users").child(member)
+                                .child("Profile photo").getValue().toString());
+                    }
+
 //                    asd.setUserId(member);
                     usersModelMap.put(member, asd);
 

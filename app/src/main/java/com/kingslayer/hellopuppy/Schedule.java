@@ -103,14 +103,14 @@ public class Schedule extends AppCompatActivity {
                     if(snapshot.child("Groups").child(groupId).child("groupManagerId").getValue()
                             .toString().equals(myId)){
                         if (firstTime){
-                        customHandler = new android.os.Handler();
-                        Calendar calNow = Calendar.getInstance();
-                        Calendar calNextWed = Calendar.getInstance();
-                        calNextWed.set(Calendar.HOUR, 10);
-                        calNextWed.set(Calendar.MINUTE, 4);
-                        calNextWed.set(Calendar.SECOND, 0);
-                        while(calNextWed.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY){
-                            calNextWed.add(Calendar.DATE, 1);
+                            customHandler = new android.os.Handler();
+                            Calendar calNow = Calendar.getInstance();
+                            Calendar calNextWed = Calendar.getInstance();
+                            calNextWed.set(Calendar.HOUR, 10);
+                            calNextWed.set(Calendar.MINUTE, 4);
+                            calNextWed.set(Calendar.SECOND, 0);
+                            while(calNextWed.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY){
+                                calNextWed.add(Calendar.DATE, 1);
                         }
 
                         System.out.println(calNextWed.getTimeInMillis() - calNow.getTimeInMillis());
@@ -187,10 +187,6 @@ public class Schedule extends AppCompatActivity {
         String myId = FirebaseAuth.getInstance().getUid().toString();
 
         DatabaseReference groupIdRef = FirebaseDatabase.getInstance().getReference();
-/*
-        // trigger onDataChange
-        groupIdRef.child("Tempi").setValue("deleteInAMinute");
-        groupIdRef.child("Tempi").removeValue();*/
 
         groupIdRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -224,9 +220,9 @@ public class Schedule extends AppCompatActivity {
                         String algorithmData = getString();
                         schedulesAlgorithm(algorithmData);
                         saveInDb();
+                        arrangeShiftInTable();
                     }
                 }
-                arrangeShiftInTable();
             }
 
 
@@ -235,14 +231,6 @@ public class Schedule extends AppCompatActivity {
 
             }
         });
-
-//        if (credits.size() > 0 && chosenDays.size()>0) {
-//            saveInDb();
-////            isUpdated = true;
-//        }
-//        else {
-//
-//        }
     }
 
     private String getString() {
@@ -264,7 +252,7 @@ public class Schedule extends AppCompatActivity {
         for(int i=0; i< numOfMembers; i++){
             String user = (String) credits.keySet().toArray()[i];
             Integer creditsLeft = credits.get(user);
-            groupRef.child("ScheduleChoices").child(user).child("Credits").setValue(creditsLeft);
+            groupRef.child("ScheduleChoices").child(user).child("Credits").setValue((int)creditsLeft + 5);
         }
 
         // save schedule for next week

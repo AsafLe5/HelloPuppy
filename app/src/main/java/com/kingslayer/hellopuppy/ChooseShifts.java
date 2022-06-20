@@ -116,7 +116,7 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
                 for(DataSnapshot ds: snapshot.getChildren()){
                     if(ds.getKey().equals(FirebaseAuth.getInstance().getUid().toString())){
                         creditsLeft = Integer.parseInt(ds.child("Credits").getValue().toString());
-                        creditsLeft = 5;
+//                        creditsLeft = 5;
                         percent = 100 / creditsLeft;
                     }
                 }
