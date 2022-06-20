@@ -34,11 +34,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.kingslayer.hellopuppy.GroupProfile;
 import com.kingslayer.hellopuppy.Models.ModelUser;
 import com.kingslayer.hellopuppy.R;
 import com.kingslayer.hellopuppy.WatchProfile;
 import com.squareup.picasso.Picasso;
+import com.kingslayer.hellopuppy.Group;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -80,6 +80,7 @@ public class AdapterRemoveUser extends RecyclerView.Adapter<AdapterRemoveUser.Ho
 
         Picasso.get().load(user.getUserProfile()).into(holder.UserPicture);
 
+        int a = 8;
         // handle user click
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +90,6 @@ public class AdapterRemoveUser extends RecyclerView.Adapter<AdapterRemoveUser.Ho
                 Intent intent = new Intent(getApplicationContext(), WatchProfile.class);
                 intent.putExtra("User", holder.getUserId());
                 context.startActivity(intent);
-
             }
         });
     }
@@ -109,7 +109,6 @@ public class AdapterRemoveUser extends RecyclerView.Adapter<AdapterRemoveUser.Ho
 
         public HolderRemoveUserList(@NonNull @NotNull View itemView) {
             super(itemView);
-//            UserPicture = itemView.findViewById(R.id.UserPicture);
             userName = itemView.findViewById(R.id.actualUserName);
             dogName = itemView.findViewById(R.id.actualDogName);
             UserPicture = itemView.findViewById(R.id.UserPicture);

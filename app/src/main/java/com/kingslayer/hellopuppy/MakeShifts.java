@@ -135,7 +135,7 @@ public class MakeShifts extends Worker {
         for(int i=0; i< numOfMembers; i++){
             String user = (String) credits.keySet().toArray()[i];
             Integer creditsLeft = credits.get(user);
-            groupRef.child("ScheduleChoices").child(user).child("Credits").setValue(creditsLeft);
+            groupRef.child("ScheduleChoices").child(user).child("Credits").setValue(creditsLeft + 5);
         }
 
         // save schedule for next week

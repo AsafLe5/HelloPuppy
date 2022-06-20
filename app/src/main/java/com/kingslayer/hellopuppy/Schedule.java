@@ -2,6 +2,9 @@ package com.kingslayer.hellopuppy;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.ListenableWorker;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -270,7 +273,7 @@ public class Schedule extends AppCompatActivity {
         for (int i = 0; i < numOfMembers; i++) {
             String user = (String) credits.keySet().toArray()[i];
             Integer creditsLeft = credits.get(user);
-            groupRef.child("ScheduleChoices").child(user).child("Credits").setValue(creditsLeft);
+            groupRef.child("ScheduleChoices").child(user).child("Credits").setValue((int)creditsLeft + 5);
         }
 
         // save schedule for next week
