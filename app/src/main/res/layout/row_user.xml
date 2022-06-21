@@ -9,13 +9,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
-        <ImageView
+
+        <com.google.android.material.imageview.ShapeableImageView
             android:layout_height="70dp"
             android:layout_width="70dp"
             android:id="@+id/UserPicture"
             android:src="@drawable/ic_profile"
+            android:minWidth="150dp"
+            android:gravity="center"
+            android:minHeight="150dp"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/ivStyle_Circle"
             android:layout_alignParentTop="true"/>
-
         <LinearLayout
             android:id="@+id/linear_layout_name"
             android:layout_width="275dp"

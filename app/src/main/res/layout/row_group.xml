@@ -9,78 +9,73 @@
 
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:layout_height="80dp"
-            android:layout_width="80dp"
-            android:id="@+id/GroupPicture"
-            android:src="@drawable/ic_profile"
-            android:layout_alignParentTop="true"/>
+        android:layout_width="350dp"
+        android:layout_height="80dp"
+        android:layout_centerVertical="true"
+        >
 
 
+
+        <LinearLayout
+            android:id="@+id/linear_layout_name"
+            android:layout_width="275dp"
+            android:layout_height="wrap_content">
         <TextView
             android:id="@+id/groupsName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Group's name"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
-            android:layout_toEndOf="@id/GroupPicture"
             android:singleLine="true"
             android:textSize="25dp"/>
-
+        </LinearLayout>
 
         <ImageView
             android:layout_width="3dp"
             android:layout_height="3dp"
             android:background="@drawable/ic_dot">
         </ImageView>
-
-        <TextView
-            android:id="@+id/NumOfMembers"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/linear_layout_numOfmembers"
+            android:layout_width="275dp"
             android:layout_height="wrap_content"
-            android:text="Number of members"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
-            android:layout_toEndOf="@id/GroupPicture"
-            android:layout_below="@id/groupsName"
-            android:singleLine="true"
-            android:textSize="20sp"/>
+            android:layout_below="@+id/linear_layout_name">
 
+            <TextView
+                android:id="@+id/NumOfMembers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/groupsName"
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp"
+                android:singleLine="true"
+                android:text="Number of members"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_layout_walksPerWeek"
+            android:layout_width="275dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linear_layout_numOfmembers">
         <TextView
             android:id="@+id/walksPerWeek"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Walks per week"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
-            android:layout_toEndOf="@id/NumOfMembers"
             android:layout_below="@id/groupsName"
-            android:singleLine="true"
-            android:textSize="20sp"/>
-
-        <TextView
-            android:id="@+id/explanation_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Explanation"
-            android:layout_marginStart="4dp"
             android:layout_marginLeft="4dp"
-            android:layout_toEndOf="@id/GroupPicture"
-            android:layout_below="@id/NumOfMembers"
             android:singleLine="true"
-            android:textSize="20sp"/>
-
+            android:text="Walks per week"
+            android:textSize="12sp" />
+        </LinearLayout>
         <Button
             android:id="@+id/RequestJoin"
-            android:layout_width="114dp"
+            android:layout_width="90dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="56dp"
-            android:layout_toEndOf="@+id/groupsName"
-            android:text="Request join">
+            android:layout_marginStart="75dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:text="Request join"
+            android:textSize="10sp">
 
         </Button>
 

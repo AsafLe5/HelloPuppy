@@ -54,8 +54,7 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
         // get user data
         ModelGroup group = groupsChatList.get(position);
 
-        String explanation = group.getExplanation();
-        holder.explanation.setText(explanation);
+
 
         holder.setGroupId(group.getGroupId());
 
@@ -63,21 +62,24 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
         holder.groupName.setText(groupName);
 
         String walksPerWeek = group.getWalksPerWeek();
-        holder.walksPerWeek.setText(walksPerWeek);
+        holder.walksPerWeek.setText("Require " + walksPerWeek.toLowerCase() + " walk per week");
 
         String numOfMembers = group.getNumOfMembers();
-        holder.numOfMembers.setText(numOfMembers);
+        if (numOfMembers.equals("One"))
+            holder.numOfMembers.setText(numOfMembers + " member");
+        else
+            holder.numOfMembers.setText(numOfMembers + "members");
+//
+//        String pic = group.getGroupProfile();
+//        Picasso.get().load(pic).into(holder.groupPic);
 
-        String pic = group.getGroupProfile();
-        Picasso.get().load(pic).into(holder.groupPic);
-
-
-        try {
-//            Picasso.get().load().placeholder(R.drawable.ic_profile);
-        }
-        catch (Exception e){
-
-        }
+//
+//        try {
+////            Picasso.get().load().placeholder(R.drawable.ic_profile);
+//        }
+//        catch (Exception e){
+//
+//        }
 
         // handle user click
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -120,9 +122,8 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
 
         private TextView walksPerWeek;
         private TextView numOfMembers;
-        private TextView explanation;
         private TextView groupName;
-        private ImageView groupPic;
+//        private ImageView groupPic;
         private String groupId;
 
         public HolderGroupsList(@NonNull @NotNull View itemView) {
@@ -130,9 +131,7 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
 
             walksPerWeek = itemView.findViewById(R.id.walksPerWeek);
             numOfMembers = itemView.findViewById(R.id.NumOfMembers);
-            explanation = itemView.findViewById(R.id.explanation_text);
             groupName = itemView.findViewById(R.id.groupsName);
-            groupPic = itemView.findViewById(R.id.GroupPicture);
 //            UserPicture = itemView.findViewById(R.id.UserPicture);
 //            userName = itemView.findViewById(R.id.actualUserName);
 //            dogName = itemView.findViewById(R.id.actualDogName);

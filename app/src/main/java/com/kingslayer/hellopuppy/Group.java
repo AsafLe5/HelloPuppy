@@ -219,14 +219,13 @@ public class Group extends AppCompatActivity {
 
                     ModelGroup newMG = new ModelGroup(ds.child("Name").getValue().toString(),
                             ds.child("numOfFriends").getValue().toString(),
-                            ds.child("sizeOfDogs").getValue().toString(),
-                            ds.child("Description").getValue().toString(),
+                            ds.child("walksPerWeek").getValue().toString(),
                             null, ds.getKey().toString());
 
                     String curr = ds.getKey().toString();
-                    if(ds.hasChild("Profile photo")){
-                        newMG.setGroupProfile(ds.child("Profile photo").getValue().toString());
-                    }
+//                    if(ds.hasChild("Profile photo")){
+//                        newMG.setGroupProfile(ds.child("Profile photo").getValue().toString());
+//                    }
                     groupsList.add(newMG);
                 }
                 adapterGroupsList = new AdapterGroupsList(Group.this, groupsList);
