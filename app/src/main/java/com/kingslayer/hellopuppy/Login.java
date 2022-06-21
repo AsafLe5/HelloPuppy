@@ -53,7 +53,7 @@ public class Login extends AppCompatActivity {
     private static GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mFirebaseAuth;
 
-    private ImageView imageProfile;
+//    private ImageView imageProfile;
     private String ProfileNameString;
     private LoginButton facebookLogin;
     private CallbackManager callbackManager;
@@ -72,8 +72,9 @@ public class Login extends AppCompatActivity {
 
         getSupportActionBar().setTitle("Login");
 
-        imageProfile = findViewById(R.id.profileImage);
+//        imageProfile = findViewById(R.id.profileImage);
         signInButtonGoogle = findViewById(R.id.button_login_google);
+        setGooglePlusButtonText(signInButtonGoogle, "Continue with Google");
         mFirebaseAuth = FirebaseAuth.getInstance();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -103,6 +104,8 @@ public class Login extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         textViewUser = findViewById(R.id.text_user);
         facebookLogin = findViewById(R.id.facebook_login_button);
+//        facebookLogin.setBackgroundResource(R.drawable.face);
+
         facebookLogin.setReadPermissions("email", "public_profile");
         callbackManager = CallbackManager.Factory.create();
         mAuth = FirebaseAuth.getInstance();
@@ -144,6 +147,19 @@ public class Login extends AppCompatActivity {
                 }
             }
         };
+    }
+
+    protected void setGooglePlusButtonText(SignInButton signInButton, String buttonText) {
+        // Find the TextView that is inside of the SignInButton and set its text
+        for (int i = 0; i < signInButton.getChildCount(); i++) {
+            View v = signInButton.getChildAt(i);
+
+            if (v instanceof TextView) {
+                TextView tv = (TextView) v;
+                tv.setText(buttonText);
+                return;
+            }
+        }
     }
 
     public static GoogleSignInClient getmGoogleSignInClient() {
@@ -272,7 +288,7 @@ public class Login extends AppCompatActivity {
 
         else {
             textViewUser.setText("");
-            imageProfile.setImageResource(R.drawable.ic_profile);
+//            imageProfile.setImageResource(R.drawable.ic_profile);
         }
     }
 

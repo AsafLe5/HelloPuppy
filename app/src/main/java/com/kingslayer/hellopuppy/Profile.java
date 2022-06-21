@@ -415,7 +415,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             Picasso.get().load(profileImageUri).into(profileImage);
             savePictureInDb(profileImageUri);
         }
-
     }
 
     private void initDogGenderSpinner() {

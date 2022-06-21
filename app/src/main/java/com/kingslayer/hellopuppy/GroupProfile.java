@@ -47,6 +47,7 @@ public class GroupProfile extends AppCompatActivity {
     private boolean modDog = false;
     private boolean isManager = false;
     private TextView explanation;
+    private TextView nameOfGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,7 @@ public class GroupProfile extends AppCompatActivity {
         users = findViewById(R.id.users);
         explanation = findViewById(R.id.explanation_text);
         firebaseAuth = FirebaseAuth.getInstance();
+        nameOfGroup = findViewById(R.id.name_of_group);
         loadUsers();
 //
 //        buttonJoinRequests.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +128,11 @@ public class GroupProfile extends AppCompatActivity {
                 // set the description of the group
                 if(snapshot.child("Groups").child(groupId).hasChild("Description")){
                     explanation.setText(snapshot.child("Groups").child(groupId).child("Description")
+                            .getValue().toString());
+                }
+
+                if(snapshot.child("Groups").child(groupId).hasChild("Name")){
+                    nameOfGroup.setText(snapshot.child("Groups").child(groupId).child("Name")
                             .getValue().toString());
                 }
 

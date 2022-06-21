@@ -7,17 +7,36 @@
     tools:context=".GroupProfile">
 
         <TextView
-            android:id="@+id/group_members_text"
+            android:id="@+id/name_of_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:textColor="@color/black"
+            android:textSize="35dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_below="@+id/name_of_group"
+            android:id="@+id/explanation_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="100dp"
             android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/group_members_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
             android:text="Group members"
             android:layout_below="@+id/explanation_text"
             android:textColor="@color/black"
-            android:textSize="25dp"
-            android:textStyle="bold"/>
+            android:textSize="25dp" />
 
 <!--        <Button-->
 <!--            android:id="@+id/button_join_requests"-->
@@ -31,16 +50,6 @@
 <!--            android:paddingVertical="13dp"-->
 <!--            android:text="Requests" />-->
 
-        <TextView
-            android:id="@+id/explanation_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="100dp"
-            android:layout_marginTop="50dp"
-            android:textColor="@color/black"
-            android:textSize="25dp"
-            android:textStyle="bold" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
