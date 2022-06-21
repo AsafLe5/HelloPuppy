@@ -20,7 +20,7 @@
         android:layout_below="@+id/imageView"
         android:layout_alignParentStart="true"
         android:layout_marginStart="38dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="name_text"
         />
 
@@ -65,13 +65,19 @@
         android:text="user_gender_text" />
 
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imageView2"
-        android:layout_width="116dp"
-        android:layout_height="102dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:minWidth="150dp"
+        android:gravity="center"
+        android:minHeight="150dp"
+        android:scaleType="centerCrop"
         android:layout_below="@+id/availability_text"
         app:srcCompat="@drawable/ic_dog_photo"
         android:layout_centerHorizontal="true"
+        app:shapeAppearanceOverlay="@style/ivStyle_Circle"
+        android:layout_marginTop="5dp"
          />
 
     <TextView
@@ -81,7 +87,7 @@
         android:layout_below="@+id/imageView2"
         android:layout_alignParentStart="true"
         android:layout_marginStart="38dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:text="dog_name_text" />
 
     <TextView
