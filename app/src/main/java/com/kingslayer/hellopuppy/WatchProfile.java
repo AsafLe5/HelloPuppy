@@ -21,6 +21,8 @@ import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Calendar;
+
 public class WatchProfile extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
@@ -100,6 +102,48 @@ public class WatchProfile extends AppCompatActivity {
         //endregion
     }
 
+    private int getMonthInt(String month) {
+        if (month.equals("JAN"))
+            return 1;
+        if (month.equals("FEB"))
+            return 2;
+        if (month.equals("MAR"))
+            return 3;
+        if (month.equals("APR"))
+            return 4;
+        if (month.equals("MAY"))
+            return 5;
+        if (month.equals("JUN"))
+            return 6;
+        if (month.equals("JUL"))
+            return 7;
+        if (month.equals("AUG"))
+            return 8;
+        if (month.equals("SEP"))
+            return 9;
+        if (month.equals("OCT"))
+            return 10;
+        if (month.equals("NOV"))
+            return 11;
+        if (month.equals("DEC"))
+            return 12;
+
+        //default should never happen
+        return 1;
+    }
+
+    private int calcAge(String birthDay){
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        int month = Calendar.getInstance().get(Calendar.MONTH)+1;
+        String[] splited = birthDay.split("\\s+");
+        int yearDiff = year - Integer.parseInt(splited[2]);
+        int monthDiff = month - getMonthInt(splited[0]);
+        if (monthDiff>0){
+            yearDiff--;
+        }
+        return yearDiff;
+    }
+
     private void setUserProfile() {
 
         DatabaseReference dbUserRef = FirebaseDatabase.getInstance().getReference();
@@ -116,11 +160,12 @@ public class WatchProfile extends AppCompatActivity {
                 }
 
                 if (dbUser.hasChild("Birth Day")) {
-                    ageText.setText(dbUser.child("Birth Day").getValue().toString());
+                    String birthDate = dbUser.child("Birth Day").getValue().toString();
+                    ageText.setText("Born in "+ birthDate + ", (age "+ calcAge(birthDate)+")");
                 }
 
                 if (dbUser.hasChild("Location")) {
-                    locationText.setText(dbUser.child("Location").getValue().toString());
+                    locationText.setText("Lives in "+dbUser.child("Location").getValue().toString());
                 }
 
                 if (dbUser.hasChild("Gender")) {
@@ -128,7 +173,7 @@ public class WatchProfile extends AppCompatActivity {
                 }
 
                 if (dbUser.hasChild("Availability")) {
-                    availabilityText.setText(dbUser.child("Availability").getValue().toString());
+                    availabilityText.setText("Available "+dbUser.child("Availability").getValue().toString().toLowerCase());
                 }
 
                 if (dbUser.hasChild("Profile photo")) {
@@ -136,15 +181,29 @@ public class WatchProfile extends AppCompatActivity {
                 }
 
                 if (dbDog.hasChild("Dog Birth Day")) {
-                    dogAgeText.setText(dbDog.child("Dog Birth Day").getValue().toString());
+                    String birthDate = dbDog.child("Dog Birth Day").getValue().toString();
+                    dogAgeText.setText("Born in "+ birthDate + ", (age "+ calcAge(birthDate)+")");
                 }
 
                 if (dbDog.hasChild("Name")) {
                     dogNameText.setText(dbDog.child("Name").getValue().toString());
                 }
 
-                if (dbDog.hasChild("Age")) {
-                    dogAgeText.setText(dbDog.child("Age").getValue().toString());
+//                if (dbDog.hasChild("Dog Birth Day")) {
+//                    dogAgeText.setText(dbDog.child("Dog Birth Day").getValue().toString());
+//                }
+
+                if (dbDog.hasChild("Is castrated")) {
+                    if(dbDog.child("Is castrated").getValue().toString().equals("Yes"))
+                        isCastratedText.setText("My dog is castrated");
+                    else
+                        isCastratedText.setText("My dog is not castrated");
+                }
+                if (dbDog.hasChild("Is vaccinated")) {
+                    if(dbDog.child("Is castrated").getValue().toString().equals("Yes"))
+                        isVaccinatedText.setText("My dog is vaccinated");
+                    else
+                        isVaccinatedText.setText("My dog is not vaccinated");
                 }
 
                 if (dbDog.hasChild("Gender")) {
