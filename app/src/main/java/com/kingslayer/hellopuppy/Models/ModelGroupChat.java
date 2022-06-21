@@ -4,6 +4,7 @@ public class ModelGroupChat {
     String timestamp, message, sender, type;
 
 
+
     ModelGroupChat(){
 
     }
@@ -31,6 +32,9 @@ public class ModelGroupChat {
     public String getType() {
         return type;
     }
+
+
+
     //endregion
 
     //region $ setters
@@ -49,5 +53,8 @@ public class ModelGroupChat {
     public void setType(String type) {
         this.type = type;
     }
+
+
+
     //endregion
 }

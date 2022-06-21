@@ -77,6 +77,11 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
 
         setContentView(R.layout.activity_create_group);
 
+        if (getIntent().hasExtra("GroupId")) {
+            Bundle B = getIntent().getExtras();
+            groupId = B.getString("GroupId");
+        }
+
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.group);
         nameOfGroup = findViewById(R.id.name_of_group);
@@ -135,7 +140,7 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
             @Override
             public void onClick(View view) {
 
-                groupId = ""+System.currentTimeMillis();
+//                groupId = ""+System.currentTimeMillis();
 
                 DatabaseReference groupRef = FirebaseDatabase.getInstance().getReference().child("Groups")
                         .child(groupId);
@@ -244,9 +249,6 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
             }
         });
         //endregion
-
-
-
     }
 
     private void openImage() {
@@ -268,7 +270,8 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
                 else{
                     //gallery clicked
                     if(!checkStoragePermission()){
-                        requestStoragePermissions();
+                        pickImageFromGallery();
+//                        requestStoragePermissions();
                     }
                     else{
                         pickImageFromGallery();
@@ -328,13 +331,13 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
                 if (data != null) {
                     imageUri = data.getData();
                     if (imageUri != null) {
-                        savePictureInDb();
+                        savePictureInDb(imageUri);
                     }
                 }
             }
             else{
                 if (imageUri != null) {
-                    savePictureInDb();
+                    savePictureInDb(imageUri);
                 }
             }
             //imageUri = data.getData();
@@ -342,35 +345,50 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
         }
     }
 
-    void savePictureInDb(){
-        final ProgressDialog pd = new ProgressDialog(this);
-        pd.setMessage("Uploading");
-        pd.show();
+    void savePictureInDb(Uri profileImageUri){
 
-        StorageReference fileRef = FirebaseStorage.getInstance().getReference("Group profile photos")
-                .child(groupId.toString() +
-                        "." + getFileExtention(imageUri));
-
-        fileRef.putFile(imageUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
+                .child("Profile photo").setValue(profileImageUri.toString()).addOnSuccessListener(
+                new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        pd.dismiss();
+                    public void onSuccess(Void unused) {
                         Toast.makeText(CreateGroup.this,
                                 "Image uploaded successfully"
                                 , Toast.LENGTH_SHORT).show();
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull @NotNull Exception e) {
-                        pd.dismiss();
-                        Toast.makeText(CreateGroup.this,
-                                "Can't upload image"
-                                , Toast.LENGTH_SHORT).show();
-                    }
-                });
+                }
+        );
     }
+
+//    void savePictureInDb(){
+//        final ProgressDialog pd = new ProgressDialog(this);
+//        pd.setMessage("Uploading");
+//        pd.show();
+//
+//        StorageReference fileRef = FirebaseStorage.getInstance().getReference("Group profile photos")
+//                .child(groupId.toString() +
+//                        "." + getFileExtention(imageUri));
+//
+//        fileRef.putFile(imageUri)
+//                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                    @Override
+//                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                        pd.dismiss();
+//                        Toast.makeText(CreateGroup.this,
+//                                "Image uploaded successfully"
+//                                , Toast.LENGTH_SHORT).show();
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull @NotNull Exception e) {
+//                        pd.dismiss();
+//                        Toast.makeText(CreateGroup.this,
+//                                "Can't upload image"
+//                                , Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//    }
     private String getFileExtention(Uri uri){
         ContentResolver contentResolver = getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();

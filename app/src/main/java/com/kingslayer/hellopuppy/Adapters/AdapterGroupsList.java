@@ -17,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.kingslayer.hellopuppy.GroupProfile;
 import com.kingslayer.hellopuppy.Models.ModelGroup;
 import com.kingslayer.hellopuppy.R;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -56,12 +57,7 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
         String explanation = group.getExplanation();
         holder.explanation.setText(explanation);
 
-//        groupId = group.getGroupId();
         holder.setGroupId(group.getGroupId());
-
-//        FirebaseDatabase.getInstance().getReference().child("Groups")
-//                .child(groupId).child("Join requests")
-//                .setValue(membersIds);
 
         String groupName = group.getGroupName();
         holder.groupName.setText(groupName);
@@ -72,7 +68,8 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
         String numOfMembers = group.getNumOfMembers();
         holder.numOfMembers.setText(numOfMembers);
 
-        Button requestJoin = group.getRequestJoinBtn();
+        String pic = group.getGroupProfile();
+        Picasso.get().load(pic).into(holder.groupPic);
 
 
         try {

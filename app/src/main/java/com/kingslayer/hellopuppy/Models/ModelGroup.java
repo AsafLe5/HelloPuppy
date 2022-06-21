@@ -18,19 +18,22 @@ public class ModelGroup extends AppCompatActivity {
     private String groupName;
     private String groupId;
     private Button requestJoinBtn;
+    private String groupProfile;
+
 //    private URL imageUrl;
 
     public ModelGroup()  {
     }
 
     public ModelGroup(String groupName, String numOfMembers, String walksPerWeek,
-                      String explanation, URL imageUrl, String groupId){
+                      String explanation, URL imageUrl, String groupId, String groupProfile){
         this.groupName = groupName;
         this.explanation = explanation;
         this.numOfMembers = numOfMembers;
         this.walksPerWeek = walksPerWeek;
 //        this.imageUrl = imageUrl;
         this.groupId = groupId;
+        this.groupProfile = groupProfile;
         //this.requestJoinBtn = findViewById(R.id.RequestJoin);
 
 //        requestJoinBtn.setOnClickListener(new View.OnClickListener() {
@@ -41,6 +44,15 @@ public class ModelGroup extends AppCompatActivity {
 //            }
 //    });
    }
+
+    public ModelGroup(String groupName, String numOfMembers, String walksPerWeek,
+                      String explanation, URL imageUrl, String groupId){
+        this.groupName = groupName;
+        this.explanation = explanation;
+        this.numOfMembers = numOfMembers;
+        this.walksPerWeek = walksPerWeek;
+        this.groupId = groupId;
+    }
 
     //region $ getters
     public String getNumOfMembers() {
@@ -61,6 +73,10 @@ public class ModelGroup extends AppCompatActivity {
 
     public String getGroupId() {
         return groupId;
+    }
+
+    public String getGroupProfile() {
+        return groupProfile;
     }
 
     public Button getRequestJoinBtn() {
@@ -95,6 +111,10 @@ public class ModelGroup extends AppCompatActivity {
 
     public void setGroupId(String groupId) {
         this.groupId = groupId;
+    }
+
+    public void setGroupProfile(String groupProfile) {
+        this.groupProfile = groupProfile;
     }
     //endregion
 }

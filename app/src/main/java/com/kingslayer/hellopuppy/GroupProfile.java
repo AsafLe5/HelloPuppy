@@ -158,7 +158,6 @@ public class GroupProfile extends AppCompatActivity {
                                 .child("Profile photo").getValue().toString());
                     }
 
-//                    asd.setUserId(member);
                     usersModelMap.put(member, asd);
 
                 }
@@ -171,8 +170,7 @@ public class GroupProfile extends AppCompatActivity {
             }
         });
         DbRef.child("Users").child("Tempi").setValue("deleteInAMinute");
-        //DbRef.child("Users").child("Tempi").removeValue();
-
+//        DbRef.child("Users").child("Tempi").removeValue();
     }
     void updateMod(){
         for (Map.Entry<String, ModelUser> model : usersModelMap.entrySet()){

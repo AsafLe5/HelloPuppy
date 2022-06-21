@@ -52,7 +52,7 @@ public class Group extends AppCompatActivity {
 
         String myId = FirebaseAuth.getInstance().getUid();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
 
@@ -97,10 +97,8 @@ public class Group extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         loadGroups();
 
-
         DatabaseReference groupIdRef = FirebaseDatabase.getInstance().getReference().child("Users")
                 .child(FirebaseAuth.getInstance().getUid().toString());
-
 
         groupIdRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -198,20 +196,12 @@ public class Group extends AppCompatActivity {
         createGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),CreateGroup.class));
+                String groupId = ""+System.currentTimeMillis();
+                Intent intent = new Intent(getApplicationContext(),CreateGroup.class);
+                intent.putExtra("GroupId", groupId);
+                startActivity(intent);
             }
         });
-
-//        group1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Intent intent = new Intent(getApplicationContext(), GroupProfile.class);
-//                intent.putExtra("GroupId", myGroupId);
-//                startActivity(intent);
-//
-//            }
-//        });
     }
 
     private void loadGroups(){
@@ -232,8 +222,12 @@ public class Group extends AppCompatActivity {
                             ds.child("sizeOfDogs").getValue().toString(),
                             ds.child("Description").getValue().toString(),
                             null, ds.getKey().toString());
-                    groupsList.add(newMG);
 
+                    String curr = ds.getKey().toString();
+                    if(ds.hasChild("Profile photo")){
+                        newMG.setGroupProfile(ds.child("Profile photo").getValue().toString());
+                    }
+                    groupsList.add(newMG);
                 }
                 adapterGroupsList = new AdapterGroupsList(Group.this, groupsList);
                 groups.setAdapter(adapterGroupsList);
