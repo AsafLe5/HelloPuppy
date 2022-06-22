@@ -104,7 +104,7 @@ public class Login extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         textViewUser = findViewById(R.id.text_user);
         facebookLogin = findViewById(R.id.facebook_login_button);
-//        facebookLogin.setBackgroundResource(R.drawable.face);
+        facebookLogin.setBackgroundResource(R.drawable.face5);
 
         facebookLogin.setReadPermissions("email", "public_profile");
         callbackManager = CallbackManager.Factory.create();
