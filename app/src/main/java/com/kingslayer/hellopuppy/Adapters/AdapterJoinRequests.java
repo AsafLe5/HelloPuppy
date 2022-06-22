@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.kingslayer.hellopuppy.Models.ModelUser;
 import com.kingslayer.hellopuppy.R;
 import com.kingslayer.hellopuppy.WatchProfile;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -66,6 +67,8 @@ public class AdapterJoinRequests extends
         holder.userName.setText(userName);
 
         holder.setUserId(user.getUserId());
+
+        Picasso.get().load(user.getUserProfile()).into(holder.UserPicture);
 
         holder.itemView.findViewById(R.id.accept).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,6 +178,8 @@ public class AdapterJoinRequests extends
 //            UserPicture = itemView.findViewById(R.id.UserPicture);
             userName = itemView.findViewById(R.id.actualUserName);
             availability = itemView.findViewById(R.id.Availability);
+            UserPicture = itemView.findViewById(R.id.UserPicture);
+
         }
 
         public void setUserId(String userId) {

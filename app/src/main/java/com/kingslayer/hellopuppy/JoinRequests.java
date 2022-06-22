@@ -114,6 +114,12 @@ public class JoinRequests extends AppCompatActivity {
                         currentUser.setAvailability(snapshot.child("Users").child(memberId)
                                 .child("Availability").getValue().toString());
                         currentUser.setUserId(memberId);
+
+                        if(snapshot.child("Users").child(memberId).hasChild("Profile photo")){
+                            currentUser.setUserProfile(snapshot.child("Users").child(memberId)
+                                    .child("Profile photo").getValue().toString());
+                        }
+
                         usersModelMap.put(memberId, currentUser);
 
                     }
