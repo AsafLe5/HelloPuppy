@@ -14,8 +14,6 @@
         android:layout_centerVertical="true"
         >
 
-
-
         <LinearLayout
             android:id="@+id/linear_layout_name"
             android:layout_width="275dp"
