@@ -5,13 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Models.ModelGroup">
+    tools:context=".Models.ModelGroup"
+    >
 
 
     <RelativeLayout
         android:layout_width="350dp"
         android:layout_height="80dp"
         android:layout_centerVertical="true"
+        android:background="@drawable/selector"
+        android:layout_marginBottom="5dp"
         >
 
 
@@ -25,15 +28,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Group's name"
+            android:layout_marginStart="6dp"
             android:singleLine="true"
             android:textSize="25dp"/>
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="3dp"
-            android:layout_height="3dp"
-            android:background="@drawable/ic_dot">
-        </ImageView>
+
         <LinearLayout
             android:id="@+id/linear_layout_numOfmembers"
             android:layout_width="275dp"
@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/groupsName"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginLeft="4dp"
                 android:singleLine="true"
                 android:text="Number of members"
@@ -62,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/groupsName"
-            android:layout_marginLeft="4dp"
+            android:layout_marginLeft="8dp"
             android:singleLine="true"
             android:text="Walks per week"
             android:textSize="12sp" />
@@ -71,10 +71,10 @@
             android:id="@+id/RequestJoin"
             android:layout_width="90dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="75dp"
+            android:layout_marginEnd="10dp"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
-            android:text="Request join"
+            android:text="Request to join"
             android:textSize="10sp">
 
         </Button>
