@@ -74,7 +74,7 @@ public class Login extends AppCompatActivity {
 
 //        imageProfile = findViewById(R.id.profileImage);
         signInButtonGoogle = findViewById(R.id.button_login_google);
-        setGooglePlusButtonText(signInButtonGoogle, "Continue with Google");
+        setGooglePlusButtonText(signInButtonGoogle, "Google");
         mFirebaseAuth = FirebaseAuth.getInstance();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -102,9 +102,10 @@ public class Login extends AppCompatActivity {
 
         FacebookSdk.setClientToken("de914a5a5db3dd92cfd3378bfa1b5fc7");
         FacebookSdk.sdkInitialize(getApplicationContext());
-        textViewUser = findViewById(R.id.text_user);
+//        textViewUser = findViewById(R.id.text_user);
         facebookLogin = findViewById(R.id.facebook_login_button);
-//        facebookLogin.setBackgroundResource(R.drawable.face);
+//        facebookLogin.setBackgroundResource(R.drawable.face5);
+//        facebookLogin.setText("Facebook");
 
         facebookLogin.setReadPermissions("email", "public_profile");
         callbackManager = CallbackManager.Factory.create();
@@ -271,7 +272,7 @@ public class Login extends AppCompatActivity {
     private void updateUIFB(FirebaseUser user) {
 
         if(user != null){
-            textViewUser.setText(user.getDisplayName());
+//            textViewUser.setText(user.getDisplayName());
             if(user.getPhotoUrl()!=null){
                 //photoUrl = user.getPhotoUrl().toString();
                 //ProfileNameString = user.getDisplayName();
@@ -287,7 +288,7 @@ public class Login extends AppCompatActivity {
         }
 
         else {
-            textViewUser.setText("");
+//            textViewUser.setText("");
 //            imageProfile.setImageResource(R.drawable.ic_profile);
         }
     }

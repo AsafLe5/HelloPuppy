@@ -17,8 +17,6 @@
         android:layout_marginBottom="5dp"
         >
 
-
-
         <LinearLayout
             android:id="@+id/linear_layout_name"
             android:layout_width="275dp"

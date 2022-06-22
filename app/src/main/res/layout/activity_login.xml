@@ -9,14 +9,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="80dp"
         android:fontFamily="sans-serif-condensed-medium"
-
         android:text="@string/Welcome"
         android:textSize="32dp" />
 
-<!--    <ImageView-->
+    <!--    <ImageView-->
 <!--        android:id="@+id/profileImage"-->
 <!--        android:layout_width="30dp"-->
 <!--        android:layout_height="30dp"-->
@@ -24,30 +24,86 @@
 <!--        android:layout_centerHorizontal="true"-->
 <!--        android:layout_marginTop="188dp"/>-->
 
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="73dp"
+        android:layout_marginEnd="18dp"
+        android:src="@drawable/paw"></ImageView>
 
-    <EditText
+    <TextView
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="160dp"
+        android:text="Join our social network for dog's people, helping each other to take their dogs out"
+        android:textSize="18dp"
+        android:id="@+id/explanation"/>
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:id="@+id/text_user"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="280dp"
+        android:text="Continue with"
+        android:textSize="20dp"
+        android:id="@+id/continue_with"/>
 
-    <com.google.android.gms.common.SignInButton
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/continue_with"
+        android:layout_marginTop="25dp">
+
+        <com.google.android.gms.common.SignInButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:id="@+id/button_login_google"
+            />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/button_login_google"
+            android:layout_marginStart="25dp"
+            android:id="@+id/layout"
+            >
+
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/facebook_login_button"
+                android:layout_width="118dp"
+                android:layout_height="25dp"
+                android:paddingTop="13dp"
+                android:paddingBottom="13dp"
+                android:layout_marginTop="5dp"
+                app:com_facebook_login_text="          Facebook" />
+
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:src="@drawable/pic"
+                android:layout_marginBottom="0dp"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="9dp"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:id="@+id/button_login_google"
-        />
-
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/facebook_login_button"
-        android:layout_width="198dp"
-        android:layout_height="25dp"
-        android:layout_centerInParent="true"
-        android:paddingTop="13dp"
-        android:paddingBottom="13dp"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="25dp"
-        android:layout_below="@+id/button_login_google"
-        xmlns:facebook="http://schemas.android.com/apk/res-auto" />
+        android:layout_marginTop="690dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="12dp"
+        android:text=" @All rights reserved to Asaf Levi and Hadassa Danesh">
+    </TextView>
 
 </RelativeLayout>

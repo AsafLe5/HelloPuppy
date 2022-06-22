@@ -215,9 +215,7 @@ public class FindDogOne extends AppCompatActivity implements OnMapReadyCallback,
 
                     mLocationClient = new FusedLocationProviderClient(FindDogOne.this);
 
-
                     startTimer();
-
 
                     fab.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -232,7 +230,6 @@ public class FindDogOne extends AppCompatActivity implements OnMapReadyCallback,
                     // startBtn.setEnabled(false);
 
                     startBtn.setText("END TRIP");
-
 
                     startButton = false;
 
@@ -314,7 +311,6 @@ public class FindDogOne extends AppCompatActivity implements OnMapReadyCallback,
                 goToLocation(location.getLatitude(), location.getLongitude());
             }
         });
-
     }
 
     private void goToLocation(double latitude, double longitude) {

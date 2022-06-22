@@ -74,7 +74,7 @@
         android:id="@+id/linear_layout_dogs_size"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/linear_layout_maxNumOfMem">
         <TextView
@@ -94,7 +94,7 @@
     <LinearLayout
         android:id="@+id/linear_layout_walks_per"
         android:layout_width="350dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/linear_layout_dogs_size">
@@ -118,7 +118,7 @@
         android:id="@+id/linear_layout_availability"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/linear_layout_walks_per">
     <TextView
