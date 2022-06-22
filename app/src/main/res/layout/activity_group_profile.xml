@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GroupProfile">
+    tools:context=".GroupProfile"
+    android:background="@drawable/gradient_background">
 
         <TextView
             android:id="@+id/name_of_group"
@@ -52,10 +53,11 @@
 
 
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="350dp"
             android:layout_height="match_parent"
             android:id="@+id/reall"
             android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
             android:layout_below="@+id/group_members_text">
 
                 <androidx.recyclerview.widget.RecyclerView
