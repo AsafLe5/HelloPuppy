@@ -103,13 +103,13 @@ public class Schedule extends AppCompatActivity {
                             customHandler = new android.os.Handler();
                             Calendar calNow = Calendar.getInstance();
                             Calendar calNextWed = Calendar.getInstance();
-                            calNextWed.set(Calendar.HOUR, 7);
-                            calNextWed.set(Calendar.MINUTE, 8);
+                            calNextWed.set(Calendar.HOUR, 8);
+                            calNextWed.set(Calendar.MINUTE, 20);
                             calNextWed.set(Calendar.SECOND, 0);
-                            while (calNextWed.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+                            while (calNextWed.get(Calendar.DAY_OF_WEEK) != Calendar.WEDNESDAY) {
                                 calNextWed.add(Calendar.DATE, 1);
                             }
-                            if (calNextWed.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY &&
+                            if (calNextWed.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY &&
                                     (calNextWed.get(Calendar.HOUR) < calNow.get(Calendar.HOUR) ||
                                             (calNextWed.get(Calendar.HOUR) == calNow.get(Calendar.HOUR) &&
                                                     calNextWed.get(Calendar.MINUTE) < calNow.get(Calendar.MINUTE)))){
