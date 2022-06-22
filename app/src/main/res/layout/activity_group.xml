@@ -43,15 +43,18 @@
     <RelativeLayout
         android:layout_width="350dp"
         android:layout_centerHorizontal="true"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/linear_layout_create_group">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linear_layout_create_group"
+        android:layout_above="@+id/bottom_navigator">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/groups"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:listitem="@layout/row_group"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            />
+
     </RelativeLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
