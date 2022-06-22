@@ -30,26 +30,26 @@
             android:layout_width="275dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="75dp"
-            android:paddingTop="2dp">
+            android:paddingTop="5dp">
         <TextView
             android:id="@+id/userName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="4"
             android:text="Name:"
             android:layout_marginStart="8dp"
             android:layout_toEndOf="@id/UserPicture"
-            android:textSize="20sp"/>
+            android:textSize="18sp"/>
         <TextView
             android:id="@+id/actualUserName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="5"
             android:layout_marginStart="4dp"
 
             android:layout_toEndOf="@+id/userName"
             android:text="the user name"
-            android:textSize="18sp"/>
+            android:textSize="16sp"/>
         </LinearLayout>
 
 
@@ -64,20 +64,20 @@
             android:id="@+id/dogsName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="4"
             android:layout_marginStart="8dp"
             android:text="Dog's Name:"
             android:layout_below="@id/userName"
-            android:textSize="20sp"/>
+            android:textSize="18sp"/>
         <TextView
             android:id="@+id/actualDogName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="5"
             android:layout_marginStart="4dp"
             android:layout_toEndOf="@+id/dogsName"
             android:text="the dog's name"
-            android:textSize="18sp" />
+            android:textSize="16dp" />
         </LinearLayout>
 
     </RelativeLayout>
