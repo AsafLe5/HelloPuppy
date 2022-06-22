@@ -54,21 +54,12 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
     private BottomNavigationView bottomNavigationView;
     private EditText nameOfGroup;
     private EditText descriptionOfGroup;
-    private Button uploadGroupImage;
-    private Uri imageUri;
     private Spinner numOfFriends;
     private Spinner sizeOfDogs;
     private Spinner walksPerWeek;
     private Spinner requireAvailability;
     private Button createGroup;
     private Map<String, String> choices = new HashMap<String,String>(4);
-    private static final int IMAGE_REQUEST = 2;
-    private static final int CAMERA_REQUEST_CODE = 100;
-    private static final int STORAGE_REQUEST_CODE = 200;
-    private static final int IMAGE_PICK_CAMERA_CODE = 300;
-    private static final int IMAGE_PICK_GALLERY_CODE = 400;
-    private String[] cameraPermissions;
-    private String[] storagePermissions;
     private String groupId;
 
     @Override
@@ -87,7 +78,6 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
         nameOfGroup = findViewById(R.id.name_of_group);
         descriptionOfGroup = findViewById(R.id.group_description);
         createGroup = findViewById(R.id.create_group);
-        uploadGroupImage = findViewById(R.id.button_upload_image);
 
         getSupportActionBar().setTitle("Create group");
 
@@ -120,21 +110,9 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
         requireAvailability.setAdapter(requireAvailabilityAdapter);
         requireAvailability.setOnItemSelectedListener(this);
 
-        // permissions
-        cameraPermissions = new String[]{Manifest.permission.CAMERA,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        //endregion
 
         //region $ Group's listener
 
-        uploadGroupImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openImage();
-                //uploadImage();
-            }
-        });
 
         createGroup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -251,150 +229,6 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
         //endregion
     }
 
-    private void openImage() {
-        String[] options = {"Camera", "Gallery"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Pick Group Image:").setItems(options, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(which == 0){
-                    //camera clicked
-                    if(!checkCameraPermissions()){
-                          pickImageFromCamera();
-                        //requestCameraPermissions();
-                    }
-                    else{
-                        pickImageFromCamera();
-                    }
-                }
-                else{
-                    //gallery clicked
-                    if(!checkStoragePermission()){
-                        pickImageFromGallery();
-//                        requestStoragePermissions();
-                    }
-                    else{
-                        pickImageFromGallery();
-                    }
-                }
-            }
-        }).show();
-//        Intent intent = new Intent();
-//        intent.setType("image/");
-//        intent.setAction(Intent.ACTION_GET_CONTENT);
-//        startActivityForResult(intent, IMAGE_REQUEST);
-    }
-
-    private void pickImageFromGallery(){
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        startActivityForResult(intent, IMAGE_PICK_GALLERY_CODE);
-    }
-
-    private void pickImageFromCamera(){
-        ContentValues cv = new ContentValues();
-        cv.put(MediaStore.Images.Media.TITLE, "Group Image Icon Title");
-        cv.put(MediaStore.Images.Media.DESCRIPTION, "Group Image Icon Description");
-        imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cv);
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        startActivityForResult(intent, IMAGE_PICK_CAMERA_CODE);
-    }
-
-    private boolean checkStoragePermission(){
-        boolean res = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
-        return res;
-    }
-
-    private void requestStoragePermissions(){
-        ActivityCompat.requestPermissions(this, storagePermissions, STORAGE_REQUEST_CODE);
-    }
-
-    private boolean checkCameraPermissions(){
-        boolean res = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
-        boolean res2 = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
-        return res && res2;
-    }
-
-    private void requestCameraPermissions(){
-        ActivityCompat.requestPermissions(this, cameraPermissions, CAMERA_REQUEST_CODE);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK){
-            if(requestCode == IMAGE_PICK_GALLERY_CODE){
-                if (data != null) {
-                    imageUri = data.getData();
-                    if (imageUri != null) {
-                        savePictureInDb(imageUri);
-                    }
-                }
-            }
-            else{
-                if (imageUri != null) {
-                    savePictureInDb(imageUri);
-                }
-            }
-            //imageUri = data.getData();
-            //uploadImage();
-        }
-    }
-
-    void savePictureInDb(Uri profileImageUri){
-
-        FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
-                .child("Profile photo").setValue(profileImageUri.toString()).addOnSuccessListener(
-                new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Toast.makeText(CreateGroup.this,
-                                "Image uploaded successfully"
-                                , Toast.LENGTH_SHORT).show();
-                    }
-                }
-        );
-    }
-
-//    void savePictureInDb(){
-//        final ProgressDialog pd = new ProgressDialog(this);
-//        pd.setMessage("Uploading");
-//        pd.show();
-//
-//        StorageReference fileRef = FirebaseStorage.getInstance().getReference("Group profile photos")
-//                .child(groupId.toString() +
-//                        "." + getFileExtention(imageUri));
-//
-//        fileRef.putFile(imageUri)
-//                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                    @Override
-//                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                        pd.dismiss();
-//                        Toast.makeText(CreateGroup.this,
-//                                "Image uploaded successfully"
-//                                , Toast.LENGTH_SHORT).show();
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull @NotNull Exception e) {
-//                        pd.dismiss();
-//                        Toast.makeText(CreateGroup.this,
-//                                "Can't upload image"
-//                                , Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//    }
-    private String getFileExtention(Uri uri){
-        ContentResolver contentResolver = getContentResolver();
-        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
-    }
-
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String choice = adapterView.getItemAtPosition(i).toString();
@@ -421,30 +255,4 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
 
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {
-        switch (requestCode){
-            case CAMERA_REQUEST_CODE:{
-                if(grantResults.length>0){
-                    boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    boolean storageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                    if( cameraAccepted && storageAccepted){
-                        // permission allowed
-                        pickImageFromCamera();
-                    }
-                }
-            }
-            break;
-            case STORAGE_REQUEST_CODE:{
-                if(grantResults.length>0){
-                    boolean storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    if(storageAccepted){
-                        // permission allowed
-                        pickImageFromGallery();
-                    }
-                }
-            }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
 }
