@@ -74,7 +74,7 @@ public class Login extends AppCompatActivity {
 
 //        imageProfile = findViewById(R.id.profileImage);
         signInButtonGoogle = findViewById(R.id.button_login_google);
-        setGooglePlusButtonText(signInButtonGoogle, "Continue with Google");
+        setGooglePlusButtonText(signInButtonGoogle, "Google");
         mFirebaseAuth = FirebaseAuth.getInstance();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -104,7 +104,7 @@ public class Login extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         textViewUser = findViewById(R.id.text_user);
         facebookLogin = findViewById(R.id.facebook_login_button);
-        facebookLogin.setBackgroundResource(R.drawable.face5);
+//        facebookLogin.setBackgroundResource(R.drawable.face5);
 
         facebookLogin.setReadPermissions("email", "public_profile");
         callbackManager = CallbackManager.Factory.create();
