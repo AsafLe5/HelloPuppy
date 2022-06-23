@@ -14,6 +14,7 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -24,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -39,15 +41,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class CreateGroup extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -61,6 +66,15 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
     private Button createGroup;
     private Map<String, String> choices = new HashMap<String,String>(4);
     private String groupId;
+    // instance for firebase storage and StorageReference
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
+    // request code
+    private final int PICK_IMAGE_REQUEST = 22;
+    // Uri indicates, where the image will be picked from
+    private Uri filePath;
+    private Button uploadImage;
+    private ImageView imageProf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +92,22 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
         nameOfGroup = findViewById(R.id.name_of_group);
         descriptionOfGroup = findViewById(R.id.group_description);
         createGroup = findViewById(R.id.create_group);
+        imageProf = findViewById(R.id.group_prof);
 
         getSupportActionBar().setTitle("Create group");
 
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+
+        uploadImage = findViewById(R.id.upload_image);
+        // on pressing btnSelect SelectImage() is called
+        uploadImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                SelectImage();
+            }
+        });
         //region $ Spinner and Adapters initialization
         numOfFriends = (Spinner) findViewById(R.id.limit_friends_spinner);
         ArrayAdapter<CharSequence> numOfFriendsAdapter = ArrayAdapter.
@@ -110,9 +137,7 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
         requireAvailability.setAdapter(requireAvailabilityAdapter);
         requireAvailability.setOnItemSelectedListener(this);
 
-
         //region $ Group's listener
-
 
         createGroup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -227,6 +252,116 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
             }
         });
         //endregion
+    }
+
+    // Select Image method
+    private void SelectImage()
+    {
+
+        // Defining Implicit Intent to mobile gallery
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Image from here..."),
+                PICK_IMAGE_REQUEST);
+    }
+
+    // Override onActivityResult method
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // checking request code and result code
+        // if request code is PICK_IMAGE_REQUEST and
+        // resultCode is RESULT_OK
+        // then set image in the image view
+        if (requestCode == PICK_IMAGE_REQUEST
+                && resultCode == RESULT_OK
+                && data != null
+                && data.getData() != null) {
+
+            // Get the Uri of data
+            filePath = data.getData();
+            try { // Setting image on image view using Bitmap
+                Bitmap bitmap = MediaStore
+                        .Images
+                        .Media
+                        .getBitmap(
+                                getContentResolver(),
+                                filePath);
+                // imageProf.setImageBitmap(bitmap);
+                uploadImage();
+            }
+
+            catch (IOException e) {
+                // Log the exception
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // UploadImage method
+    private void uploadImage()
+    {
+        if (filePath != null) {
+
+            // Code for showing progressDialog while uploading
+            ProgressDialog progressDialog
+                    = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            // Defining the child of storageReference
+            StorageReference ref
+                    = storageReference.child("Group profile/" + groupId);
+
+            // adding listeners on upload
+            // or failure of image
+            ref.putFile(filePath)
+                    .addOnSuccessListener(
+                            new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
+                                @Override
+                                public void onSuccess(
+                                        UploadTask.TaskSnapshot taskSnapshot)
+                                {     // Image uploaded successfully
+                                    // Dismiss dialog
+                                    progressDialog.dismiss();
+                                    Toast.makeText(CreateGroup.this, "Image Uploaded!!",
+                                                    Toast.LENGTH_SHORT).show();
+                                }
+                            })
+
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e)
+                        {
+
+                            // Error, Image not uploaded
+                            progressDialog.dismiss();
+                            Toast
+                                    .makeText(CreateGroup.this,
+                                            "Failed " + e.getMessage(),
+                                            Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    })
+                    .addOnProgressListener( new OnProgressListener<UploadTask.TaskSnapshot>() {
+
+                        // Progress Listener for loading
+                        // percentage on the dialog box
+                        @Override
+                        public void onProgress(
+                                UploadTask.TaskSnapshot taskSnapshot)
+                        {
+                            double progress
+                                    = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                            progressDialog.setMessage("Uploaded " + (int)progress + "%");
+                        }
+                    });
+        }
     }
 
     @Override

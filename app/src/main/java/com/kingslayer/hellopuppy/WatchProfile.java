@@ -4,12 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,6 +44,8 @@ public class WatchProfile extends AppCompatActivity {
     private TextView isVaccinatedText;
     private TextView isCastratedText;
     private TextView dogGenderText;
+    private boolean isUserPhotoSet = false;
+    private String urlUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +74,10 @@ public class WatchProfile extends AppCompatActivity {
             user = getIntent().getStringExtra("User");
         }
 
+        setPicFromDB("Dog");
+        setPicFromDB("User");
         setUserProfile();
-
-
+        
         //region $ Navigation View
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -176,10 +184,6 @@ public class WatchProfile extends AppCompatActivity {
                     availabilityText.setText("Available "+dbUser.child("Availability").getValue().toString().toLowerCase());
                 }
 
-                if (dbUser.hasChild("Profile photo")) {
-                    Picasso.get().load(dbUser.child("Profile photo").getValue().toString()).into(userPhoto);
-                }
-
                 if (dbDog.hasChild("Dog Birth Day")) {
                     String birthDate = dbDog.child("Dog Birth Day").getValue().toString();
                     dogAgeText.setText("Born in "+ birthDate + ", (age "+ calcAge(birthDate)+")");
@@ -210,15 +214,49 @@ public class WatchProfile extends AppCompatActivity {
                     dogGenderText.setText(dbDog.child("Gender").getValue().toString());
                 }
 
-                if(dbDog.hasChild("Dog's photo")){
-                    String dogsImage = dbDog.child("Dog's photo").getValue().toString();
-                    Picasso.get().load(dogsImage).into(dogPhoto);
+                if (dbUser.hasChild("Profile photo") && !isUserPhotoSet) {
+                    urlUser = dbUser.child("Profile photo").getValue().toString();
+                    setPicFromDB("User");
                 }
+
+//                if(dbDog.hasChild("Dog's photo")){
+//                    String dogsImage = dbDog.child("Dog's photo").getValue().toString();
+//                    Picasso.get().load(dogsImage).into(dogPhoto);
+//                }
             }
 
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
+            }
+        });
+    }
+
+    private void setPicFromDB(String from){
+
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+        StorageReference photoReference= storageReference.child(from + " profile/"
+                + user);
+
+        final long TEN_MEGABYTE = 1024 * 1024;
+        photoReference.getBytes(TEN_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                if(from.equals("User")){
+                    userPhoto.setImageBitmap(bmp);
+                    isUserPhotoSet = true;
+                }
+                else{
+                    dogPhoto.setImageBitmap(bmp);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                if(from.equals("User") && urlUser!=null){
+                    Picasso.get().load(urlUser).into(userPhoto);
+                }
             }
         });
     }

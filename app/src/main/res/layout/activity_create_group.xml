@@ -26,7 +26,8 @@
         android:layout_height="wrap_content"
         android:textSize="25dp"
         android:text="Choose your Group's features"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true" />
+
     <EditText
         android:layout_centerHorizontal="true"
         android:id="@+id/name_of_group"
@@ -136,6 +137,12 @@
         android:textSize="22dp" />
     </LinearLayout>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload group profile"
+        android:id="@+id/upload_image">
+    </Button>
 
     <Button
         android:id="@+id/create_group"
@@ -147,5 +154,11 @@
         android:text="Create!"
         android:layout_above="@+id/bottom_navigator"/>
 
+    <ImageView
+        android:layout_marginTop="500dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/group_prof"></ImageView>
 
 </RelativeLayout>

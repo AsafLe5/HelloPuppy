@@ -65,6 +65,12 @@
             android:text="Walks per week"
             android:textSize="12sp" />
         </LinearLayout>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/groupProfile"
+            />
         <Button
             android:id="@+id/RequestJoin"
             android:layout_width="90dp"

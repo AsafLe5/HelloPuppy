@@ -10,10 +10,13 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -30,9 +33,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FacebookAuthProvider;
@@ -44,10 +51,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -111,6 +123,17 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
 
     private ImageView dogImage;
 
+    // instance for firebase storage and StorageReference
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
+    // request code
+    private final int PICK_IMAGE_REQUEST = 22;
+    // Uri indicates, where the image will be picked from
+    private Uri filePath;
+    private Button uploadImage;
+    private boolean isUserPicSet = false;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,6 +165,22 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                 Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+
+        profileImage = findViewById(R.id.profileImage);
+        addProfileImage = findViewById(R.id.addProfileImage);
+        // on pressing btnSelect SelectImage() is called
+        addProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                isDogPic = false;
+                SelectImage();
+            }
+        });
+        setPicFromDB("User");
+        setPicFromDB("Dog");
 
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
         dbRef.addValueEventListener(new ValueEventListener() {
@@ -232,17 +271,21 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                     hasGroup = true;
                 }
 
-                if(dog.hasChild("Dog's photo")){
-                    String dogsImage = dog.child("Dog's photo").getValue().toString();
-                    Picasso.get().load(dogsImage).into(dogImage);
-                }
-                if(user.hasChild("Profile photo")){
-                    String userImage = user.child("Profile photo").getValue().toString();
-                    Picasso.get().load(userImage).into(profileImage);
-                }
-                else{
-                    userProfileFromLogin();
-                }
+//                if(dog.hasChild("Dog's photo")){
+//                    String dogsImage = dog.child("Dog's photo").getValue().toString();
+//                    Picasso.get().load(dogsImage).into(dogImage);
+//                }
+
+
+//                if(user.hasChild("Profile photo") && !isUserPicSet){
+//                    String userImage = user.child("Profile photo").getValue().toString();
+//                    Picasso.get().load(userImage).into(profileImage);
+//                    setPicFromDB("User");
+//                    setPicFromDB("Dog");
+//                }
+//                else{
+//                    userProfileFromLogin();
+//                }
             }
 
             @Override
@@ -255,7 +298,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             @Override
             public void onClick(View view) {
                 isDogPic = true;
-                openImage();
+                SelectImage();
             }
         });
 
@@ -341,17 +384,15 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         });
         //endregion
 
-        addProfileImage = findViewById(R.id.addProfileImage);
-        addProfileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                isDogPic = false;
-                openImage();
-            }
-        });
+//        addProfileImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                isDogPic = false;
+//                openImage();
+//            }
+//        });
         nameTextView = findViewById(R.id.nameTextView);
         nameTextView.setText(profileNameString);
-        profileImage = findViewById(R.id.profileImage);
 
 //        userProfileFromLogin();
 
@@ -410,11 +451,49 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?height=500";
 
             // (optional) use Picasso to download and show to image
-            Picasso.get().load(photoUrl).into(profileImage);
+            if(!isUserPicSet){
+                Picasso.get().load(photoUrl).into(profileImage);
+                isUserPicSet = true;
+            }
+
         } else {
-            Picasso.get().load(profileImageUri).into(profileImage);
+            if(!isUserPicSet){
+                Picasso.get().load(profileImageUri).into(profileImage);
+                isUserPicSet = true;
+            }
             savePictureInDb(profileImageUri);
         }
+    }
+
+
+    private void setPicFromDB(String from){
+
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+        StorageReference photoReference= storageReference.child(from + " profile/"
+                + FirebaseAuth.getInstance().getUid().toString());
+
+        final long TEN_MEGABYTE = 1024 * 1024;
+        photoReference.getBytes(TEN_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                if(from.equals("User")){
+                    profileImage.setImageBitmap(bmp);
+                    isUserPicSet = true;
+                }
+                else{
+                    dogImage.setImageBitmap(bmp);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                if(from.equals("User")){
+                    isUserPicSet = false;
+                    userProfileFromLogin();
+                }
+            }
+        });
     }
 
     private void initDogGenderSpinner() {
@@ -1056,27 +1135,27 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
         ActivityCompat.requestPermissions(this, cameraPermissions, CAMERA_REQUEST_CODE);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK){
-            if(requestCode == IMAGE_PICK_GALLERY_CODE){
-                if (data != null) {
-                    imageUri = data.getData();
-                    if (imageUri != null) {
-                        savePictureInDb();
-                    }
-                }
-            }
-            else{
-                if (imageUri != null) {
-                    savePictureInDb();
-                }
-            }
-            //imageUri = data.getData();
-            //uploadImage();
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if(resultCode == RESULT_OK){
+//            if(requestCode == IMAGE_PICK_GALLERY_CODE){
+//                if (data != null) {
+//                    imageUri = data.getData();
+//                    if (imageUri != null) {
+//                        savePictureInDb();
+//                    }
+//                }
+//            }
+//            else{
+//                if (imageUri != null) {
+//                    savePictureInDb();
+//                }
+//            }
+//            //imageUri = data.getData();
+//            //uploadImage();
+//        }
+//    }
 
     void savePictureInDb(){
 
@@ -1115,5 +1194,126 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+
+    // Select Image method
+    private void SelectImage()
+    {
+
+        // Defining Implicit Intent to mobile gallery
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Image from here..."),
+                PICK_IMAGE_REQUEST);
+    }
+
+    // Override onActivityResult method
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // checking request code and result code
+        // if request code is PICK_IMAGE_REQUEST and
+        // resultCode is RESULT_OK
+        // then set image in the image view
+        if (requestCode == PICK_IMAGE_REQUEST
+                && resultCode == RESULT_OK
+                && data != null
+                && data.getData() != null) {
+
+            // Get the Uri of data
+            filePath = data.getData();
+            try { // Setting image on image view using Bitmap
+                Bitmap bitmap = MediaStore
+                        .Images
+                        .Media
+                        .getBitmap(
+                                getContentResolver(),
+                                filePath);
+                if(isDogPic){
+                    dogImage.setImageBitmap(bitmap);
+                }
+                else{
+                    profileImage.setImageBitmap(bitmap);
+                }
+                uploadImage();
+            }
+
+            catch (IOException e) {
+                // Log the exception
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // UploadImage method
+    private void uploadImage()
+    {
+        if (filePath != null) {
+
+            // Code for showing progressDialog while uploading
+            ProgressDialog progressDialog
+                    = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            String dogOrUser = "User";
+
+            if(isDogPic){
+                dogOrUser = "Dog";
+            }
+            // Defining the child of storageReference
+            StorageReference ref = storageReference.child(dogOrUser + " profile/"
+                    + FirebaseAuth.getInstance().getUid().toString());
+
+            // adding listeners on upload
+            // or failure of image
+            ref.putFile(filePath)
+                    .addOnSuccessListener(
+                            new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
+                                @Override
+                                public void onSuccess(
+                                        UploadTask.TaskSnapshot taskSnapshot)
+                                {     // Image uploaded successfully
+                                    // Dismiss dialog
+                                    progressDialog.dismiss();
+                                    Toast.makeText(Profile.this, "Image Uploaded!!",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            })
+
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e)
+                        {
+
+                            // Error, Image not uploaded
+                            progressDialog.dismiss();
+                            Toast
+                                    .makeText(Profile.this,
+                                            "Failed " + e.getMessage(),
+                                            Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    })
+                    .addOnProgressListener( new OnProgressListener<UploadTask.TaskSnapshot>() {
+
+                        // Progress Listener for loading
+                        // percentage on the dialog box
+                        @Override
+                        public void onProgress(
+                                UploadTask.TaskSnapshot taskSnapshot)
+                        {
+                            double progress
+                                    = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                            progressDialog.setMessage("Uploaded " + (int)progress + "%");
+                        }
+                    });
+        }
     }
 }

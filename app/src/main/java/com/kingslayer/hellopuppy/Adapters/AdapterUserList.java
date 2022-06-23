@@ -2,6 +2,8 @@ package com.kingslayer.hellopuppy.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.kingslayer.hellopuppy.GroupProfile;
 import com.kingslayer.hellopuppy.Models.ModelUser;
 import com.kingslayer.hellopuppy.R;
@@ -53,20 +60,43 @@ public class AdapterUserList extends RecyclerView.Adapter<AdapterUserList.Holder
         String dogsName = user.getDogsName();
 //        userId = user.getUserId();
         holder.setUserId(user.getUserId());
+        setPicFromDB(user.getUserProfile(), holder);
+
         holder.dogName.setText(dogsName);
         holder.userName.setText(userName);
 
-        Picasso.get().load(user.getUserProfile()).into(holder.UserPicture);
+//        Picasso.get().load(user.getUserProfile()).into(holder.UserPicture);
 
         // handle user click
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(ModelUser.this,
-//                        "user clicked!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), WatchProfile.class);
                 intent.putExtra("User", holder.getUserId());
                 context.startActivity(intent);
+            }
+        });
+    }
+
+    private void setPicFromDB(String urlUser, HolderUserList holder){
+
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+        StorageReference photoReference= storageReference.child("User profile/"
+                + holder.userId);
+
+        final long TEN_MEGABYTE = 1024 * 1024;
+        photoReference.getBytes(TEN_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                holder.UserPicture.setImageBitmap(bmp);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                if(urlUser!=null){
+                    Picasso.get().load(urlUser).into(holder.UserPicture);
+                }
             }
         });
     }

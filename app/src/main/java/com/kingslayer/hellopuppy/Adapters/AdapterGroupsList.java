@@ -2,6 +2,8 @@ package com.kingslayer.hellopuppy.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +14,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.kingslayer.hellopuppy.GroupProfile;
 import com.kingslayer.hellopuppy.Models.ModelGroup;
 import com.kingslayer.hellopuppy.R;
@@ -54,10 +60,9 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
         // get user data
         ModelGroup group = groupsChatList.get(position);
 
-
-
         holder.setGroupId(group.getGroupId());
 
+        setPicFromDB(holder);
         String groupName = group.getGroupName();
         holder.groupName.setText(groupName);
 
@@ -112,6 +117,22 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
     }
 
 
+    private void setPicFromDB(HolderGroupsList holder) {
+
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+        StorageReference photoReference = storageReference.child("Group profile/"
+                + holder.groupId);
+
+        final long TEN_MEGABYTE = 1024 * 1024;
+        photoReference.getBytes(TEN_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                holder.groupPic.setImageBitmap(bmp);
+            }
+        });
+    }
+
     @Override
     public int getItemCount() {
         return groupsChatList.size();
@@ -123,7 +144,7 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
         private TextView walksPerWeek;
         private TextView numOfMembers;
         private TextView groupName;
-//        private ImageView groupPic;
+        private ImageView groupPic;
         private String groupId;
 
         public HolderGroupsList(@NonNull @NotNull View itemView) {
@@ -132,6 +153,7 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
             walksPerWeek = itemView.findViewById(R.id.walksPerWeek);
             numOfMembers = itemView.findViewById(R.id.NumOfMembers);
             groupName = itemView.findViewById(R.id.groupsName);
+            groupPic = itemView.findViewById(R.id.groupProfile);
 //            UserPicture = itemView.findViewById(R.id.UserPicture);
 //            userName = itemView.findViewById(R.id.actualUserName);
 //            dogName = itemView.findViewById(R.id.actualDogName);
