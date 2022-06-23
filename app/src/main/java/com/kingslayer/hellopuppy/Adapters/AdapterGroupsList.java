@@ -73,7 +73,7 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
         if (numOfMembers.equals("One"))
             holder.numOfMembers.setText(numOfMembers + " member");
         else
-            holder.numOfMembers.setText(numOfMembers + "members");
+            holder.numOfMembers.setText(numOfMembers + " members");
 //
 //        String pic = group.getGroupProfile();
 //        Picasso.get().load(pic).into(holder.groupPic);
