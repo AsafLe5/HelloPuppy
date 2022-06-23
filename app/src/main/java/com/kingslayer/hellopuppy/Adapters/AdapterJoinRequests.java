@@ -68,6 +68,8 @@ public class AdapterJoinRequests extends
         // get the data of the user- his name and the dogs name
         String userName = user.getUserName();
         String availability = user.getAvailability();
+        String[] a = availability.split(" ");
+        availability = a[0] + " " +a[1];
         //groupId = user.getGroupId();
         holder.availability.setText(availability);
         holder.userName.setText(userName);
@@ -160,7 +162,7 @@ public class AdapterJoinRequests extends
             super(itemView);
 //            UserPicture = itemView.findViewById(R.id.UserPicture);
             userName = itemView.findViewById(R.id.actualUserName);
-            availability = itemView.findViewById(R.id.Availability);
+            availability = itemView.findViewById(R.id.actualAvailability);
             UserPicture = itemView.findViewById(R.id.UserPicture);
         }
 

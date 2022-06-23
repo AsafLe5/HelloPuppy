@@ -6,40 +6,9 @@
     android:layout_height="match_parent"
     android:id="@+id/group_layout"
     tools:context=".GroupChatActivity"
-    android:background="@drawable/gradient_background">
+    android:background="@drawable/gradient_background"
+    >
 
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/toolbar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="?android:attr/actionBarSize"-->
-<!--        android:background="@color/purple"-->
-<!--        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">-->
-<!--        <RelativeLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content">-->
-
-<!--            <ImageView-->
-<!--                android:layout_height="80dp"-->
-<!--                android:layout_width="80dp"-->
-<!--                android:id="@+id/GroupPicture"-->
-<!--                android:src="@drawable/ic_profile"-->
-<!--                android:layout_alignParentTop="true"/>-->
-
-<!--            <TextView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:id="@+id/groupTitle"-->
-<!--                android:layout_toEndOf="@+id/GroupPicture"-->
-<!--                android:text="Group Title"-->
-<!--                android:textSize="18sp"-->
-<!--                android:layout_marginStart="10dp"-->
-<!--                android:textColor="@color/white"-->
-<!--                android:textStyle="bold"-->
-<!--                >-->
-<!--            </TextView>-->
-
-<!--        </RelativeLayout>-->
-<!--    </androidx.appcompat.widget.Toolbar>-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
@@ -47,8 +16,10 @@
         android:id="@+id/chat"
         android:layout_above="@+id/chatLayout"
         app:stackFromEnd="true"
+        android:layout_marginBottom="10dp"
         tools:listitem="@layout/row_groupchat_left"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+
     </androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout
@@ -88,24 +59,6 @@
 
     </LinearLayout>
 
-<!--    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--        xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--        xmlns:tools="http://schemas.android.com/tools"-->
-<!--        android:layout_alignBottom="@+id/chatLayout"-->
-<!--        android:layout_alignParentTop="true"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:id="@+id/grlayout">-->
-
-<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
-<!--        android:id="@+id/bottom_navigator"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:itemBackground="@color/purple_500"-->
-<!--        app:itemIconTint="@drawable/serlector"-->
-<!--        app:itemTextColor="@drawable/serlector"-->
-<!--        app:menu="@menu/menu" />-->
-<!--    </LinearLayout>-->
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

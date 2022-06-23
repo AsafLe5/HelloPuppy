@@ -98,49 +98,53 @@ public class Schedule extends AppCompatActivity {
                     if (snapshot.child("Groups").child(groupId).child("groupManagerId").getValue()
                             .toString().equals(myId)) {
                         //if (firstTime) {
-                            tableLayout.setVisibility(View.GONE);
-                            notReadyText.setVisibility(View.VISIBLE);
-                            customHandler = new android.os.Handler();
-                            Calendar calNow = Calendar.getInstance();
-                            Calendar calNextWed = Calendar.getInstance();
-                            calNextWed.set(Calendar.HOUR, 7);
-                            calNextWed.set(Calendar.MINUTE, 8);
-                            calNextWed.set(Calendar.SECOND, 0);
-                            while (calNextWed.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
-                                calNextWed.add(Calendar.DATE, 1);
-                            }
-                            if (calNextWed.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY &&
-                                    (calNextWed.get(Calendar.HOUR) < calNow.get(Calendar.HOUR) ||
-                                            (calNextWed.get(Calendar.HOUR) == calNow.get(Calendar.HOUR) &&
-                                                    calNextWed.get(Calendar.MINUTE) < calNow.get(Calendar.MINUTE)))){
-                                calNextWed.add(Calendar.DATE, 7);
-                            }
-                            System.out.println(calNextWed.getTimeInMillis() - calNow.getTimeInMillis());
-                            long diff = calNextWed.getTimeInMillis() - calNow.getTimeInMillis();
-                            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-                            String newtime = new SimpleDateFormat("yyyyMMdd_HHmmss").format(calNextWed.getTime());
-                            /////////////////////customHandler.postDelayed(updateTimerThread, 100000);
-                            // Haven't calculated shifts for this week yet
-                            if (snapshot.child("Groups").child(groupId).hasChild("Already calculated this week")) {
-                                if (snapshot.child("Groups").child(groupId).child("Already calculated this week").getValue().equals("False")) {
-                                    if (diff > 1000 * 60 * 60 * 92) { // manager entered group between Wednesday at 8pm and Sunday
-                                        arrangeShifts();
-                                        tableLayout.setVisibility(View.VISIBLE);
-                                        notReadyText.setVisibility(View.GONE);
-                                        reference.child("Groups").child(groupId).child("Already calculated this week").setValue("True");
-                                    }
-                                } else { // Already calculated this week
-                                    if (diff < 1000 * 60 * 60 * 92) { // manager entered group between Sunday and Wednesday at 8pm
-                                        reference.child("Groups").child(groupId).child("Already calculated this week").setValue("False");
-                                    }
+                        tableLayout.setVisibility(View.GONE);
+                        notReadyText.setVisibility(View.VISIBLE);
+                        customHandler = new android.os.Handler();
+                        Calendar calNow = Calendar.getInstance();
+                        Calendar calNextWed = Calendar.getInstance();
+                        calNextWed.set(Calendar.HOUR, 8);
+                        calNextWed.set(Calendar.MINUTE, 41);
+                        calNextWed.set(Calendar.SECOND, 0);
+                        while (calNextWed.get(Calendar.DAY_OF_WEEK) != Calendar.WEDNESDAY) {
+                            calNextWed.add(Calendar.DATE, 1);
+                        }
+                        if (calNextWed.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY &&
+                                (calNextWed.get(Calendar.HOUR) < calNow.get(Calendar.HOUR) ||
+                                        (calNextWed.get(Calendar.HOUR) == calNow.get(Calendar.HOUR) &&
+                                                calNextWed.get(Calendar.MINUTE) < calNow.get(Calendar.MINUTE)))) {
+                            calNextWed.add(Calendar.DATE, 7);
+                        }
+                        System.out.println(calNextWed.getTimeInMillis() - calNow.getTimeInMillis());
+                        long diff = calNextWed.getTimeInMillis() - calNow.getTimeInMillis();
+                        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+                        String newtime = new SimpleDateFormat("yyyyMMdd_HHmmss").format(calNextWed.getTime());
+                        /////////////////////customHandler.postDelayed(updateTimerThread, 100000);
+                        // Haven't calculated shifts for this week yet
+                        if (snapshot.child("Groups").child(groupId).hasChild("Already calculated this week")) {
+                            if (snapshot.child("Groups").child(groupId).child("Already calculated this week").getValue().equals("False")) {
+                                if (diff > 1000 * 60 * 60 * 92) { // manager entered group between Wednesday at 8pm and Sunday
+                                    arrangeShifts();
+                                    tableLayout.setVisibility(View.VISIBLE);
+                                    notReadyText.setVisibility(View.GONE);
+                                    reference.child("Groups").child(groupId).child("Already calculated this week").setValue("True");
                                 }
-
-                            } else {
-                                reference.child("Groups").child(groupId).child("Already calculated this week").setValue("False");
+                            } else { // Already calculated this week
+                                if (diff < 1000 * 60 * 60 * 92) { // manager entered group between Sunday and Wednesday at 8pm
+                                    reference.child("Groups").child(groupId).child("Already calculated this week").setValue("False");
+                                } else { // show already calculated results shifts for this week
+                                    getShifts(); /// must take from DBBBBB!
+                                    tableLayout.setVisibility(View.VISIBLE);
+                                    notReadyText.setVisibility(View.GONE);
+                                }
                             }
 
-                            //checkIfAlreadyCalcShiftsThisWeek(groupId);
-                            firstTime = false;
+                        } else {
+                            reference.child("Groups").child(groupId).child("Already calculated this week").setValue("False");
+                        }
+
+                        //checkIfAlreadyCalcShiftsThisWeek(groupId);
+                        firstTime = false;
                         //}
                     }
                 }
@@ -230,7 +234,8 @@ public class Schedule extends AppCompatActivity {
                             .getChildrenCount() == 8) {
                         for (DataSnapshot user : snapshot.child("Groups").child(myGroupId)
                                 .child("ScheduleChoices").getChildren()) {
-                            groupNames.put(user.getKey().toString(), snapshot.child("Users").child(user.getKey()).child("Full name").getValue().toString());
+                            groupNames.put(user.getKey().toString(), snapshot.child("Users").child(user.getKey())
+                                    .child("Full name").getValue().toString());
                             for (DataSnapshot day : snapshot.child("Groups").child(myGroupId)
                                     .child("ScheduleChoices").child(user.getKey().toString()).getChildren()) {
                                 writeInArray(i, user.getKey().toString(), day.getKey().toString(), day.getValue().toString());
@@ -273,7 +278,7 @@ public class Schedule extends AppCompatActivity {
         for (int i = 0; i < numOfMembers; i++) {
             String user = (String) credits.keySet().toArray()[i];
             Integer creditsLeft = credits.get(user);
-            groupRef.child("ScheduleChoices").child(user).child("Credits").setValue((int)creditsLeft + 5);
+            groupRef.child("ScheduleChoices").child(user).child("Credits").setValue((int) creditsLeft + 5);
         }
 
         // save schedule for next week
@@ -418,4 +423,35 @@ public class Schedule extends AppCompatActivity {
             namePerRow.get(i).setText(groupNames.get(chosenDays.get(i)));
         }
     }
-}
+
+    private void getShifts() {
+
+        DatabaseReference groupIdRef = FirebaseDatabase.getInstance().getReference();
+
+        groupIdRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                // get all get group member's names.
+                for (DataSnapshot user : snapshot.child("Groups").child(myGroupId)
+                        .child("ScheduleChoices").getChildren()) {
+                    groupNames.put(user.getKey().toString(), snapshot.child("Users")
+                            .child(user.getKey()).child("Full name").getValue().toString());
+
+                    chosenDays = (List<String>) snapshot.child("Groups")
+                            .child(groupId).child("NextWeekShifts").getValue();
+
+                    arrangeShiftInTable();
+
+                }
+                }
+
+
+                @Override
+                public void onCancelled (@NonNull @NotNull DatabaseError error){
+
+                }
+            });
+
+        }
+
+    }
