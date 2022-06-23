@@ -267,6 +267,10 @@ public class GroupProfile extends AppCompatActivity {
                     .child("GroupId").removeValue();
         }
 
+        // save that the trip is over
+        FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
+                .child("FindDog").child("CurrentlyOnTrip").setValue("");
+
         //delete the group
         FirebaseDatabase.getInstance().getReference("Groups").child(groupId).removeValue();
 

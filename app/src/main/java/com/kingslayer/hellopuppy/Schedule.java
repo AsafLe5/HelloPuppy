@@ -425,15 +425,12 @@ public class Schedule extends AppCompatActivity {
     }
 
     private void getShifts() {
-        String myId = FirebaseAuth.getInstance().getUid().toString();
+
         DatabaseReference groupIdRef = FirebaseDatabase.getInstance().getReference();
 
         groupIdRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-
-                myGroupId = snapshot.child("Users").child(myId)
-                        .child("GroupId").getValue().toString();
                 // get all get group member's names.
                 for (DataSnapshot user : snapshot.child("Groups").child(myGroupId)
                         .child("ScheduleChoices").getChildren()) {

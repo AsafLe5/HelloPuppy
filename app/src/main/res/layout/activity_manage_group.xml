@@ -20,17 +20,6 @@
         android:textSize="25dp"
         android:textStyle="bold"/>
 
-    <!--        <Button-->
-    <!--            android:id="@+id/button_join_requests"-->
-    <!--            android:layout_width="101dp"-->
-    <!--            android:layout_height="73dp"-->
-    <!--            android:textSize="10dp"-->
-    <!--            android:layout_alignParentEnd="true"-->
-    <!--            android:layout_marginTop="55dp"-->
-    <!--            android:layout_marginEnd="9dp"-->
-    <!--            android:paddingHorizontal="13dp"-->
-    <!--            android:paddingVertical="13dp"-->
-    <!--            android:text="Requests" />-->
 
     <TextView
         android:id="@+id/explanation_text"
@@ -44,11 +33,12 @@
         android:textStyle="bold" />
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
         android:id="@+id/reall"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/group_members_text">
+        android:layout_width="350dp"
+        android:layout_centerHorizontal="true"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/group_members_text"
+        android:layout_marginTop="10dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/users"

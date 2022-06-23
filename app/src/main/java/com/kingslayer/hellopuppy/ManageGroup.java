@@ -49,9 +49,9 @@ public class ManageGroup extends AppCompatActivity {
         }
 
         getSupportActionBar().setTitle("Manage group");
-
         usersList = null;
         bottomNavigationView = findViewById(R.id.bottom_navigator);
+        bottomNavigationView.setSelectedItemId(R.id.group);
         //bottomNavigationView.setSelectedItemId(R.id.group);
         users = findViewById(R.id.users);
         firebaseAuth = FirebaseAuth.getInstance();
