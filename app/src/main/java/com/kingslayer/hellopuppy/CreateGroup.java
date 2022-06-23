@@ -25,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -73,8 +74,7 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
     private final int PICK_IMAGE_REQUEST = 22;
     // Uri indicates, where the image will be picked from
     private Uri filePath;
-    private Button uploadImage;
-    private ImageView imageProf;
+    private ImageButton uploadImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +92,6 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
         nameOfGroup = findViewById(R.id.name_of_group);
         descriptionOfGroup = findViewById(R.id.group_description);
         createGroup = findViewById(R.id.create_group);
-        imageProf = findViewById(R.id.group_prof);
 
         getSupportActionBar().setTitle("Create group");
 
@@ -291,7 +290,6 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
                         .getBitmap(
                                 getContentResolver(),
                                 filePath);
-                // imageProf.setImageBitmap(bitmap);
                 uploadImage();
             }
 

@@ -28,15 +28,27 @@
         android:text="Choose your Group's features"
         android:layout_centerHorizontal="true" />
 
-    <EditText
-        android:layout_centerHorizontal="true"
-        android:id="@+id/name_of_group"
-        android:layout_width="180dp"
+    <LinearLayout
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="90dp"
+        >
+    <EditText
+        android:id="@+id/name_of_group"
+        android:layout_width="0dp"
+        android:layout_weight="8"
+        android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Group's name"
         android:inputType="textPersonName" />
+    <ImageButton
+        android:id="@+id/upload_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:src="@drawable/btn_upload_image"/>
+    </LinearLayout>
 
 
     <EditText
@@ -137,12 +149,7 @@
         android:textSize="22dp" />
     </LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Upload group profile"
-        android:id="@+id/upload_image">
-    </Button>
+
 
     <Button
         android:id="@+id/create_group"
@@ -153,12 +160,5 @@
         android:textSize="18dp"
         android:text="Create!"
         android:layout_above="@+id/bottom_navigator"/>
-
-    <ImageView
-        android:layout_marginTop="500dp"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/group_prof"></ImageView>
 
 </RelativeLayout>
