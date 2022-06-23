@@ -104,7 +104,7 @@ public class Schedule extends AppCompatActivity {
                         Calendar calNow = Calendar.getInstance();
                         Calendar calNextWed = Calendar.getInstance();
                         calNextWed.set(Calendar.HOUR, 9);
-                        calNextWed.set(Calendar.MINUTE, 41);
+                        calNextWed.set(Calendar.MINUTE, 38);
                         calNextWed.set(Calendar.SECOND, 0);
                         while (calNextWed.get(Calendar.DAY_OF_WEEK) != Calendar.THURSDAY) {
                             calNextWed.add(Calendar.DATE, 1);
