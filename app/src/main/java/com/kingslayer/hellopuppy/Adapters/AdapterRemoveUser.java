@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.kingslayer.hellopuppy.GroupProfile;
 import com.kingslayer.hellopuppy.Models.ModelUser;
 import com.kingslayer.hellopuppy.R;
 import com.kingslayer.hellopuppy.WatchProfile;
@@ -45,6 +46,7 @@ import com.kingslayer.hellopuppy.Group;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -52,11 +54,14 @@ public class AdapterRemoveUser extends RecyclerView.Adapter<AdapterRemoveUser.Ho
 
     private Context context;
     private ArrayList<ModelUser> usersChatList;
-    private String userId;
-
-    public AdapterRemoveUser(Context context, ArrayList<ModelUser> usersChatList){
+    private List<String> membersArray;
+    private String groupId;
+    public AdapterRemoveUser(Context context, ArrayList<ModelUser> usersChatList,
+                             String groupId, List<String> membersArray){
         this.context = context;
+        this.membersArray = membersArray;
         this.usersChatList = usersChatList;
+        this.groupId = groupId;
     }
 
     @NonNull
@@ -98,31 +103,36 @@ public class AdapterRemoveUser extends RecyclerView.Adapter<AdapterRemoveUser.Ho
 //                ModelUser user = usersChatList.get(position);
 //                usersChatList.remove(user);
                 // are you sure
-
-//                leaveGroup();
+                ModelUser user = usersChatList.get(position);
+                leaveGroup(user);
 
             }
         });
     }
-//
-//    public void leaveGroup(){
-//        boolean isMeCurrOnTrip = false;
-//        // remove me from MembersIds of the group
-//        if(membersArray.contains(FirebaseAuth.getInstance().getUid().toString())){
-//            membersArray.remove(FirebaseAuth.getInstance().getUid().toString());
-//        }
-//        FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
-//                .child("MembersIds").setValue(membersArray);
-//
-//        // remove my schedule
-//        FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
-//                .child("ScheduleChoices").child(FirebaseAuth.getInstance()
-//                .getUid().toString()).removeValue();
-//
-//        // delete my group id
-//        FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance()
-//                .getUid().toString()).child("GroupId").removeValue();
-//    }
+
+    public void leaveGroup(ModelUser user){
+        boolean isMeCurrOnTrip = false;
+        // remove me from MembersIds of the group
+        if(membersArray.contains(user.getUserId())){
+            membersArray.remove(user.getUserId());
+        }
+        membersArray.add(FirebaseAuth.getInstance().getUid());
+        FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
+                .child("MembersIds").setValue(membersArray);
+
+        // remove my schedule
+        FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
+                .child("ScheduleChoices").child(user.getUserId()).removeValue();
+
+        // delete my group id
+        FirebaseDatabase.getInstance().getReference("Users").child(user.getUserId())
+                .child("GroupId").removeValue();
+
+        usersChatList.remove(user);
+//        Intent intent = new Intent(getApplicationContext(), GroupProfile.class);
+//        intent.putExtra("GroupId", groupId);
+//        context.startActivity(intent);
+    }
 
     @Override
     public int getItemCount() {

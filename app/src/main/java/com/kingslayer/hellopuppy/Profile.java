@@ -263,8 +263,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                 if(user.hasChild("GroupId")){
                     hasGroup = true;
                 }
-
-
             }
 
             @Override

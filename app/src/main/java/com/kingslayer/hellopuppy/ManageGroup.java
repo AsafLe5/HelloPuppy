@@ -95,6 +95,8 @@ public class ManageGroup extends AppCompatActivity {
 
                 membersArray = (List<String>) snapshot.child("Groups").child(groupId)
                         .child("MembersIds").getValue();
+
+                membersArray.remove(FirebaseAuth.getInstance().getUid());
                 for(String member: membersArray){
                     ModelUser asd = new ModelUser(member);
                     asd.setUserName(snapshot.child("Users").child(member)
@@ -127,7 +129,7 @@ public class ManageGroup extends AppCompatActivity {
         for (Map.Entry<String, ModelUser> model : usersModelMap.entrySet()){
             usersList.add(model.getValue());
         }
-        adapterRemoveUserList = new AdapterRemoveUser(ManageGroup.this, usersList);
+        adapterRemoveUserList = new AdapterRemoveUser(ManageGroup.this, usersList, groupId, membersArray);
         users.setAdapter(adapterRemoveUserList);
     }
 }
