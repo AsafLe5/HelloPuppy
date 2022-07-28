@@ -135,31 +135,30 @@ public class FindDog extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.find_dog);
         setContentView(R.layout.loading_page);
         DatabaseReference fb = FirebaseDatabase.getInstance().getReference();
-        getSupportActionBar().setTitle("Find dog");
+        getSupportActionBar().setTitle(Constants.FIND_DOG_TITLE);
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.find_dog);
 
         fb.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                if (snapshot.child("Users").child(FirebaseAuth.getInstance().getUid().toString())
-                        .hasChild("GroupId")) {
+                if (snapshot.child(Constants.USERS_DB).child(FirebaseAuth.getInstance().getUid().toString())
+                        .hasChild(Constants.GROUP_ID_DB)) {
 
-                    myGroupId = snapshot.child("Users").child(FirebaseAuth.getInstance().getUid().toString())
-                            .child("GroupId").getValue().toString();
+                    myGroupId = snapshot.child(Constants.USERS_DB).child(FirebaseAuth.getInstance().getUid().toString())
+                            .child(Constants.GROUP_ID_DB).getValue().toString();
 
-                    currentlyOnTrip = snapshot.child("Groups").child(myGroupId).child("FindDog")
-                            .child("CurrentlyOnTrip").getValue().toString();
+                    currentlyOnTrip = snapshot.child(Constants.GROUPS_DB).child(myGroupId).child
+                            (Constants.FIND_DOG_DB)
+                            .child(Constants.CURRENTLY_ON_TRIP_DB).getValue().toString();
 
                     if(!currentlyOnTrip.equals(""))
-                        nameOfWalker = snapshot.child("Users").child(currentlyOnTrip)
-                                .child("Full name").getValue().toString();
+                        nameOfWalker = snapshot.child(Constants.USERS_DB).child(currentlyOnTrip)
+                                .child(Constants.USER_NAME_DB).getValue().toString();
 
                     startPage();
-
                 }
             }
 
@@ -207,22 +206,22 @@ public class FindDog extends AppCompatActivity{
 
         if(currentlyOnTrip.equals("")){
             Intent intent = new Intent(getApplicationContext(), FindDogOne.class);
-            intent.putExtra("myGroupId", myGroupId);
+            intent.putExtra(Constants.MY_GROUP_ID, myGroupId);
             findViewById(R.id.loadingPanel).setVisibility(View.GONE);
             startActivity(intent);
 
         }
         else if (currentlyOnTrip.equals(FirebaseAuth.getInstance().getUid())){
             Intent intent = new Intent(getApplicationContext(), FindDogOne.class);
-            intent.putExtra("myGroupId", myGroupId);
-            intent.putExtra("onTrip", true);
+            intent.putExtra(Constants.MY_GROUP_ID, myGroupId);
+            intent.putExtra(Constants.IS_ON_TRIP, true);
             findViewById(R.id.loadingPanel).setVisibility(View.GONE);
             startActivity(intent);
         }
         else{
             Intent intent = new Intent(getApplicationContext(), FindDogOthers.class);
-            intent.putExtra("name", nameOfWalker);
-            intent.putExtra("myGroupId", myGroupId);
+            intent.putExtra(Constants.NAME_OF_WALKER, nameOfWalker);
+            intent.putExtra(Constants.MY_GROUP_ID, myGroupId);
             findViewById(R.id.loadingPanel).setVisibility(View.GONE);
             startActivity(intent);
         }

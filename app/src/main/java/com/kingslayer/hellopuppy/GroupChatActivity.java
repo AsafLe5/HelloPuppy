@@ -41,7 +41,7 @@ public class GroupChatActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ImageView groupPic;
     private TextView groupTitle;
-    private ImageButton attachBtn, sendBtn;
+    private ImageButton sendBtn;
     private EditText messageEt;
     private FirebaseAuth firebaseAuth;
     private ArrayList<ModelGroupChat> groupChatList;
@@ -57,7 +57,7 @@ public class GroupChatActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.chat);
 
         // init views
-        attachBtn = findViewById(R.id.attachBtn);
+
         messageEt = findViewById(R.id.messageEt);
         sendBtn = findViewById(R.id.sendBtn);
         chat = findViewById(R.id.chat);

@@ -209,7 +209,7 @@ public class Group extends AppCompatActivity {
 //        groupsList = new ArrayList<>();
 
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Groups");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Constants.GROUPS_DB);
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
