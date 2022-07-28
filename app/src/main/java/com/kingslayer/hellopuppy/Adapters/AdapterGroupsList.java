@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.kingslayer.hellopuppy.Constants;
 import com.kingslayer.hellopuppy.GroupProfile;
 import com.kingslayer.hellopuppy.Models.ModelGroup;
 import com.kingslayer.hellopuppy.R;
@@ -66,8 +67,6 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
         String groupName = group.getGroupName();
         holder.groupName.setText(groupName);
 
-        String walksPerWeek = group.getWalksPerWeek();
-        holder.walksPerWeek.setText("Require " + walksPerWeek.toLowerCase() + " walk per week");
 
         String numOfMembers = group.getNumOfMembers();
         if (numOfMembers.equals("One"))
@@ -93,11 +92,11 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
 
 
                 Intent intent = new Intent(getApplicationContext(), GroupProfile.class);
-                intent.putExtra("GroupId", holder.getGroupId());
+                intent.putExtra(Constants.GROUP_ID_DB, holder.getGroupId());
                 context.startActivity(intent);
                 //open group chat
 //                Intent intent = new Intent(context, GroupChatActivity.class);
-//                intent.putExtra("groupId", groupId);
+//                intent.putExtra(Constants.GROUP_ID_DB, groupId);
 //                context.startActivity(intent);
 //                Toast.makeText(ModelUser.this,
 //                        "user clicked!", Toast.LENGTH_SHORT).show();
@@ -141,7 +140,6 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
 
     class HolderGroupsList extends RecyclerView.ViewHolder {
 
-        private TextView walksPerWeek;
         private TextView numOfMembers;
         private TextView groupName;
         private ImageView groupPic;
@@ -150,7 +148,6 @@ public class AdapterGroupsList extends RecyclerView.Adapter<AdapterGroupsList.Ho
         public HolderGroupsList(@NonNull @NotNull View itemView) {
             super(itemView);
 
-            walksPerWeek = itemView.findViewById(R.id.walksPerWeek);
             numOfMembers = itemView.findViewById(R.id.NumOfMembers);
             groupName = itemView.findViewById(R.id.groupsName);
             groupPic = itemView.findViewById(R.id.groupProfile);

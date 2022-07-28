@@ -39,10 +39,10 @@ public class Chat extends AppCompatActivity {
                 for(DataSnapshot ds: snapshot.getChildren()){
 
                     assert myId != null;
-                    if(ds.getKey().equals(myId) && ds.hasChild("GroupId")){
-                        String groupId = ds.child("GroupId").getValue().toString();
+                    if(ds.getKey().equals(myId) && ds.hasChild(Constants.GROUP_ID_DB)){
+                        String groupId = ds.child(Constants.GROUP_ID_DB).getValue().toString();
                         Intent intent = new Intent(getApplicationContext(), GroupChatActivity.class);
-                        intent.putExtra("GroupId", groupId);
+                        intent.putExtra(Constants.GROUP_ID_DB, groupId);
                         findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                         startActivity(intent);
                         overridePendingTransition(0,0);

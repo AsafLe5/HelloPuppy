@@ -78,7 +78,7 @@ public class Schedule extends AppCompatActivity {
             public void onClick(View v) {
                 if (groupId != null) {
                     Intent intent = new Intent(getApplicationContext(), ChooseShifts.class);
-                    intent.putExtra("GroupId", groupId);
+                    intent.putExtra(Constants.GROUP_ID_DB, groupId);
                     startActivity(intent);
                 }
             }
@@ -90,22 +90,19 @@ public class Schedule extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
 
-//                for(DataSnapshot ds: snapshot.getChildren()){
-
                 assert myId != null;
                 if (snapshot.child(Constants.USERS_DB).hasChild(myId) &&
-                        snapshot.child(Constants.USERS_DB).child(myId).hasChild("GroupId")) {
-                    groupId = snapshot.child(Constants.USERS_DB).child(myId).child("GroupId").getValue().toString();
+                        snapshot.child(Constants.USERS_DB).child(myId).hasChild(Constants.GROUP_ID_DB)) {
+                    groupId = snapshot.child(Constants.USERS_DB).child(myId).child(Constants.GROUP_ID_DB).getValue().toString();
                     if (snapshot.child(Constants.GROUPS_DB).child(groupId).child("groupManagerId").getValue()
                             .toString().equals(myId)) {
-                        //if (firstTime) {
                         tableLayout.setVisibility(View.GONE);
                         notReadyText.setVisibility(View.VISIBLE);
                         customHandler = new android.os.Handler();
                         Calendar calNow = Calendar.getInstance();
                         Calendar calNextWed = Calendar.getInstance();
-                        calNextWed.set(Calendar.HOUR, 9);
-                        calNextWed.set(Calendar.MINUTE, 48);
+                        calNextWed.set(Calendar.HOUR, 8);
+                        calNextWed.set(Calendar.MINUTE, 0);
                         calNextWed.set(Calendar.SECOND, 0);
                         while (calNextWed.get(Calendar.DAY_OF_WEEK) != Calendar.THURSDAY) {
                             calNextWed.add(Calendar.DATE, 1);
@@ -118,8 +115,8 @@ public class Schedule extends AppCompatActivity {
                         }
                         System.out.println(calNextWed.getTimeInMillis() - calNow.getTimeInMillis());
                         long diff = calNextWed.getTimeInMillis() - calNow.getTimeInMillis();
-                        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-                        String newtime = new SimpleDateFormat("yyyyMMdd_HHmmss").format(calNextWed.getTime());
+//                        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+//                        String newtime = new SimpleDateFormat("yyyyMMdd_HHmmss").format(calNextWed.getTime());
                         /////////////////////customHandler.postDelayed(updateTimerThread, 100000);
                         // Haven't calculated shifts for this week yet
                         if (snapshot.child(Constants.GROUPS_DB).child(groupId)
@@ -225,7 +222,7 @@ public class Schedule extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 myGroupId = snapshot.child(Constants.USERS_DB).child(myId)
-                        .child("GroupId").getValue().toString();
+                        .child(Constants.GROUP_ID_DB).getValue().toString();
                 List<String> members = (List<String>) snapshot.child(Constants.GROUPS_DB).child(myGroupId)
                         .child("MembersIds").getValue();
                 numOfMembers = members.size();
@@ -441,7 +438,7 @@ public class Schedule extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 myGroupId = snapshot.child("Users").child(myId)
-                        .child("GroupId").getValue().toString();
+                        .child(Constants.GROUP_ID_DB).getValue().toString();
                 // get all get group member's names.
                 for (DataSnapshot user : snapshot.child("Groups").child(myGroupId)
                         .child("ScheduleChoices").getChildren()) {

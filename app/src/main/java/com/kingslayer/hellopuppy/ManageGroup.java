@@ -42,9 +42,9 @@ public class ManageGroup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_group);
 
-        if (getIntent().hasExtra("GroupId")) {
+        if (getIntent().hasExtra(Constants.GROUP_ID_DB)) {
             Bundle B = getIntent().getExtras();
-            groupId = B.getString("GroupId");
+            groupId = B.getString(Constants.GROUP_ID_DB);
         }
 
         getSupportActionBar().setTitle("Manage group");

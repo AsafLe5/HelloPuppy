@@ -46,9 +46,9 @@ public class JoinRequests extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.group);
         getSupportActionBar().setTitle("Join requests");
 
-        if (getIntent().hasExtra("GroupId")) {
+        if (getIntent().hasExtra(Constants.GROUP_ID_DB)) {
             Bundle B = getIntent().getExtras();
-            groupId = B.getString("GroupId");
+            groupId = B.getString(Constants.GROUP_ID_DB);
         }
         loadJoinRequests();
         DatabaseReference DbRef = FirebaseDatabase.getInstance().getReference();

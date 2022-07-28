@@ -64,7 +64,7 @@ public class GroupChatActivity extends AppCompatActivity {
 
         // get id of the group
         Intent intent = getIntent();
-        groupId = intent.getStringExtra("GroupId");
+        groupId = intent.getStringExtra(Constants.GROUP_ID_DB);
 
         firebaseAuth = FirebaseAuth.getInstance();
         loadGroupInfo();

@@ -60,20 +60,13 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
     private Map<String, ArrayAdapter> daysAdapter;
 
     private Map<String, Spinner> daysSpinner;
-    private List<String> sundayInventory = new ArrayList<String>();
-    private List<String> mondayInventory = new ArrayList<String>();
-    private List<String> tuesdayInventory = new ArrayList<String>();
-    private List<String> wednesdayInventory = new ArrayList<String>();
-    private List<String> thursdayInventory = new ArrayList<String>();
-    private List<String> fridayInventory = new ArrayList<String>();
-    private List<String> saturdayInventory = new ArrayList<String>();
-    private ArrayAdapter sundayAdapter;
-    private ArrayAdapter mondayAdapter;
-    private ArrayAdapter tuesdayAdapter;
-    private ArrayAdapter wednesdayAdapter;
-    private ArrayAdapter thursdayAdapter;
-    private ArrayAdapter fridayAdapter;
-    private ArrayAdapter saturdayAdapter;
+    private final List<String> sundayInventory = new ArrayList<String>();
+    private final List<String> mondayInventory = new ArrayList<String>();
+    private final List<String> tuesdayInventory = new ArrayList<String>();
+    private final List<String> wednesdayInventory = new ArrayList<String>();
+    private final List<String> thursdayInventory = new ArrayList<String>();
+    private final List<String> fridayInventory = new ArrayList<String>();
+    private final List<String> saturdayInventory = new ArrayList<String>();
 
 
     @Override
@@ -99,9 +92,9 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
         daysInventory.put("friday", fridayInventory);
         daysInventory.put("saturday", saturdayInventory);
 
-        if (getIntent().hasExtra("GroupId")) {
+        if (getIntent().hasExtra(Constants.GROUP_ID_DB)) {
             Bundle B = getIntent().getExtras();
-            groupId = B.getString("GroupId");
+            groupId = B.getString(Constants.GROUP_ID_DB);
         }
 
         progress_bar = findViewById(R.id.progress_bar);
@@ -142,7 +135,7 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
         }
 
         sundaySpinner = findViewById(R.id.sunday_spinner);
-        sundayAdapter = new ArrayAdapter(this,R.layout.support_simple_spinner_dropdown_item, sundayInventory);
+        ArrayAdapter sundayAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, sundayInventory);
         sundayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sundaySpinner.setAdapter(sundayAdapter);
         sundaySpinner.setOnItemSelectedListener(this);
@@ -150,14 +143,14 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
 
 
         mondaySpinner = findViewById(R.id.monday_spinner);
-        mondayAdapter = new ArrayAdapter(this,R.layout.support_simple_spinner_dropdown_item, mondayInventory);
+        ArrayAdapter mondayAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, mondayInventory);
         mondayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mondaySpinner.setAdapter(mondayAdapter);
         mondaySpinner.setOnItemSelectedListener(this);
         mondaySpinner.setSelection(2);
 
         tuesdaySpinner = findViewById(R.id.tuesday_spinner);
-        tuesdayAdapter = new ArrayAdapter(this,R.layout.support_simple_spinner_dropdown_item, tuesdayInventory);
+        ArrayAdapter tuesdayAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, tuesdayInventory);
         tuesdayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         tuesdaySpinner.setAdapter(tuesdayAdapter);
         tuesdaySpinner.setOnItemSelectedListener(this);
@@ -165,7 +158,7 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
 
 
         wednesdaySpinner = findViewById(R.id.wednesday_spinner);
-        wednesdayAdapter = new ArrayAdapter(this,R.layout.support_simple_spinner_dropdown_item, wednesdayInventory);
+        ArrayAdapter wednesdayAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, wednesdayInventory);
         wednesdayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         wednesdaySpinner.setAdapter(wednesdayAdapter);
         wednesdaySpinner.setOnItemSelectedListener(this);
@@ -173,7 +166,7 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
 
 
         thursdaySpinner = findViewById(R.id.thursday_spinner);
-        thursdayAdapter = new ArrayAdapter(this,R.layout.support_simple_spinner_dropdown_item, thursdayInventory);
+        ArrayAdapter thursdayAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, thursdayInventory);
         thursdayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         thursdaySpinner.setAdapter(thursdayAdapter);
         thursdaySpinner.setOnItemSelectedListener(this);
@@ -181,14 +174,14 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
 
 
         fridaySpinner = findViewById(R.id.friday_spinner);
-        fridayAdapter = new ArrayAdapter(this,R.layout.support_simple_spinner_dropdown_item, fridayInventory);
+        ArrayAdapter fridayAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, fridayInventory);
         fridayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         fridaySpinner.setAdapter(fridayAdapter);
         fridaySpinner.setOnItemSelectedListener(this);
         fridaySpinner.setSelection(2);
 
         saturdaySpinner = findViewById(R.id.saturday_spinner);
-        saturdayAdapter = new ArrayAdapter(this,R.layout.support_simple_spinner_dropdown_item, saturdayInventory);
+        ArrayAdapter saturdayAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, saturdayInventory);
         saturdayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         saturdaySpinner.setAdapter(saturdayAdapter);
         saturdaySpinner.setOnItemSelectedListener(this);

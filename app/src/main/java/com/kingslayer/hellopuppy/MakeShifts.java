@@ -67,7 +67,7 @@ public class MakeShifts extends Worker {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 myGroupId = snapshot.child("Users").child(myId)
-                        .child("GroupId").getValue().toString();
+                        .child(Constants.GROUP_ID_DB).getValue().toString();
                 List<String> members = (List<String>) snapshot.child("Groups").child(myGroupId)
                         .child("MembersIds").getValue();
                 numOfMembers = members.size();
