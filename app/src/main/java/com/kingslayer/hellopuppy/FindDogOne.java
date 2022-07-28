@@ -192,6 +192,7 @@ public class FindDogOne extends AppCompatActivity implements OnMapReadyCallback,
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.find_dog);
 
+        // const
         getSupportActionBar().setTitle("Find dog");
 
         startBtn.setOnClickListener(new View.OnClickListener() {
@@ -208,9 +209,11 @@ public class FindDogOne extends AppCompatActivity implements OnMapReadyCallback,
                             .findFragmentById(R.id.map);
                     mapFragment.getMapAsync(FindDogOne.this);
 
-                    ActivityCompat.requestPermissions(FindDogOne.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    ActivityCompat.requestPermissions(FindDogOne.this,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                             PackageManager.PERMISSION_GRANTED);
-                    ActivityCompat.requestPermissions(FindDogOne.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    ActivityCompat.requestPermissions(FindDogOne.this,
+                            new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                             PackageManager.PERMISSION_GRANTED);
 
                     mLocationClient = new FusedLocationProviderClient(FindDogOne.this);
