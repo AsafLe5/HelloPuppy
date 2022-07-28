@@ -7,12 +7,12 @@
 
     <string name="Welcome"> Welcome to HelloPuppy! </string>
     <string-array name="availabilities">
-        <item>One day a week</item>
-        <item>Two days a week</item>
-        <item>Three days a week</item>
-        <item>Four days a week</item>
-        <item>Five days a week</item>
-        <item>Six days a week</item>
+        <item>Once a week</item>
+        <item>Twice a week</item>
+        <item>Three times a week</item>
+        <item>Four times a week</item>
+        <item>Five times a week</item>
+        <item>Six times a week</item>
     </string-array>
     <string-array name="genders">
         <item>male</item>
