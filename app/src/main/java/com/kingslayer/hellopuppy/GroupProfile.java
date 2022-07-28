@@ -53,9 +53,9 @@ public class GroupProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_profile);
-        if (getIntent().hasExtra("GroupId")) {
+        if (getIntent().hasExtra(Constants.GROUP_ID_DB)) {
             Bundle B = getIntent().getExtras();
-            groupId = B.getString("GroupId");
+            groupId = B.getString(Constants.GROUP_ID_DB);
         }
 
         getSupportActionBar().setTitle("Group profile");
@@ -77,7 +77,7 @@ public class GroupProfile extends AppCompatActivity {
 //            @Override
 //            public void onClick(View v) {
 //                Intent intent = new Intent(getApplicationContext(), JoinRequests.class);
-//                intent.putExtra("GroupId", groupId);
+//                intent.putExtra(Constants.GROUP_ID_DB, groupId);
 //                startActivity(intent);
 //                overridePendingTransition(0,0);
 ////                startActivity(new Intent(getApplicationContext(), Profile.class));
@@ -204,13 +204,13 @@ public class GroupProfile extends AppCompatActivity {
             switch (id){
                 case R.id.requests:
                     Intent intent = new Intent(getApplicationContext(), JoinRequests.class);
-                    intent.putExtra("GroupId", groupId);
+                    intent.putExtra(Constants.GROUP_ID_DB, groupId);
                     startActivity(intent);
                     overridePendingTransition(0,0);
                     break;
                 case R.id.manage_group:
                     Intent intent2 = new Intent(getApplicationContext(), ManageGroup.class);
-                    intent2.putExtra("GroupId", groupId);
+                    intent2.putExtra(Constants.GROUP_ID_DB, groupId);
                     startActivity(intent2);
                     overridePendingTransition(0,0);
                     break;
@@ -264,7 +264,7 @@ public class GroupProfile extends AppCompatActivity {
         // remove group id for every member in the group
         for(String member: membersArray){
             FirebaseDatabase.getInstance().getReference("Users").child(member)
-                    .child("GroupId").removeValue();
+                    .child(Constants.GROUP_ID_DB).removeValue();
         }
 
         // save that the trip is over
@@ -294,7 +294,7 @@ public class GroupProfile extends AppCompatActivity {
 
         // delete my group id
         FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance()
-                .getUid().toString()).child("GroupId").removeValue();
+                .getUid().toString()).child(Constants.GROUP_ID_DB).removeValue();
 
         Intent intent = new Intent(getApplicationContext(), Group.class);
         startActivity(intent);

@@ -260,7 +260,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                     allFieldsGotFilled = true;
                 }
 
-                if(user.hasChild("GroupId")){
+                if(user.hasChild(Constants.GROUP_ID_DB)){
                     hasGroup = true;
                 }
 

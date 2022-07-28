@@ -61,10 +61,10 @@ public class Group extends AppCompatActivity {
 
                     assert myId != null;
                     String sdf = ds.getKey();
-                    if(ds.getKey().equals(myId) && ds.hasChild("GroupId")){
-                        String groupId = ds.child("GroupId").getValue().toString();
+                    if(ds.getKey().equals(myId) && ds.hasChild(Constants.GROUP_ID_DB)){
+                        String groupId = ds.child(Constants.GROUP_ID_DB).getValue().toString();
                             Intent intent = new Intent(getApplicationContext(), GroupProfile.class);
-                            intent.putExtra("GroupId", groupId);
+                            intent.putExtra(Constants.GROUP_ID_DB, groupId);
                             startActivity(intent);
                             overridePendingTransition(0,0);
                             return;
@@ -104,8 +104,8 @@ public class Group extends AppCompatActivity {
         groupIdRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                if (snapshot.hasChild("GroupId")) {
-                    myGroupId = snapshot.child("GroupId").getValue().toString();
+                if (snapshot.hasChild(Constants.GROUP_ID_DB)) {
+                    myGroupId = snapshot.child(Constants.GROUP_ID_DB).getValue().toString();
 //                    DatabaseReference membersIds = fb.child("Groups").child(myGroupId).child("MembersIds");
 //                    membersIds.addValueEventListener(new ValueEventListener() {
 //                        @Override
@@ -199,7 +199,7 @@ public class Group extends AppCompatActivity {
             public void onClick(View v) {
                 String groupId = ""+System.currentTimeMillis();
                 Intent intent = new Intent(getApplicationContext(),CreateGroup.class);
-                intent.putExtra("GroupId", groupId);
+                intent.putExtra(Constants.GROUP_ID_DB, groupId);
                 startActivity(intent);
             }
         });
@@ -220,7 +220,6 @@ public class Group extends AppCompatActivity {
 
                     ModelGroup newMG = new ModelGroup(ds.child("Name").getValue().toString(),
                             ds.child("numOfFriends").getValue().toString(),
-                            ds.child("walksPerWeek").getValue().toString(),
                             null, ds.getKey().toString());
 
                     String curr = ds.getKey().toString();

@@ -25,7 +25,7 @@ public class ModelGroup extends AppCompatActivity {
     public ModelGroup()  {
     }
 
-    public ModelGroup(String groupName, String numOfMembers, String walksPerWeek,
+    public ModelGroup(String groupName, String numOfMembers,
                       URL imageUrl, String groupId, String groupProfile){
         this.groupName = groupName;
         this.explanation = explanation;
@@ -45,7 +45,7 @@ public class ModelGroup extends AppCompatActivity {
 //    });
    }
 
-    public ModelGroup(String groupName, String numOfMembers, String walksPerWeek,
+    public ModelGroup(String groupName, String numOfMembers,
                        URL imageUrl, String groupId){
         this.groupName = groupName;
         this.explanation = explanation;

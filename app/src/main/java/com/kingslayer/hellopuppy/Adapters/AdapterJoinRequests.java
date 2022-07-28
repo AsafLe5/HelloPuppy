@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.kingslayer.hellopuppy.Constants;
 import com.kingslayer.hellopuppy.Group;
 import com.kingslayer.hellopuppy.Models.ModelUser;
 import com.kingslayer.hellopuppy.R;
@@ -85,7 +86,7 @@ public class AdapterJoinRequests extends
                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
                 reference.child("Users").child(user.getUserId())
-                        .child("GroupId").setValue(groupId);
+                        .child(Constants.GROUP_ID_DB).setValue(groupId);
 
                 usersInGroup.add(user.getUserId().toString());
                 reference.child("Groups").child(groupId).child("MembersIds").setValue(usersInGroup);

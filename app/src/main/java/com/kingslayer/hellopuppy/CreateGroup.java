@@ -81,9 +81,9 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
 
         setContentView(R.layout.activity_create_group);
 
-        if (getIntent().hasExtra("GroupId")) {
+        if (getIntent().hasExtra(Constants.GROUP_ID_DB)) {
             Bundle B = getIntent().getExtras();
-            groupId = B.getString("GroupId");
+            groupId = B.getString(Constants.GROUP_ID_DB);
         }
 
         bottomNavigationView = findViewById(R.id.bottom_navigator);
@@ -165,7 +165,7 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
                 // storing my group id
                 FirebaseDatabase.getInstance().getReference().child("Users")
                         .child(FirebaseAuth.getInstance().getUid().toString())
-                        .child("GroupId").setValue(groupId);
+                        .child(Constants.GROUP_ID_DB).setValue(groupId);
 
                 groupRef.child("ScheduleChoices").child(FirebaseAuth.getInstance().getUid()
                         .toString()).child("Credits").setValue(5);
