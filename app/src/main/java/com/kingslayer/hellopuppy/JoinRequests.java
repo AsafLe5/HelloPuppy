@@ -44,9 +44,7 @@ public class JoinRequests extends AppCompatActivity {
         requests = findViewById(R.id.requests);
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.group);
-
         getSupportActionBar().setTitle("Join requests");
-
 
         if (getIntent().hasExtra("GroupId")) {
             Bundle B = getIntent().getExtras();
@@ -80,7 +78,6 @@ public class JoinRequests extends AppCompatActivity {
                         overridePendingTransition(0,0);
                         return true;
                 }
-
                 return false;
             }
         });
@@ -126,7 +123,8 @@ public class JoinRequests extends AppCompatActivity {
                     updateRequestMod();
                 }
                 else {
-                    Toast.makeText(JoinRequests.this, "You don't have new requests", Toast.LENGTH_LONG).show();
+                    Toast.makeText(JoinRequests.this, "You don't have new requests",
+                            Toast.LENGTH_LONG).show();
                 }
 
             }

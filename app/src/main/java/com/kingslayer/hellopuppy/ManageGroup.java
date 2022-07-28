@@ -37,7 +37,6 @@ public class ManageGroup extends AppCompatActivity {
     private List<String> membersArray;
     private Map<String,ModelUser> usersModelMap = new HashMap<String,ModelUser>();;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,9 +88,7 @@ public class ManageGroup extends AppCompatActivity {
 
     private void loadUsers() {
         usersList = new ArrayList<>();
-
         DatabaseReference DbRef = FirebaseDatabase.getInstance().getReference();
-
         DbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -133,6 +130,5 @@ public class ManageGroup extends AppCompatActivity {
         adapterRemoveUserList = new AdapterRemoveUser(ManageGroup.this, usersList);
         users.setAdapter(adapterRemoveUserList);
     }
-
 }
 

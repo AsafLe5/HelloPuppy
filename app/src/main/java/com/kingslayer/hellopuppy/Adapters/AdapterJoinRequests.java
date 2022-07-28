@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.kingslayer.hellopuppy.Group;
 import com.kingslayer.hellopuppy.Models.ModelUser;
 import com.kingslayer.hellopuppy.R;
 import com.kingslayer.hellopuppy.WatchProfile;
@@ -74,7 +75,6 @@ public class AdapterJoinRequests extends
         holder.availability.setText(availability);
         holder.userName.setText(userName);
 
-//        Picasso.get().load(user.getUserProfile()).into(holder.UserPicture);
 
         holder.itemView.findViewById(R.id.accept).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +86,6 @@ public class AdapterJoinRequests extends
 
                 reference.child("Users").child(user.getUserId())
                         .child("GroupId").setValue(groupId);
-
 
                 usersInGroup.add(user.getUserId().toString());
                 reference.child("Groups").child(groupId).child("MembersIds").setValue(usersInGroup);
@@ -119,9 +118,7 @@ public class AdapterJoinRequests extends
                 context.startActivity(intent);
             }
         });
-
     }
-
 
     private void setPicFromDB(String urlUser, HolderJoinRequestsList holder){
 

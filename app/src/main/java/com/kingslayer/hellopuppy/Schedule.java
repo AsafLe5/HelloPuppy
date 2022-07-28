@@ -37,17 +37,17 @@ public class Schedule extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private Button chooseShifts;
     private String groupId;
-    private boolean isManager = false;
+//    private boolean isManager = false;
     private android.os.Handler customHandler;
     int toMins = 1000 * 60;
-    private boolean amIManager = false;
+//    private boolean amIManager = false;
     private String myGroupId;
     private String groupManagerId;
     private String[][] creditsOnDays;
     private int numOfMembers;
     Map<String, Integer> credits = new HashMap<String, Integer>(); // Uid to credits left
     List<String> chosenDays = new ArrayList<>(7); //each cell contain uid of selected user chosen this day.
-    boolean isUpdated = false;
+//    boolean isUpdated = false;
     boolean firstTime = true;
     private List<TextView> namePerRow;
     private Map<String, String> groupNames;
@@ -60,7 +60,7 @@ public class Schedule extends AppCompatActivity {
         setContentView(R.layout.activity_schedule);
         tableLayout = findViewById(R.id.table_layout);
         notReadyText = findViewById(R.id.not_ready_text);
-        getSupportActionBar().setTitle("Schedule");
+        getSupportActionBar().setTitle(Constants.SCHEDULE_TITLE);
         namePerRow = new ArrayList<>();
         bottomNavigationView = findViewById(R.id.bottom_navigator);
         bottomNavigationView.setSelectedItemId(R.id.schedule);
@@ -93,9 +93,10 @@ public class Schedule extends AppCompatActivity {
 //                for(DataSnapshot ds: snapshot.getChildren()){
 
                 assert myId != null;
-                if (snapshot.child("Users").hasChild(myId) && snapshot.child("Users").child(myId).hasChild("GroupId")) {
-                    groupId = snapshot.child("Users").child(myId).child("GroupId").getValue().toString();
-                    if (snapshot.child("Groups").child(groupId).child("groupManagerId").getValue()
+                if (snapshot.child(Constants.USERS_DB).hasChild(myId) &&
+                        snapshot.child(Constants.USERS_DB).child(myId).hasChild("GroupId")) {
+                    groupId = snapshot.child(Constants.USERS_DB).child(myId).child("GroupId").getValue().toString();
+                    if (snapshot.child(Constants.GROUPS_DB).child(groupId).child("groupManagerId").getValue()
                             .toString().equals(myId)) {
                         //if (firstTime) {
                         tableLayout.setVisibility(View.GONE);
@@ -121,18 +122,26 @@ public class Schedule extends AppCompatActivity {
                         String newtime = new SimpleDateFormat("yyyyMMdd_HHmmss").format(calNextWed.getTime());
                         /////////////////////customHandler.postDelayed(updateTimerThread, 100000);
                         // Haven't calculated shifts for this week yet
-                        if (snapshot.child("Groups").child(groupId).hasChild("Already calculated this week")) {
-                            if (snapshot.child("Groups").child(groupId).child("Already calculated this week").getValue().equals("False")) {
-                                if (diff > 1000 * 60 * 60 * 92) { // manager entered group between Wednesday at 8pm and Sunday
+                        if (snapshot.child(Constants.GROUPS_DB).child(groupId)
+                                .hasChild("Already calculated this week")) {
+                            if (snapshot.child(Constants.GROUPS_DB).child(groupId)
+                                    .child("Already calculated this week").getValue().equals("False")) {
+                                // manager entered group between Wednesday at 8pm and Sunday
+                                if (diff > 1000 * 60 * 60 * 92) {
                                     arrangeShifts();
                                     tableLayout.setVisibility(View.VISIBLE);
                                     notReadyText.setVisibility(View.GONE);
                                     reference.child("Groups").child(groupId).child("Already calculated this week").setValue("True");
                                 }
-                            } else { // Already calculated this week
-                                if (diff < 1000 * 60 * 60 * 92) { // manager entered group between Sunday and Wednesday at 8pm
+                            }
+                            // Already calculated this week
+                            else {
+                                // manager entered group between Sunday and Wednesday at 8pm
+                                if (diff < 1000 * 60 * 60 * 92) {
                                     reference.child("Groups").child(groupId).child("Already calculated this week").setValue("False");
-                                } else { // show already calculated results shifts for this week
+                                }
+                                // show already calculated results shifts for this week
+                                else {
                                     getShifts(); /// must take from DBBBBB!
                                     tableLayout.setVisibility(View.VISIBLE);
                                     notReadyText.setVisibility(View.GONE);
@@ -140,11 +149,12 @@ public class Schedule extends AppCompatActivity {
                             }
 
                         } else {
-                            reference.child("Groups").child(groupId).child("Already calculated this week").setValue("False");
+                            reference.child(Constants.GROUPS_DB).child(groupId)
+                                    .child("Already calculated this week").setValue("False");
                         }
 
                         //checkIfAlreadyCalcShiftsThisWeek(groupId);
-                        firstTime = false;
+//                        firstTime = false;
                         //}
                     }
                 }
@@ -192,11 +202,10 @@ public class Schedule extends AppCompatActivity {
     private Runnable updateTimerThread = new Runnable() {
         public void run() {
             //write here whaterver you want to repeat
-            Date currentTime = Calendar.getInstance().getTime();
-            System.out.println("hey");
+//            Date currentTime = Calendar.getInstance().getTime();
+//            System.out.println("hey");
 
             arrangeShifts();
-
             customHandler.postDelayed(this, 2 * toMins);
         }
     };
@@ -215,30 +224,30 @@ public class Schedule extends AppCompatActivity {
         groupIdRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                myGroupId = snapshot.child("Users").child(myId)
+                myGroupId = snapshot.child(Constants.USERS_DB).child(myId)
                         .child("GroupId").getValue().toString();
-                List<String> members = (List<String>) snapshot.child("Groups").child(myGroupId)
+                List<String> members = (List<String>) snapshot.child(Constants.GROUPS_DB).child(myGroupId)
                         .child("MembersIds").getValue();
                 numOfMembers = members.size();
 
                 creditsOnDays = new String[numOfMembers][9];
 
-                groupManagerId = snapshot.child("Groups").child(myGroupId)
+                groupManagerId = snapshot.child(Constants.GROUPS_DB).child(myGroupId)
                         .child("groupManagerId").getValue().toString();
                 if (myId.equals(groupManagerId)) { // I'm the manager
 
                     int i = 0;
 
-                    if (snapshot.child("Groups").child(myGroupId)
-                            .child("ScheduleChoices").child(FirebaseAuth.getInstance().getUid().toString())
+                    if (snapshot.child(Constants.GROUPS_DB).child(myGroupId)
+                            .child(Constants.SCHEDULED_CHOICES_DB).child(FirebaseAuth.getInstance().getUid())
                             .getChildrenCount() == 8) {
-                        for (DataSnapshot user : snapshot.child("Groups").child(myGroupId)
-                                .child("ScheduleChoices").getChildren()) {
-                            groupNames.put(user.getKey().toString(), snapshot.child("Users").child(user.getKey())
-                                    .child("Full name").getValue().toString());
-                            for (DataSnapshot day : snapshot.child("Groups").child(myGroupId)
-                                    .child("ScheduleChoices").child(user.getKey().toString()).getChildren()) {
-                                writeInArray(i, user.getKey().toString(), day.getKey().toString(), day.getValue().toString());
+                        for (DataSnapshot user : snapshot.child(Constants.GROUPS_DB).child(myGroupId)
+                                .child(Constants.SCHEDULED_CHOICES_DB).getChildren()) {
+                            groupNames.put(user.getKey(), snapshot.child(Constants.USERS_DB)
+                                    .child(user.getKey()).child(Constants.USER_NAME_DB).getValue().toString());
+                            for (DataSnapshot day : snapshot.child(Constants.GROUPS_DB).child(myGroupId)
+                                    .child(Constants.SCHEDULED_CHOICES_DB).child(user.getKey()).getChildren()) {
+                                writeInArray(i, user.getKey(), day.getKey(), day.getValue().toString());
                             }
                             i++;
                         }
@@ -443,7 +452,7 @@ public class Schedule extends AppCompatActivity {
                     arrangeShiftInTable();
 
                 }
-                }
+            }
 
 
                 @Override

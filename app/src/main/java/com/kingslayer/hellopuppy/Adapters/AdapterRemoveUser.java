@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.kingslayer.hellopuppy.Models.ModelUser;
 import com.kingslayer.hellopuppy.R;
 import com.kingslayer.hellopuppy.WatchProfile;
@@ -80,19 +82,47 @@ public class AdapterRemoveUser extends RecyclerView.Adapter<AdapterRemoveUser.Ho
 
         Picasso.get().load(user.getUserProfile()).into(holder.UserPicture);
 
-        int a = 8;
         // handle user click
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(ModelUser.this,
-//                        "user clicked!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), WatchProfile.class);
                 intent.putExtra("User", holder.getUserId());
                 context.startActivity(intent);
             }
         });
+
+        holder.itemView.findViewById(R.id.remove_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                ModelUser user = usersChatList.get(position);
+//                usersChatList.remove(user);
+                // are you sure
+
+//                leaveGroup();
+
+            }
+        });
     }
+//
+//    public void leaveGroup(){
+//        boolean isMeCurrOnTrip = false;
+//        // remove me from MembersIds of the group
+//        if(membersArray.contains(FirebaseAuth.getInstance().getUid().toString())){
+//            membersArray.remove(FirebaseAuth.getInstance().getUid().toString());
+//        }
+//        FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
+//                .child("MembersIds").setValue(membersArray);
+//
+//        // remove my schedule
+//        FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
+//                .child("ScheduleChoices").child(FirebaseAuth.getInstance()
+//                .getUid().toString()).removeValue();
+//
+//        // delete my group id
+//        FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance()
+//                .getUid().toString()).child("GroupId").removeValue();
+//    }
 
     @Override
     public int getItemCount() {
