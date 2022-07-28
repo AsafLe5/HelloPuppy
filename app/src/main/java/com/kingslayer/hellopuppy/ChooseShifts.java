@@ -294,19 +294,19 @@ public class ChooseShifts extends AppCompatActivity implements AdapterView.OnIte
     public String getNumOfCredits(String choice){
         switch (choice){
             case "really bad":
-                return "-2";
+                return "2";
 
             case "bad":
-                return "-1";
+                return "1";
 
             case "fine":
                 return "0";
 
             case "good":
-                return "1";
+                return "-1";
 
             case "really good":
-                return "2";
+                return "-2";
             default:
                 return "";
         }

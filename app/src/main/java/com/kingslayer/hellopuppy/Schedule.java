@@ -104,12 +104,12 @@ public class Schedule extends AppCompatActivity {
                         Calendar calNow = Calendar.getInstance();
                         Calendar calNextWed = Calendar.getInstance();
                         calNextWed.set(Calendar.HOUR, 9);
-                        calNextWed.set(Calendar.MINUTE, 38);
+                        calNextWed.set(Calendar.MINUTE, 48);
                         calNextWed.set(Calendar.SECOND, 0);
                         while (calNextWed.get(Calendar.DAY_OF_WEEK) != Calendar.THURSDAY) {
                             calNextWed.add(Calendar.DATE, 1);
                         }
-                        if (calNextWed.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY &&
+                        if (calNextWed.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY &&
                                 (calNextWed.get(Calendar.HOUR) < calNow.get(Calendar.HOUR) ||
                                         (calNextWed.get(Calendar.HOUR) == calNow.get(Calendar.HOUR) &&
                                                 calNextWed.get(Calendar.MINUTE) < calNow.get(Calendar.MINUTE)))) {
@@ -425,12 +425,14 @@ public class Schedule extends AppCompatActivity {
     }
 
     private void getShifts() {
-
+        String myId = FirebaseAuth.getInstance().getUid().toString();
         DatabaseReference groupIdRef = FirebaseDatabase.getInstance().getReference();
 
         groupIdRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+                myGroupId = snapshot.child("Users").child(myId)
+                        .child("GroupId").getValue().toString();
                 // get all get group member's names.
                 for (DataSnapshot user : snapshot.child("Groups").child(myGroupId)
                         .child("ScheduleChoices").getChildren()) {
