@@ -33,9 +33,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -210,11 +208,6 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                     numOfFilledFields++;
                 }
 
-//                if (dog.hasChild("Age")) {
-//                    dogsAge.setText(dog.child("Age").getValue().toString());
-//                    numOfFilledFields++;
-//
-//                }
 
                 if (user.hasChild("Gender")) {
                     userGender = user.child("Gender").getValue().toString();
@@ -271,21 +264,7 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
                     hasGroup = true;
                 }
 
-//                if(dog.hasChild("Dog's photo")){
-//                    String dogsImage = dog.child("Dog's photo").getValue().toString();
-//                    Picasso.get().load(dogsImage).into(dogImage);
-//                }
 
-
-//                if(user.hasChild("Profile photo") && !isUserPicSet){
-//                    String userImage = user.child("Profile photo").getValue().toString();
-//                    Picasso.get().load(userImage).into(profileImage);
-//                    setPicFromDB("User");
-//                    setPicFromDB("Dog");
-//                }
-//                else{
-//                    userProfileFromLogin();
-//                }
             }
 
             @Override
@@ -382,19 +361,11 @@ public class Profile extends AppCompatActivity implements EditNameDialog.EditNam
             }
 
         });
-        //endregion
 
-//        addProfileImage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                isDogPic = false;
-//                openImage();
-//            }
-//        });
+
         nameTextView = findViewById(R.id.nameTextView);
         nameTextView.setText(profileNameString);
 
-//        userProfileFromLogin();
 
         buttonEditName = findViewById(R.id.buttonEditName);
         buttonEditName.setOnClickListener(new View.OnClickListener() {

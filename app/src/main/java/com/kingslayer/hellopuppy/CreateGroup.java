@@ -61,7 +61,6 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
     private EditText nameOfGroup;
     private EditText descriptionOfGroup;
     private Spinner numOfFriends;
-    private Spinner sizeOfDogs;
     private Spinner walksPerWeek;
     private Spinner requireAvailability;
     private Button createGroup;
@@ -115,19 +114,7 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
         numOfFriends.setAdapter(numOfFriendsAdapter);
         numOfFriends.setOnItemSelectedListener(this);
 
-        sizeOfDogs = findViewById(R.id.size_of_dogs_spinner);
-        ArrayAdapter<CharSequence> sizeOfDogsAdapter = ArrayAdapter.
-                createFromResource(this,R.array.size_of_dog, android.R.layout.simple_spinner_item);
-        sizeOfDogsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sizeOfDogs.setAdapter(sizeOfDogsAdapter);
-        sizeOfDogs.setOnItemSelectedListener(this);
 
-        walksPerWeek = findViewById(R.id.walks_per_week_spinner);
-        ArrayAdapter<CharSequence> walksPerWeekAdapter = ArrayAdapter.
-                createFromResource(this,R.array.one_to_seven, android.R.layout.simple_spinner_item);
-        walksPerWeekAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        walksPerWeek.setAdapter(walksPerWeekAdapter);
-        walksPerWeek.setOnItemSelectedListener(this);
 
         requireAvailability = findViewById(R.id.require_availability_spinner);
         ArrayAdapter<CharSequence> requireAvailabilityAdapter = ArrayAdapter.
@@ -368,12 +355,6 @@ public class CreateGroup extends AppCompatActivity implements AdapterView.OnItem
         switch (adapterView.getId()){
             case R.id.limit_friends_spinner:
                 choices.put("numOfFriends", choice);
-                break;
-            case R.id.size_of_dogs_spinner:
-                choices.put("sizeOfDogs", choice);
-                break;
-            case R.id.walks_per_week_spinner:
-                choices.put("walksPerWeek", choice);
                 break;
             case R.id.require_availability_spinner:
                 choices.put("requireAvailability", choice);
