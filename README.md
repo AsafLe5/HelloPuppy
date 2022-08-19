@@ -8,9 +8,15 @@ The dog’s quality of life is raising and everyone is happy!
 # App features
 * Sign in with Google or Facebook
 * Edit your profile
+![WhatsApp Image 2022-08-19 at 18 08 37](https://user-images.githubusercontent.com/72384896/185652781-5d6c1b7c-8b2a-4b7a-ae41-a5f94f549a58.jpeg)
+
 * Create a new group or join one
+![WhatsApp Image 2022-08-19 at 18 08 37 (2)](https://user-images.githubusercontent.com/72384896/185652575-045255d0-5b80-4e2b-aa12-0fcf4a1634c3.jpeg)
+
 * Now, you can see the schedule of this week shifts, and rate how much you want to take the dogs out at each day of next week.
 * Chat your group members, and get to know them better!
+![WhatsApp Image 2022-08-19 at 18 08 36](https://user-images.githubusercontent.com/72384896/185652634-f6fbdcec-34e4-427a-ab94-be37cb1ca728.jpeg)
+
 * Track the location of your dog anytime he is in a walk, so you'll always know he's safe!
 
 # Explanation Video
