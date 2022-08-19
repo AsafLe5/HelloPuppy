@@ -8,7 +8,7 @@ The dog’s quality of life is raising and everyone is happy!
 # App features
 * Sign in with Google or Facebook
 * Edit your profile
-<img src="https://camo.githubusercontent.com/..." data-canonical-src="(https://user-images.githubusercontent.com/72384896/185652781-5d6c1b7c-8b2a-4b7a-ae41-a5f94f549a58.jpeg" width="200" height="400" />
+<img src="https://camo.githubusercontent.com/..." data-canonical-src="https://user-images.githubusercontent.com/72384896/185652781-5d6c1b7c-8b2a-4b7a-ae41-a5f94f549a58.jpeg" width="200" height="400" />
 
 ![WhatsApp Image 2022-08-19 at 18 08 37](https://user-images.githubusercontent.com/72384896/185654668-77bd1528-df74-4367-aaa9-55506209ff89.jpeg)
 
