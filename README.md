@@ -16,3 +16,6 @@ The dog’s quality of life is raising and everyone is happy!
 # Explanation Video
 watch [here](https://youtu.be/ALXKwvsfy9Y)
 
+# Authors
+Asaf Levi and Hadassa Danesh
+
